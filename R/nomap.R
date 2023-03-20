@@ -3,6 +3,8 @@
 ############################
 
 .nomap_trace <- function(graph, labels, return.map=FALSE){
+
+  graph <- .set_label_assignments(graph, labels)
   mapped <- .nomap_map(graph)
 
   if (return.map){
@@ -29,16 +31,16 @@
 #' @importFrom BiocParallel SerialParam bplapply
 .calculate_nomap <- function(graph, labels, n.iter=15, return.map=FALSE, BPPARAM=SerialParam()){
 
+  # To-do: Need to implement checks on KNN graph
   .check_labels(labels)
 
-  graph <- .set_label_assignments(graph, labels)
   trace <- .nomap_trace(graph, labels)
 
   # Now shuffle labels and correct the trace
   trace_random <- bplapply(seq(n.iter), \(x){
     .nomap_trace(graph, sample(labels))
   }, BPPARAM=BPPARAM)
-  print(trace_random)
+
   trace_random <- mean(unlist(trace_random))
 
   if (return.map) {
@@ -72,6 +74,7 @@ setMethod("calculateNomap", "ANY", .calculate_nomap)
 #' #' @rdname calculateNomap
 #' @importFrom SingleCellExperiment reducedDim
 setMethod("calculateNomap", "SingleCellExperiment", function(x, labels,..., graph.name=NULL){
+
   if (is.null(graph.name)) {
     graph.name <- "KNN"
   }
