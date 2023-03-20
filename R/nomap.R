@@ -1,7 +1,3 @@
-#' Title
-#'
-
-#'
 .calculate_nomap <- function(graph, labels, return.map=FALSE){
 
   .check_labels(labels)
