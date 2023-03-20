@@ -10,7 +10,9 @@
   mapped <- .nomap_map(graph)
 
   if (return.map) {
-    print('here')
+    # not yet implemented, but should return mapped matrix
+    # and nomap statistic
+    mean(diag(mapped))
   }
 
   mean(diag(mapped))
@@ -40,6 +42,8 @@
 #' @export
 #' @rdname calculateNomap
 setMethod("calculateNomap", "ANY", .calculate_nomap)
+
+#' @importFrom SingleCellExperiment reducedDim
 setMethod("calculateNomap", "SingleCellExperiment", function(x, labels,..., graph.name=NULL){
   if (is.null(graph.name)) {
     graph.name <- "KNN"
