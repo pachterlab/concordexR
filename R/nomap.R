@@ -1,7 +1,6 @@
 ############################
 # Internal functions
 ############################
-
 .nomap_trace <- function(graph, labels, return.map=FALSE){
 
   graph <- .set_label_assignments(graph, labels)
@@ -14,7 +13,6 @@
   mean(diag(mapped))
 
 }
-
 
 #' @importFrom Matrix rowSums t
 .nomap_map <- function(graph){
@@ -29,7 +27,8 @@
 }
 
 #' @importFrom BiocParallel SerialParam bplapply
-.calculate_nomap <- function(graph, labels, n.iter=15, return.map=FALSE, BPPARAM=SerialParam()){
+.calculate_nomap <- function(
+    graph, labels, n.iter=15, return.map=FALSE, BPPARAM=SerialParam()){
 
   # To-do: Need to implement checks on KNN graph
   .check_labels(labels)
@@ -69,15 +68,3 @@
 #' @export
 #' @rdname calculateNomap
 setMethod("calculateNomap", "ANY", .calculate_nomap)
-
-#' @export
-#' #' @rdname calculateNomap
-#' @importFrom SingleCellExperiment reducedDim
-setMethod("calculateNomap", "SingleCellExperiment", function(x, labels,..., graph.name=NULL){
-
-  if (is.null(graph.name)) {
-    graph.name <- "KNN"
-  }
-
-  .calculate_nomap(reducedDim(x, graph.name, withDimnames=TRUE), labels=labels, ...)
-})
