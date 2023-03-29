@@ -30,7 +30,7 @@
 .calculate_nomap <- function(
     graph, labels, n.iter=15, return.map=FALSE, BPPARAM=SerialParam()){
 
-  # To-do: Need to implement checks on KNN graph
+
   .check_labels(labels)
 
   trace <- .nomap_trace(graph, labels)
