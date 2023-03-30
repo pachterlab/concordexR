@@ -7,23 +7,16 @@
 \usage{
 calculateNomap(x, ...)
 
-\S4method{calculateNomap}{ANY}(
-  x,
-  labels,
-  n.iter = 15,
-  return.map = FALSE,
-  BPPARAM = SerialParam(),
-  ...
-)
+\S4method{calculateNomap}{ANY}(x, ...)
 }
 \arguments{
 \item{x}{A numeric matrix specifying the neighborhood structure of observations.
-Typically an adjacency matrix produced by a nearest-neighbor algorithm.}
-
-\item{...}{Not currently used.}
+Typically an adjacency matrix produced by a k-Nearest Neighbor algorithm.}
 
 \item{labels}{A numeric or character vector containing the label or class
 corresponding to each observation. For example, a cell type or cluster ID.}
+
+\item{k}{Number of neighbors to expect for each observation. Defaults to 20.}
 
 \item{n.iter}{A number specifying the number of permutations for correcting
 the coefficient.}
@@ -35,7 +28,7 @@ and how computing the metric for numerous observations shall be parallelized.}
 A named list with the following components:
 \describe{
 \item{\code{nomap}}{
-The raw coefficient corresponding to the original label assignments.
+The raw nomap coefficient corresponding to the original label assignments.
 }
 
 \item{\code{mean_random_nomap}}{
@@ -49,6 +42,6 @@ coefficients.
 }
 }
 \description{
-Computes the raw and corrected Nomap coefficient using a neighborhood graph
+Compute the raw and corrected nomap coefficient using a neighborhood graph
 and observation labels.
 }
