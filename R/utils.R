@@ -47,13 +47,13 @@
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom rlang is_missing is_empty caller_env
 #' @importFrom Matrix diag
-.check_graph <- function(graph, k,...,call = rlang::caller_env()){
+.check_graph <- function(graph, k,..., call = rlang::caller_env()){
 
   orientation <- .check_matrix_dims(graph, k=k, return_dims=FALSE)
-
-  graph <- .reorient_matrix(graph, k=l, how=orientation)
+  graph <- .reorient_matrix(graph, k=k, how=orientation)
 
   # Check to see if graph is self-referential, warn for now
+
     diag_s <- sum(diag(graph))
     if (diag_s != 0L){
       cli::cli_warn(
@@ -64,7 +64,6 @@
     }
 
     graph
-
 }
 
 #' @importFrom cli cli_abort
@@ -75,7 +74,7 @@
 }
 
 #' @importFrom cli cli_abort
-#' #' @importFrom Matrix rowSums
+#' #' @importFrom Matrix rowSums colSums
 .check_matrix_dims <- function(x, k, return_dims=FALSE,..., call = rlang::caller_env()) {
   .check_is_matrix(x, .internal=TRUE)
 
@@ -85,21 +84,26 @@
     return(dims)
   }
 
-  if (diff(dims) == 0){
-    # Are the neighbors on the rows?
-    neighbors_axis <- all(as.logical(rowSums(x) / k))
-    reorient <- switch(neighbors_axis, "TRUE" = "none", "FALSE" = "transpose")
-
-  } else{
-    # Is one of the dimensions equal to k?
-    neighbors_axis <- which(dims == k)
-    if (length(neighbors_axis) > 1L || length(neighbors_axis) < 1L) {
-      cli::cli_abort("Cannot determine whether neighbors are oriented on the rows or columns",..., call = call)
-    } else{
-      reorient <- switch(neighbors_axis, "expand_row", "expand_col")
+  guess_orientation <- function(x, k, dims) {
+    if (diff(dims) == 0L){
+      if (all((rowSums(x)/k)==1)) {return(1)}
+      if (all((colSums(x)/k)==1)) {return(2)}
+    } else {
+      axis <- which(dims == k)
+      if (axis == 1) {return(3)}
+      if (axis == 2) {return(4)}
     }
+    NULL
   }
-  return(reorient)
+
+  pattern <- guess_orientation(x,k=k,dims=dims)
+
+  if (is.null(pattern)) {
+    cli::cli_abort("Cannot determine whether neighbors are oriented on the rows or columns",..., call = call)
+  }
+
+  switch(pattern, "none", "transpose", "expand_row", "expand_col")
+
 }
 
 #' @importFrom Matrix spMatrix t
@@ -107,11 +111,11 @@
   dims <- .check_matrix_dims(x, return_dims=TRUE)
   r <- dims[1]
   c <- dims[2]
-  print(c(dims, r, c, k, how))
+
   switch(how,
       "none" = x,
       "transpose" = t(x),
-      "expand_row" = spMatrix(c, c, i=sort(rep(1:c,k)), j=as.vector(x), x=rep(1,c*k)),
-      "expand_col" = spMatrix(r, r, i=rep(1:r,k), j=as.vector(x), x=rep(1,r*k))
+      "expand_row" = sparseMatrix(i=sort(rep(1:c,k)), j=as.vector(x), x=rep(1,c*k), dims=c(c,c)),
+      "expand_col" = sparseMatrix(i=rep(1:r,k), j=as.vector(x), x=rep(1,r*k), dims=c(r,r))
   )
 }
