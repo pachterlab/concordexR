@@ -1,5 +1,5 @@
 Package: nomapR
-Title: Calculate the Nomap coefficient
+Title: Calculate the nomap coefficient
 Version: 0.0.0.9000
 Authors@R: c(
     person("Jackson", "Kayla", , "kaylajac@caltech.edu", role = c("aut", "cre"),
