@@ -88,6 +88,7 @@
           ),
         call = rlang::caller_env())
     }
-    }
+  }
+
   invisible(TRUE)
 }
