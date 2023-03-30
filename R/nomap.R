@@ -2,6 +2,7 @@
 # Internal functions
 ############################
 #' @importFrom Matrix rowSums t
+#' @importFrom DelayedArray rowsum
 .nomap_map <- function(graph){
 
   groups <- as.factor(rownames(graph))
