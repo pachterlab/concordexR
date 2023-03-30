@@ -39,12 +39,15 @@ test_that("calculateNomap (dgCMatrix) returns a list of length 3L", {
 })
 
 test_that("Only (sparse) matrix objects are compatible", {
-  expect_error(calculateNomap(data.frame(m), labels, k=knn), 'must be a matrix')
-  expect_error(calculateNomap(list(m), labels, k=knn), 'must be a matrix')
-  expect_error(calculateNomap(as.vector(m), labels, k=knn), 'must be a matrix')
+  expect_error(calculateNomap(data.frame(mtx), labels, k=knn), 'must be a matrix')
+  expect_error(calculateNomap(list(mtx), labels, k=knn), 'must be a matrix')
+  expect_error(calculateNomap(as.vector(mtx), labels, k=knn), 'must be a matrix')
 })
 
-test_that("Matrix (re)-orientation is working properly",)
+test_that("Number of neighbors (k) is verified",{
+  expect_error(calculateNomap(mtx, labels, k=2), 'orient')
+})
 
+m <- matrix(c(1,3, 2,4, 1,4, 2,3), 4,2,byrow=TRUE)
 # test_that("`calculateNomap` identifies self-referential graphs")
 
