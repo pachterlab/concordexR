@@ -62,11 +62,11 @@
 #' Compute the Nomap coefficient
 #'
 #' @description
-#' Computes the raw and corrected Nomap coefficient using a neighborhood graph
+#' Compute the raw and corrected nomap coefficient using a neighborhood graph
 #' and observation labels.
 #'
 #' @param x A numeric matrix specifying the neighborhood structure of observations.
-#' Typically an adjacency matrix produced by a nearest-neighbor algorithm.
+#' Typically an adjacency matrix produced by a k-Nearest Neighbor algorithm.
 #' @param labels A numeric or character vector containing the label or class
 #' corresponding to each observation. For example, a cell type or cluster ID.
 #' @param n.iter A number specifying the number of permutations for correcting
@@ -78,7 +78,7 @@
 #' @returns A named list with the following components:
 #' \describe{
 #'   \item{`nomap`}{
-#'   The raw coefficient corresponding to the original label assignments.
+#'   The raw nomap coefficient corresponding to the original label assignments.
 #'   }
 #'
 #'   \item{`mean_random_nomap`}{
