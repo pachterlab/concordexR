@@ -22,6 +22,7 @@ BugReports: https://github.com/kayla-jackson/nomapR/issues
 Imports: 
     BiocParallel,
     cli,
+    DelayedArray,
     Matrix,
     rlang
 Encoding: UTF-8
