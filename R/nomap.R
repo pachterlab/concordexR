@@ -26,7 +26,7 @@
 #' @importFrom BiocParallel SerialParam bplapply
 #' @importFrom rlang check_required
 .calculate_nomap <- function(
-    x, labels, k=20, n.iter=15, return.map=FALSE, BPPARAM=SerialParam(), ...){
+    x, labels, k=20, n.iter=15, BPPARAM=SerialParam(), ...){
 
   check_required(x)
   check_required(labels)
@@ -43,16 +43,6 @@
   }, BPPARAM=BPPARAM)
 
   trace_random <- mean(unlist(trace_random))
-
-  if (return.map) {
-    # Not yet implemented
-    return(
-      list(
-        nomap = trace,
-        mean_random_nomap = trace_random,
-        corrected_nomap = trace/trace_random
-      ))
-    }
 
   list(
     nomap = trace,
