@@ -7,7 +7,7 @@
 
     cli::cli_abort(
       c("Must have at least 2 distinct labels",
-        "i" = "There {?is/are} {no(n)} class label{?s}"),
+        "i" = "There {?is/are} {no(n_uniq)} class label{?s}"),
       call = rlang::caller_env()
     )
   }
@@ -46,6 +46,7 @@
 
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom rlang is_missing is_empty
+#' @importFrom Matrix diag
 .check_graph <- function(graph){
 
   if (rlang::is_missing(graph)){
