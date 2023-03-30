@@ -69,7 +69,7 @@
 #' @importFrom cli cli_abort
 .check_is_matrix <- function(x, ..., call = rlang::caller_env()) {
   if (!inherits(x, c("matrix", "Matrix"))) {
-    cli::cli_abort("{.arg {x}} must be a matrix, not a {.cls {class(x)}}.",..., call = call)
+    cli::cli_abort("{.arg x} must be a matrix, not a {.cls {class(x)}}.",..., call = call)
   }
 }
 
