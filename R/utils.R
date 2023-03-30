@@ -47,17 +47,11 @@
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom rlang is_missing is_empty caller_env
 #' @importFrom Matrix diag
-.check_graph <- function(graph, ..., call = rlang::caller_env()){
-  dims <- dim(graph)
+.check_graph <- function(graph, k,...,call = rlang::caller_env()){
 
-  if (length(unique(dims)) != 1L) {
-    cli::cli_abort(
-      c("The dimensions of the graph are not equal: ",
-            "x" = "There {?is/are} {dims[1]} row{?s}",
-            "x" = "There {?is/are} {dims[2]} column{?s}"),
-          call = call
-          )
-        }
+  orientation <- .check_matrix_dims(graph, k=k, return_dims=FALSE)
+
+  graph <- .reorient_matrix(graph, k=l, how=orientation)
 
   # Check to see if graph is self-referential, warn for now
     diag_s <- sum(diag(graph))
@@ -69,7 +63,8 @@
         call = call)
     }
 
-  invisible(TRUE)
+    graph
+
 }
 
 #' @importFrom cli cli_abort
@@ -82,7 +77,7 @@
 #' @importFrom cli cli_abort
 #' #' @importFrom Matrix rowSums
 .check_matrix_dims <- function(x, k, return_dims=FALSE,..., call = rlang::caller_env()) {
-  .check_is_matrix(x)
+  .check_is_matrix(x, .internal=TRUE)
 
   dims <- dim(x)
 
@@ -112,11 +107,11 @@
   dims <- .check_matrix_dims(x, return_dims=TRUE)
   r <- dims[1]
   c <- dims[2]
-
+  print(c(dims, r, c, k, how))
   switch(how,
       "none" = x,
       "transpose" = t(x),
-      "expand_row" = spMatrix(r, r, i=rep(1:n,k), j=as.vector(x), x=rep(1,n*k)),
-      "expand_col" = spMatrix(c, c, i=sort(rep(1:c,k)), j=as.vector(x), x=rep(1,c*k))
+      "expand_row" = spMatrix(c, c, i=sort(rep(1:c,k)), j=as.vector(x), x=rep(1,c*k)),
+      "expand_col" = spMatrix(r, r, i=rep(1:r,k), j=as.vector(x), x=rep(1,r*k))
   )
 }
