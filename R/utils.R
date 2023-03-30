@@ -3,7 +3,7 @@
   uniq <- unique(labels)
   n_uniq <- length(uniq)
 
-  if (n < 2L){
+  if (n_uniq < 2L){
 
     cli::cli_abort(
       c("Must have at least 2 distinct labels",
