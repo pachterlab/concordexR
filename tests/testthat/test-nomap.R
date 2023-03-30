@@ -1,7 +1,6 @@
 library(Matrix)
 
 # set.seed(526)
-
 ncells <- 100
 nlabels <- 20
 knn <- 20
@@ -39,7 +38,13 @@ test_that("calculateNomap (dgCMatrix) returns a list of length 3L", {
   expect_length(calculateNomap(sp_mtx, labels), 3)
 })
 
-# test_that("Matrix (re)-orientation is working properly",)
-# test_that("Only (sparse) matrix objects are compatible", {expect_error()})
+test_that("Only (sparse) matrix objects are compatible", {
+  expect_error(calculateNomap(data.frame(m), labels, k=knn), 'must be a matrix')
+  expect_error(calculateNomap(list(m), labels, k=knn), 'must be a matrix')
+  expect_error(calculateNomap(as.vector(m), labels, k=knn), 'must be a matrix')
+})
+
+test_that("Matrix (re)-orientation is working properly",)
+
 # test_that("`calculateNomap` identifies self-referential graphs")
-# test_that("`n.iter` parameter is correctly verified")
+
