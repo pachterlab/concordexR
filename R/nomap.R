@@ -23,8 +23,14 @@
 }
 
 #' @importFrom BiocParallel SerialParam bplapply
+#' @importFrom rlang check_required
 .calculate_nomap <- function(
-    x, labels, n.iter=15, return.map=FALSE, BPPARAM=SerialParam(), ...){
+    x, labels, k=20, n.iter=15, return.map=FALSE, BPPARAM=SerialParam(), ...){
+
+  check_required(x)
+  check_required(labels)
+
+  .check_is_matrix(x, .internal = TRUE)
 
   .check_graph(x)
   .check_labels(labels)
@@ -69,11 +75,11 @@
 #' Typically an adjacency matrix produced by a k-Nearest Neighbor algorithm.
 #' @param labels A numeric or character vector containing the label or class
 #' corresponding to each observation. For example, a cell type or cluster ID.
+#' @param k Number of neighbors to expect for each observation. Defaults to 20.
 #' @param n.iter A number specifying the number of permutations for correcting
 #' the coefficient.
 #' @param BPPARAM A \code{\link{BiocParallelParam}} object specifying whether
 #'   and how computing the metric for numerous observations shall be parallelized.
-#' @param ... Not currently used.
 #'
 #' @returns A named list with the following components:
 #' \describe{
@@ -95,5 +101,14 @@
 #' @rdname calculateNomap
 
 setMethod("calculateNomap", "ANY", .calculate_nomap)
+
+#' @export
+#' @rdname calculateNomap
+setMethod("calculateNomap", c("matrix", "Matrix"), function(x, labels, k=20, ...){
+  orientation <- .check_matrix_dims(x, k=k, return_dims = FALSE)
+  graph <- .reorient_matrix(x, how=orientation)
+
+  calculateNomap(graph, labels=labels, k=k, ...)
+})
 
 
