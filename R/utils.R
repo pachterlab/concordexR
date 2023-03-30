@@ -52,7 +52,7 @@
   if (rlang::is_missing(graph)){
     cli::cli_abort(
       c("Argument {.var x} is missing",
-        "*" = "Please supply a graph object"),
+        "*" = "Please supply a matrix graph object"),
       call = rlang::caller_env()
     )
   } else{
@@ -78,8 +78,7 @@
         }
     }
 
-  # Check to see if graph is self-referential
-  # May create separate helper later, warn for now
+  # Check to see if graph is self-referential, warn for now
     diag_s <- sum(diag(graph))
     if (diag_s != 0L){
       cli::cli_warn(
