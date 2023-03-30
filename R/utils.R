@@ -78,3 +78,45 @@
     cli::cli_abort("{.arg {x}} must be a matrix, not a {.cls {class(x)}}.",..., call = call)
   }
 }
+
+#' @importFrom cli cli_abort
+#' #' @importFrom Matrix rowSums
+.check_matrix_dims <- function(x, k, return_dims=FALSE,..., call = rlang::caller_env()) {
+  .check_is_matrix(x)
+
+  dims <- dim(x)
+
+  if (return_dims){
+    return(dims)
+  }
+
+  if (diff(dims) == 0){
+    # Are the neighbors on the rows?
+    neighbors_axis <- all(as.logical(rowSums(x) / k))
+    reorient <- switch(neighbors_axis, "TRUE" = "none", "FALSE" = "transpose")
+
+  } else{
+    # Is one of the dimensions equal to k?
+    neighbors_axis <- which(dims == k)
+    if (length(neighbors_axis) > 1L || length(neighbors_axis) < 1L) {
+      cli::cli_abort("Cannot determine whether neighbors are oriented on the rows or columns",..., call = call)
+    } else{
+      reorient <- switch(neighbors_axis, "expand_row", "expand_col")
+    }
+  }
+  return(reorient)
+}
+
+#' @importFrom Matrix spMatrix t
+.reorient_matrix <- function(x, k, how){
+  dims <- .check_matrix_dims(x, return_dims=TRUE)
+  r <- dims[1]
+  c <- dims[2]
+
+  switch(how,
+      "none" = x,
+      "transpose" = t(x),
+      "expand_row" = spMatrix(r, r, i=rep(1:n,k), j=as.vector(x), x=rep(1,n*k)),
+      "expand_col" = spMatrix(c, c, i=sort(rep(1:c,k)), j=as.vector(x), x=rep(1,c*k))
+  )
+}
