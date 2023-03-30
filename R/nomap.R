@@ -30,10 +30,9 @@
   check_required(x)
   check_required(labels)
 
-  .check_is_matrix(x, .internal = TRUE)
 
-  .check_graph(x)
   .check_labels(labels)
+  x <- .check_graph(x, k=k)
 
   trace <- .nomap_trace(x, labels)
 
@@ -100,25 +99,8 @@
 #' @export
 #' @rdname calculateNomap
 
-setMethod("calculateNomap", "ANY", .calculate_nomap)
-
-#' @export
-#' @rdname calculateNomap
-setMethod("calculateNomap", "matrix", function(x, labels, k=20, ...){
-  orientation <- .check_matrix_dims(x, k=k, return_dims = FALSE)
-  graph <- .reorient_matrix(x, how=orientation)
-
-  calculateNomap(graph, labels=labels, k=k, ...)
+setMethod("calculateNomap", "ANY", function(x, ...){
+  .check_is_matrix(x)
+  .calculate_nomap(x, ...)
 })
-
-#' @export
-#' @rdname calculateNomap
-setMethod("calculateNomap", "Matrix", function(x, labels, k=20, ...){
-  orientation <- .check_matrix_dims(x, k=k, return_dims = FALSE)
-  graph <- .reorient_matrix(x, how=orientation)
-
-  calculateNomap(graph, labels=labels, k=k, ...)
-})
-
-
 
