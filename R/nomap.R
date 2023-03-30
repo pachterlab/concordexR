@@ -44,7 +44,7 @@
       list(
         nomap = trace,
         mean_random_nomap = trace_random,
-        corrected_trace = trace/trace_random
+        corrected_nomap = trace/trace_random
       ))
     }
 
@@ -59,8 +59,28 @@
 # S4 method definitions
 ############################
 
+#' Compute the Nomap coefficient
+#'
+#' @description
+#' Computes the raw and corrected Nomap coefficient using a neighborhood graph
+#' and observation labels.
+#'
+#' @param x A numeric matrix specifying the neighborhood structure of observations.
+#' Typically an adjacency matrix produced by a nearest-neighbor algorithm.
+#' @param labels A vector containing the label or class corresponding to each observation.
+#' For example, a cell type or cluster id. Can be numeric or a character string.
+#' @param n.iter A number specifying the number of permutations for correcting
+#' the coefficient.
+#' @param BPPARAM A \code{\link{BiocParallelParam}} object specifying whether
+#'   and how computing the metric for numerous observations shall be parallelized.
+#' @param ... Not currently used.
+#'
+#' @returns A named list with the following components:
 #' @export
 #' @rdname calculateNomap
+#' * nomap a value
+#' * mean_random_nomap a value
+#' * corrected_trace a value
 setMethod("calculateNomap", "ANY", .calculate_nomap)
 
 
