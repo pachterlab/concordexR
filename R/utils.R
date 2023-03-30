@@ -48,35 +48,16 @@
 #' @importFrom rlang is_missing is_empty caller_env
 #' @importFrom Matrix diag
 .check_graph <- function(graph, ..., call = rlang::caller_env()){
+  dims <- dim(graph)
 
-  if (rlang::is_missing(graph)){
+  if (length(unique(dims)) != 1L) {
     cli::cli_abort(
-      c("Argument {.var x} is missing",
-        "*" = "Please supply a matrix graph object"),
-      call = call
-    )
-  } else{
-
-    dims <- dim(graph)
-
-    if (length(unique(dims)) != 1L) {
-      if (is.null(dims)){
-        cli::cli_abort(
-          c("Cannot determine the dimensions of the graph",
-            "i" = "The class of the object you supplied is {.cls {class(graph)}}",
-            "i" = "You must supply a matrix-like object for {.var x}"),
-          call = call
-        )
-
-      } else{
-        cli::cli_abort(
-          c("The dimensions of the graph are not equal: ",
+      c("The dimensions of the graph are not equal: ",
             "x" = "There {?is/are} {dims[1]} row{?s}",
             "x" = "There {?is/are} {dims[2]} column{?s}"),
           call = call
           )
         }
-    }
 
   # Check to see if graph is self-referential, warn for now
     diag_s <- sum(diag(graph))
@@ -87,7 +68,6 @@
           ),
         call = call)
     }
-  }
 
   invisible(TRUE)
 }
