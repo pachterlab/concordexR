@@ -1,19 +1,6 @@
 ############################
 # Internal functions
 ############################
-.nomap_trace <- function(graph, labels, return.map=FALSE){
-
-  graph <- .set_label_assignments(graph, labels)
-  mapped <- .nomap_map(graph)
-
-  if (return.map){
-    # not yet implemented,
-    return(mean(diag(mapped)))
-  }
-  mean(diag(mapped))
-
-}
-
 #' @importFrom Matrix rowSums t
 .nomap_map <- function(graph){
 
@@ -26,39 +13,46 @@
   t(out)/rowSums(out)
 }
 
+.nomap_trace <- function(graph, labels, return.map=FALSE){
+
+  graph <- .set_label_assignments(graph, labels)
+  mapped <- .nomap_map(graph)
+
+  mean(diag(mapped))
+
+}
+
 #' @importFrom BiocParallel SerialParam bplapply
 .calculate_nomap <- function(
-    graph, labels, n.iter=15, return.map=FALSE, BPPARAM=SerialParam()){
+    x, labels, n.iter=15, return.map=FALSE, BPPARAM=SerialParam(), ...){
 
-
+  .check_graph(x)
   .check_labels(labels)
 
-  trace <- .nomap_trace(graph, labels)
+  trace <- .nomap_trace(x, labels)
 
-  # Now shuffle labels and correct the trace
-  trace_random <- bplapply(seq(n.iter), \(x){
-    .nomap_trace(graph, sample(labels))
+  # Permute and correct trace
+  trace_random <- bplapply(seq(n.iter), \(ind){
+    .nomap_trace(x, sample(labels))
   }, BPPARAM=BPPARAM)
 
   trace_random <- mean(unlist(trace_random))
 
   if (return.map) {
-    # not yet implemented, but should return mapped matrix
-    # and nomap statistics
+    # Not yet implemented
     return(
       list(
         nomap = trace,
         mean_random_nomap = trace_random,
         corrected_trace = trace/trace_random
       ))
-  }
+    }
 
   list(
     nomap = trace,
     mean_random_nomap = trace_random,
     corrected_trace = trace/trace_random
   )
-
 }
 
 ############################
@@ -68,3 +62,5 @@
 #' @export
 #' @rdname calculateNomap
 setMethod("calculateNomap", "ANY", .calculate_nomap)
+
+
