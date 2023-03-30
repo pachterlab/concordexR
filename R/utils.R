@@ -74,7 +74,7 @@
 }
 
 #' @importFrom cli cli_abort
-#' #' @importFrom Matrix rowSums colSums
+#' @importFrom Matrix rowSums colSums
 .check_matrix_dims <- function(x, k, return_dims=FALSE,..., call = rlang::caller_env()) {
   .check_is_matrix(x, .internal=TRUE)
 
@@ -103,7 +103,6 @@
   }
 
   switch(pattern, "none", "transpose", "expand_row", "expand_col")
-
 }
 
 #' @importFrom Matrix spMatrix t
