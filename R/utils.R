@@ -45,15 +45,15 @@
 }
 
 #' @importFrom cli cli_abort cli_warn
-#' @importFrom rlang is_missing is_empty
+#' @importFrom rlang is_missing is_empty caller_env
 #' @importFrom Matrix diag
-.check_graph <- function(graph){
+.check_graph <- function(graph, ..., call = rlang::caller_env()){
 
   if (rlang::is_missing(graph)){
     cli::cli_abort(
       c("Argument {.var x} is missing",
         "*" = "Please supply a matrix graph object"),
-      call = rlang::caller_env()
+      call = call
     )
   } else{
 
@@ -65,7 +65,7 @@
           c("Cannot determine the dimensions of the graph",
             "i" = "The class of the object you supplied is {.cls {class(graph)}}",
             "i" = "You must supply a matrix-like object for {.var x}"),
-          call = rlang::caller_env()
+          call = call
         )
 
       } else{
@@ -73,7 +73,7 @@
           c("The dimensions of the graph are not equal: ",
             "x" = "There {?is/are} {dims[1]} row{?s}",
             "x" = "There {?is/are} {dims[2]} column{?s}"),
-          call = rlang::caller_env()
+          call = call
           )
         }
     }
@@ -85,9 +85,16 @@
         c("Some nodes in the graph are self-referential",
           "!" = "There should not be an edge between a node and itself"
           ),
-        call = rlang::caller_env())
+        call = call)
     }
   }
 
   invisible(TRUE)
+}
+
+#' @importFrom cli cli_abort
+.check_is_matrix <- function(x, ..., call = rlang::caller_env()) {
+  if (!inherits(x, c("matrix", "Matrix"))) {
+    cli::cli_abort("{.arg {x}} must be a matrix, not a {.cls {class(x)}}.",..., call = call)
+  }
 }
