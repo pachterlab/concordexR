@@ -3,7 +3,7 @@
 \name{calculateNomap}
 \alias{calculateNomap}
 \alias{calculateNomap,ANY-method}
-\title{Compute the nomap coefficient}
+\title{Compute the Nomap coefficient}
 \usage{
 calculateNomap(x, ...)
 
@@ -18,18 +18,37 @@ calculateNomap(x, ...)
 }
 \arguments{
 \item{x}{A numeric matrix specifying the neighborhood structure of observations.
-Typically, an adjacency matrix produced by a nearest-neighbor algorithm.}
+Typically an adjacency matrix produced by a nearest-neighbor algorithm.}
 
 \item{...}{Not currently used.}
 
-\item{labels}{A vector containing the label or class corresponding to each observation.
-For example, a cell type or cluster id. Can be numeric or a character string.}
+\item{labels}{A numeric or character vector containing the label or class
+corresponding to each observation. For example, a cell type or cluster ID.}
 
-\item{n.iter}{Number of permutations.}
+\item{n.iter}{A number specifying the number of permutations for correcting
+the coefficient.}
 
 \item{BPPARAM}{A \code{\link{BiocParallelParam}} object specifying whether
 and how computing the metric for numerous observations shall be parallelized.}
 }
+\value{
+A named list with the following components:
+\describe{
+\item{\code{nomap}}{
+The raw coefficient corresponding to the original label assignments.
+}
+
+\item{\code{mean_random_nomap}}{
+The average of \code{n.iter} nomap coefficients. Nomap coefficients are computed
+after after permuting the labels and reassigning them to new observations.
+}
+\item{\code{corrected_nomap}}{
+Simply the raw nomap coefficient divided by the average of the permuted
+coefficients.
+}
+}
+}
 \description{
-Compute the nomap coefficient
+Computes the raw and corrected Nomap coefficient using a neighborhood graph
+and observation labels.
 }

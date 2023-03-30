@@ -67,8 +67,8 @@
 #'
 #' @param x A numeric matrix specifying the neighborhood structure of observations.
 #' Typically an adjacency matrix produced by a nearest-neighbor algorithm.
-#' @param labels A vector containing the label or class corresponding to each observation.
-#' For example, a cell type or cluster id. Can be numeric or a character string.
+#' @param labels A numeric or character vector containing the label or class
+#' corresponding to each observation. For example, a cell type or cluster ID.
 #' @param n.iter A number specifying the number of permutations for correcting
 #' the coefficient.
 #' @param BPPARAM A \code{\link{BiocParallelParam}} object specifying whether
@@ -76,11 +76,24 @@
 #' @param ... Not currently used.
 #'
 #' @returns A named list with the following components:
+#' \describe{
+#'   \item{`nomap`}{
+#'   The raw coefficient corresponding to the original label assignments.
+#'   }
+#'
+#'   \item{`mean_random_nomap`}{
+#'   The average of `n.iter` nomap coefficients. Nomap coefficients are computed
+#'   after after permuting the labels and reassigning them to new observations.
+#'   }
+#'   \item{`corrected_nomap`}{
+#'   Simply the raw nomap coefficient divided by the average of the permuted
+#'   coefficients.
+#'   }
+#' }
+#'
 #' @export
 #' @rdname calculateNomap
-#' * nomap a value
-#' * mean_random_nomap a value
-#' * corrected_trace a value
+
 setMethod("calculateNomap", "ANY", .calculate_nomap)
 
 
