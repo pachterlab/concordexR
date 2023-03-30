@@ -104,11 +104,21 @@ setMethod("calculateNomap", "ANY", .calculate_nomap)
 
 #' @export
 #' @rdname calculateNomap
-setMethod("calculateNomap", c("matrix", "Matrix"), function(x, labels, k=20, ...){
+setMethod("calculateNomap", "matrix", function(x, labels, k=20, ...){
   orientation <- .check_matrix_dims(x, k=k, return_dims = FALSE)
   graph <- .reorient_matrix(x, how=orientation)
 
   calculateNomap(graph, labels=labels, k=k, ...)
 })
+
+#' @export
+#' @rdname calculateNomap
+setMethod("calculateNomap", "Matrix", function(x, labels, k=20, ...){
+  orientation <- .check_matrix_dims(x, k=k, return_dims = FALSE)
+  graph <- .reorient_matrix(x, how=orientation)
+
+  calculateNomap(graph, labels=labels, k=k, ...)
+})
+
 
 
