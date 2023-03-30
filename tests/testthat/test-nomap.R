@@ -39,6 +39,7 @@ test_that("calculateNomap (dgCMatrix) returns a list of length 3L", {
   expect_length(calculateNomap(sp_mtx, labels), 3)
 })
 
+# test_that("Matrix (re)-orientation is working properly",)
 # test_that("Only (sparse) matrix objects are compatible", {expect_error()})
 # test_that("`calculateNomap` identifies self-referential graphs")
 # test_that("`n.iter` parameter is correctly verified")
