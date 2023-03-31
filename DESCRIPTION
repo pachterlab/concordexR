@@ -30,11 +30,13 @@ Imports:
     scales
 Suggests: 
     BiocNeighbors,
+    BiocStyle,
+    bluster,
     covr,
     knitr,
     rmarkdown,
     scater,
-    scRNAseq,
+    TENxPBMCData,
     testthat (>= 3.0.0),
     vdiffr
 Encoding: UTF-8
@@ -44,3 +46,6 @@ Depends:
     R (>= 4.2)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+biocViews:
+    Clustering
+    
