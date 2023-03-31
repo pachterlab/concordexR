@@ -9,8 +9,10 @@
     out <- rowsum(graph, groups)
     out <- rowsum(t(out), groups)
 
-    # transpose so that rowSums() = K
-    t(out) / rowSums(out)
+    print(out)
+
+    # denominator is the number of observations for each label
+    t(out) / colSums(out)
 }
 
 .concordex_trace <- function(graph, labels, return.map = FALSE) {
