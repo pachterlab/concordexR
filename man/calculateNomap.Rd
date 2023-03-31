@@ -75,9 +75,7 @@ res <- calculateNomap(mtx, labels, k=k)
 
 res
 
-# calculateNomap also works if input
-# matrix is nxk or kxn
-
+# Also works if input matrix is nxk or kxn
 mtx <- sapply(1:ncells, function(x) {
   out <- sample((1:ncells)[-x], k)
   out

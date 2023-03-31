@@ -134,7 +134,6 @@
 #' res <- calculateNomap(mtx, labels, k=k)
 #'
 #' res
-
 setMethod("calculateNomap", "ANY", function(x, ...){
   .check_is_matrix(x)
   .calculate_nomap(x, ...)
