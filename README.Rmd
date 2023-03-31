@@ -29,7 +29,7 @@ You can install the development version of concordexR from [GitHub](https://gith
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("kayla-jackson/concordexR")
+devtools::install_github("pachterlab/concordexR")
 ```
 
 ## Example
