@@ -18,7 +18,7 @@ You can install the development version of concordexR from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("kayla-jackson/concordexR")
+devtools::install_github("pachterlab/concordexR")
 ```
 
 ## Example
