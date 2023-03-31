@@ -37,7 +37,7 @@ neighborhood graph and observation labels."><!-- mathjax --><script src="https:/
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/kayla-jackson/concordexR/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/pachterlab/concordexR/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -50,7 +50,7 @@ neighborhood graph and observation labels."><!-- mathjax --><script src="https:/
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Compute the concordex coefficient</h1>
-      <small class="dont-index">Source: <a href="https://github.com/kayla-jackson/concordexR/blob/HEAD/R/AllGenerics.R" class="external-link"><code>R/AllGenerics.R</code></a>, <a href="https://github.com/kayla-jackson/concordexR/blob/HEAD/R/concordex.R" class="external-link"><code>R/concordex.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/pachterlab/concordexR/blob/HEAD/R/AllGenerics.R" class="external-link"><code>R/AllGenerics.R</code></a>, <a href="https://github.com/pachterlab/concordexR/blob/HEAD/R/concordex.R" class="external-link"><code>R/concordex.R</code></a></small>
       <div class="d-none name"><code>calculateConcordex.Rd</code></div>
     </div>
 
@@ -142,10 +142,12 @@ cells of each label. Only returned when <code>return.map = TRUE</code>.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Simplest case where input is a nxn matrix</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Simplest case where input is a nxn matrix</span></span></span>
 <span class="r-in"><span><span class="co"># Neighbors can be oriented along the rows or columns</span></span></span>
 <span class="r-in"><span><span class="va">nCells</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">3</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"l"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="va">nCells</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mtx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">nCells</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -158,24 +160,24 @@ cells of each label. Only returned when <code>return.map = TRUE</code>.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">res</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $concordex</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2494172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4814815</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mean_random_concordex</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2544925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2734568</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $corrected_trace</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9800574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.760722</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $simulated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.1742424 0.1825397 0.1861472 0.2721612 0.3301587 0.1794872 0.3650794</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.2229992 0.3912199 0.2777778 0.3655789 0.3055556 0.1255411 0.2325499</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.2063492</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.3425926 0.3425926 0.3611111 0.3425926 0.3148148 0.3148148 0.1851852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.1574074 0.1944444 0.3518519 0.2129630 0.1018519 0.4166667 0.2777778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.1851852</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $map</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           l1        l2        l3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> l1 0.3636364 0.2727273 0.4545455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> l2 0.5000000 0.0000000 0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> l3 0.3076923 0.2307692 0.3846154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           l1        l2         l3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> l1 0.3333333 0.4444444 0.22222222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> l2 0.2500000 0.6666667 0.08333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> l3 0.3333333 0.2222222 0.44444444</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Also works if input matrix is nxk or kxn</span></span></span>
@@ -188,24 +190,24 @@ cells of each label. Only returned when <code>return.map = TRUE</code>.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">res</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $concordex</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1978022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2592593</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mean_random_concordex</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.232601</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2376543</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $corrected_trace</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8503927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.090909</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $simulated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.2222222 0.1777778 0.2148148 0.1959064 0.1722222 0.2025641 0.2420635</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.2323232 0.2480159 0.1978022 0.3138889 0.1692308 0.2835165 0.3055556</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.3111111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.1666667 0.2685185 0.2129630 0.2592593 0.3333333 0.2037037 0.1851852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.2685185 0.3055556 0.3148148 0.1851852 0.2037037 0.2222222 0.2037037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.2314815</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $map</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           l1        l2        l3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> l1 0.2857143 0.5714286 0.8571429</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> l2 0.3000000 0.0000000 0.3000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> l3 0.1538462 0.4615385 0.3076923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            l1        l2        l3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> l1 0.33333333 0.4444444 0.2222222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> l2 0.08333333 0.3333333 0.5833333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> l3 0.11111111 0.7777778 0.1111111</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
