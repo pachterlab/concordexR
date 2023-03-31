@@ -1,32 +1,32 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# nomapR
+# concordexR
 
 <!-- badges: start -->
 
 [![Codecov test
-coverage](https://codecov.io/gh/kayla-jackson/nomapR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/kayla-jackson/nomapR?branch=master)
+coverage](https://codecov.io/gh/kayla-jackson/concordexR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/kayla-jackson/concordexR?branch=master)
 <!-- badges: end -->
 
-The goal of nomapR is to replace UMAP as a clustering diagnostic.
+The goal of concordexR is to replace UMAP as a clustering diagnostic.
 
 ## Installation
 
-You can install the development version of nomapR from
+You can install the development version of concordexR from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("kayla-jackson/nomapR")
+devtools::install_github("kayla-jackson/concordexR")
 ```
 
 ## Example
 
-This is a basic example using nomap:
+This is a basic example using concordex:
 
 ``` r
-library(nomapR)
+library(concordexR)
 library(BiocNeighbors)
 ```
 
@@ -34,17 +34,17 @@ library(BiocNeighbors)
 g <- findKNN(iris[, seq_len(4)], k = 10)
 #> Warning in (function (to_check, X, clust_centers, clust_info, dtype, nn, :
 #> detected tied distances to neighbors, see ?'BiocNeighbors-ties'
-res <- calculateNomap(g$index, labels = iris$Species, k = 10, return.map = TRUE)
+res <- calculateConcordex(g$index, labels = iris$Species, k = 10, return.map = TRUE)
 ```
 
 ``` r
-plotNomapSim(res)
+plotConcordexSim(res)
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="70%" />
 
 ``` r
-heatNomap(res)
+heatConcordex(res)
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="70%" />

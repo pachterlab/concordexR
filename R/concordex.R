@@ -3,7 +3,7 @@
 ############################
 #' @importFrom Matrix rowSums t
 #' @importFrom DelayedArray rowsum
-.nomap_map <- function(graph) {
+.concordex_map <- function(graph) {
     groups <- as.factor(rownames(graph))
 
     out <- rowsum(graph, groups)
@@ -13,9 +13,9 @@
     t(out) / rowSums(out)
 }
 
-.nomap_trace <- function(graph, labels, return.map = FALSE) {
+.concordex_trace <- function(graph, labels, return.map = FALSE) {
     graph <- .set_label_assignments(graph, labels)
-    mapped <- .nomap_map(graph)
+    mapped <- .concordex_map(graph)
     tr <- mean(diag(mapped))
     if (return.map) {
         list(map = mapped, trace = tr)
@@ -26,7 +26,7 @@
 
 #' @importFrom BiocParallel SerialParam bplapply
 #' @importFrom rlang check_required
-.calculate_nomap <- function( x, labels, k=20, n.iter=15, return.map = TRUE,
+.calculate_concordex <- function( x, labels, k=20, n.iter=15, return.map = TRUE,
                               BPPARAM=SerialParam()){
 
     check_required(x)
@@ -35,12 +35,12 @@
     .check_labels(labels)
     x <- .check_graph(x, k = k)
 
-    res <- .nomap_trace(x, labels, return.map = TRUE)
+    res <- .concordex_trace(x, labels, return.map = TRUE)
     trace <- res$trace
 
     # Permute and correct trace
     trace_random <- bplapply(seq(n.iter), \(ind){
-        .nomap_trace(x, sample(labels), return.map = FALSE)
+        .concordex_trace(x, sample(labels), return.map = FALSE)
     }, BPPARAM = BPPARAM)
 
     sim <- unlist(trace_random)
@@ -48,8 +48,8 @@
 
 
     out <- list(
-        nomap = trace,
-        mean_random_nomap = trace_random,
+        concordex = trace,
+        mean_random_concordex = trace_random,
         corrected_trace = trace / trace_random,
         simulated = sim
     )
@@ -62,9 +62,9 @@
 # S4 method definitions
 ############################
 
-#' Compute the Nomap coefficient
+#' Compute the concordex coefficient
 #'
-#' @description Compute the raw and corrected nomap coefficient using a
+#' @description Compute the raw and corrected concordex coefficient using a
 #'   neighborhood graph and observation labels.
 #'
 #' @param x A numeric matrix specifying the neighborhood structure of
@@ -85,20 +85,20 @@
 #' @param ... Arguments passed to methods.
 #' @returns A named list with the following components:
 #' \describe{
-#'   \item{`nomap`}{
-#'   The raw nomap coefficient corresponding to the original label assignments.
+#'   \item{`concordex`}{
+#'   The raw concordex coefficient corresponding to the original label assignments.
 #'   }
 #'
-#'   \item{`mean_random_nomap`}{
-#'   The average of `n.iter` nomap coefficients. Nomap coefficients are computed
+#'   \item{`mean_random_concordex`}{
+#'   The average of `n.iter` concordex coefficients. concordex coefficients are computed
 #'   after permuting the labels and reassigning them to new observations.
 #'   }
-#'   \item{`corrected_nomap`}{
-#'   Simply the raw nomap coefficient divided by the average of the permuted
+#'   \item{`corrected_concordex`}{
+#'   Simply the raw concordex coefficient divided by the average of the permuted
 #'   coefficients.
 #'   }
 #'   \item{`simulated`}{
-#'   Numeric vector of the nomap coefficients from permuted labels, showing the
+#'   Numeric vector of the concordex coefficients from permuted labels, showing the
 #'   null distribution.
 #'   }
 #'   \item{`map`}{
@@ -108,7 +108,7 @@
 #' }
 #'
 #' @export
-#' @rdname calculateNomap
+#' @rdname calculateConcordex
 #' @importFrom methods setMethod setGeneric
 #' @examples
 #' # Simplest case where input is a nxn matrix
@@ -123,7 +123,7 @@
 #'     out
 #' })
 #'
-#' res <- calculateNomap(mtx, labels, k = k)
+#' res <- calculateConcordex(mtx, labels, k = k)
 #'
 #' res
 #'
@@ -133,12 +133,12 @@
 #'   out
 #' })
 #'
-#' res <- calculateNomap(mtx, labels, k = k)
+#' res <- calculateConcordex(mtx, labels, k = k)
 #'
 #' res
-setMethod("calculateNomap", "ANY",
+setMethod("calculateConcordex", "ANY",
           function(x, labels, k=20, n.iter=15, return.map = TRUE,
                    BPPARAM=SerialParam()){
   .check_is_matrix(x)
-  .calculate_nomap(x, labels, k, n.iter, return.map, BPPARAM)
+  .calculate_concordex(x, labels, k, n.iter, return.map, BPPARAM)
 })

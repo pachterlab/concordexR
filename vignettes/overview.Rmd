@@ -1,5 +1,5 @@
 ---
-title: "Overview of nomapR"
+title: "Overview of concordexR"
 author: "Lambda Moses, Kayla Jackson"
 date: "`r format(Sys.Date(), '%b %d, %Y')`"
 output:
@@ -22,15 +22,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-The goal of nomapR is to replace UMAP as a clustering diagnostic.
+The goal of concordexR is to replace UMAP as a clustering diagnostic.
 
 ## Installation
 
-You can install the development version of nomapR from [GitHub](https://github.com/) with:
+You can install the development version of concordexR from [GitHub](https://github.com/) with:
 
 ```{r}
 # install.packages("devtools")
-# devtools::install_github("kayla-jackson/nomapR")
+# devtools::install_github("kayla-jackson/concordexR")
 ```
 
 ## Example of main functionality
@@ -38,21 +38,21 @@ You can install the development version of nomapR from [GitHub](https://github.c
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-library(nomapR)
+library(concordexR)
 library(BiocNeighbors)
 ```
 
 ```{r}
 g <- findKNN(iris[, seq_len(4)], k = 10)
-res <- calculateNomap(g$index, labels = iris$Species, k = 10, return.map = TRUE)
+res <- calculateConcordex(g$index, labels = iris$Species, k = 10, return.map = TRUE)
 ```
 
 ```{r}
-plotNomapSim(res)
+plotConcordexSim(res)
 ```
 
 ```{r}
-heatNomap(res)
+heatConcordex(res)
 ```
 
 ## SessionInfo

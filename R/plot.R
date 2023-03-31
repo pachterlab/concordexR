@@ -1,38 +1,38 @@
 #' Plot density plot of simulated results
 #'
-#' The nomap traces from permuted labels represent the null distribution of the
+#' The concordex traces from permuted labels represent the null distribution of the
 #' trace. This can be plotted as a density plot and visually compared to the
 #' actual value.
 #'
-#' @param nomap Output from \code{\link{calculateNomap}}.
+#' @param concordex Output from \code{\link{calculateConcordex}}.
 #' @param ... Other arguments passed to \code{\link{geom_density}}.
-#' @return A ggplot2 object. The density plot shows the simulated nomap
+#' @return A ggplot2 object. The density plot shows the simulated concordex
 #'   coefficient from permuted labels, while the vertical line shows the actual
-#'   nomap coefficient.
+#'   concordex coefficient.
 #' @export
 #' @importFrom ggplot2 ggplot geom_density geom_vline aes labs
 #' @examples
 #' library(BiocNeighbors)
 #' g <- findKNN(iris[, seq_len(4)], k = 10)
-#' res <- calculateNomap(g$index, labels = iris$Species, k = 10)
-#' plotNomapSim(res)
+#' res <- calculateConcordex(g$index, labels = iris$Species, k = 10)
+#' plotConcordexSim(res)
 #'
-plotNomapSim <- function(nomap, ...) {
-  df <- data.frame(sim = nomap$simulated)
+plotConcordexSim <- function(concordex, ...) {
+  df <- data.frame(sim = concordex$simulated)
   sim <- NULL
   ggplot(df, aes(sim)) + geom_density(...) +
-    geom_vline(xintercept = nomap$nomap) +
-    labs(x = "Monte-Carlo simulation of nomap")
+    geom_vline(xintercept = concordex$concordex) +
+    labs(x = "Monte-Carlo simulation of concordex")
 }
 
-#' Plot the nomap map matrix as a heatmap
+#' Plot the concordex map matrix as a heatmap
 #'
-#' The \code{calculateNomap} function returns a matrix showing the number of
+#' The \code{calculateConcordex} function returns a matrix showing the number of
 #' cells of each label in the neighborhood of cells of each label when argument
 #' \code{return.map = TRUE}. This function plots this matrix as a heatmap, which
 #' can be used as a clustering diagnostic.
 #'
-#' @inheritParams plotNomapSim
+#' @inheritParams plotConcordexSim
 #' @param ... Other arguments passed to \code{\link{pheatmap}} to customize the
 #' plot.
 #' @return A \code{pheatmap} object.
@@ -41,15 +41,15 @@ plotNomapSim <- function(nomap, ...) {
 #' @examples
 #' library(BiocNeighbors)
 #' g <- findKNN(iris[, seq_len(4)], k = 10)
-#' res <- calculateNomap(g$index,
+#' res <- calculateConcordex(g$index,
 #'     labels = iris$Species, k = 10,
 #'     return.map = TRUE
 #' )
-#' heatNomap(res)
+#' heatConcordex(res)
 #'
-heatNomap <- function(nomap, ...) {
-  if (!"map" %in% names(nomap)) {
-    stop("Please rerun calculateNomap with return.map = TRUE.")
+heatConcordex <- function(concordex, ...) {
+  if (!"map" %in% names(concordex)) {
+    stop("Please rerun calculateConcordex with return.map = TRUE.")
   }
-  pheatmap(nomap$map, color = scales::viridis_pal()(256), ...)
+  pheatmap(concordex$map, color = scales::viridis_pal()(256), ...)
 }

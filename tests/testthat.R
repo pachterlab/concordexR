@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(nomapR)
+library(concordexR)
 
-test_check("nomapR")
+test_check("concordexR")
