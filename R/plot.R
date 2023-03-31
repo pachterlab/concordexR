@@ -19,8 +19,8 @@
 #'
 plotNomapSim <- function(nomap, ...) {
   df <- data.frame(sim = nomap$simulated)
-  ggplot(df, aes(sim)) +
-    geom_density(...) +
+  sim <- NULL
+  ggplot(df, aes(sim)) + geom_density(...) +
     geom_vline(xintercept = nomap$nomap) +
     labs(x = "Monte-Carlo simulation of nomap")
 }
@@ -49,5 +49,5 @@ heatNomap <- function(nomap, ...) {
   if (!"map" %in% names(nomap)) {
     stop("Please rerun calculateNomap with return.map = TRUE.")
   }
-  pheatmap(nomap$map, color = scales::viridis_pal()(256))
+  pheatmap(nomap$map, color = scales::viridis_pal()(256), ...)
 }

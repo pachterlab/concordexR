@@ -7,12 +7,23 @@
 \usage{
 calculateNomap(x, ...)
 
-\S4method{calculateNomap}{ANY}(x, ...)
+\S4method{calculateNomap}{ANY}(
+  x,
+  labels,
+  k = 20,
+  n.iter = 15,
+  return.map = TRUE,
+  BPPARAM = SerialParam()
+)
 }
 \arguments{
 \item{x}{A numeric matrix specifying the neighborhood structure of
 observations. Typically an adjacency matrix produced by a k-Nearest
-Neighbor algorithm.}
+Neighbor algorithm. It can also be a matrix whose rows correspond to each
+observation and columns correspond to neighbor indices, i.e. matrix form of
+an adjacency list which can be a matrix due to fixed number of neighbors.}
+
+\item{...}{Arguments passed to methods.}
 
 \item{labels}{A numeric or character vector containing the label or class
 corresponding to each observation. For example, a cell type or cluster ID.}
@@ -63,9 +74,9 @@ neighborhood graph and observation labels.
 # Neighbors can be oriented along the rows or columns
 ncells <- 10
 k <- 3
-labels <- sample(paste0("l",1:3), ncells, replace=TRUE)
+labels <- sample(paste0("l", seq_len(3)), ncells, replace=TRUE)
 
-mtx <- sapply(1:ncells, function(x) {
+mtx <- sapply(seq_len(ncells), function(x) {
   out <- rep(0,ncells)
   out[-x] <- sample(c(rep(1,k), rep(0, ncells-k-1)))
   out
@@ -76,8 +87,8 @@ res <- calculateNomap(mtx, labels, k=k)
 res
 
 # Also works if input matrix is nxk or kxn
-mtx <- sapply(1:ncells, function(x) {
-  out <- sample((1:ncells)[-x], k)
+mtx <- sapply(seq_len(ncells), function(x) {
+  out <- sample((seq_len(ncells))[-x], k)
   out
 })
 

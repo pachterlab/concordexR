@@ -116,7 +116,7 @@
   switch(how,
       "none" = x,
       "transpose" = t(x),
-      "expand_row" = sparseMatrix(i=sort(rep(1:c,k)), j=as.vector(x), x=rep(1,c*k), dims=c(c,c)),
-      "expand_col" = sparseMatrix(i=rep(1:r,k), j=as.vector(x), x=rep(1,r*k), dims=c(r,r))
+      "expand_row" = sparseMatrix(i=sort(rep(seq_len(c),k)), j=as.vector(x), x=rep(1,c*k), dims=c(c,c)),
+      "expand_col" = sparseMatrix(i=rep(seq_len(r),k), j=as.vector(x), x=rep(1,r*k), dims=c(r,r))
   )
 }

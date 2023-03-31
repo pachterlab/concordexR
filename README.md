@@ -23,7 +23,7 @@ devtools::install_github("kayla-jackson/nomapR")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example using nomap:
 
 ``` r
 library(nomapR)
@@ -41,10 +41,10 @@ res <- calculateNomap(g$index, labels = iris$Species, k = 10, return.map = TRUE)
 plotNomapSim(res)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="70%" />
 
 ``` r
 heatNomap(res)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="70%" />

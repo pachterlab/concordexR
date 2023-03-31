@@ -27,7 +27,7 @@
 #' @importFrom BiocParallel SerialParam bplapply
 #' @importFrom rlang check_required
 .calculate_nomap <- function(
-    x, labels, k=20, n.iter=15, return.map = FALSE, BPPARAM=SerialParam(), ...){
+    x, labels, k=20, n.iter=15, return.map = TRUE, BPPARAM=SerialParam()){
 
   check_required(x)
   check_required(labels)
@@ -70,7 +70,9 @@
 #'
 #' @param x A numeric matrix specifying the neighborhood structure of
 #'   observations. Typically an adjacency matrix produced by a k-Nearest
-#'   Neighbor algorithm.
+#'   Neighbor algorithm. It can also be a matrix whose rows correspond to each
+#'   observation and columns correspond to neighbor indices, i.e. matrix form of
+#'   an adjacency list which can be a matrix due to fixed number of neighbors.
 #' @param labels A numeric or character vector containing the label or class
 #'   corresponding to each observation. For example, a cell type or cluster ID.
 #' @param k Number of neighbors to expect for each observation. Defaults to 20.
@@ -81,7 +83,7 @@
 #' @param BPPARAM A \code{\link{BiocParallelParam}} object specifying whether
 #'   and how computing the metric for numerous observations shall be
 #'   parallelized.
-#'
+#' @param ... Arguments passed to methods.
 #' @returns A named list with the following components:
 #' \describe{
 #'   \item{`nomap`}{
@@ -108,14 +110,15 @@
 #'
 #' @export
 #' @rdname calculateNomap
+#' @importFrom methods setMethod setGeneric
 #' @examples
 #' # Simplest case where input is a nxn matrix
 #' # Neighbors can be oriented along the rows or columns
 #' ncells <- 10
 #' k <- 3
-#' labels <- sample(paste0("l",1:3), ncells, replace=TRUE)
+#' labels <- sample(paste0("l", seq_len(3)), ncells, replace=TRUE)
 #'
-#' mtx <- sapply(1:ncells, function(x) {
+#' mtx <- sapply(seq_len(ncells), function(x) {
 #'   out <- rep(0,ncells)
 #'   out[-x] <- sample(c(rep(1,k), rep(0, ncells-k-1)))
 #'   out
@@ -126,16 +129,18 @@
 #' res
 #'
 #' # Also works if input matrix is nxk or kxn
-#' mtx <- sapply(1:ncells, function(x) {
-#'   out <- sample((1:ncells)[-x], k)
+#' mtx <- sapply(seq_len(ncells), function(x) {
+#'   out <- sample((seq_len(ncells))[-x], k)
 #'   out
 #' })
 #'
 #' res <- calculateNomap(mtx, labels, k=k)
 #'
 #' res
-setMethod("calculateNomap", "ANY", function(x, ...){
+setMethod("calculateNomap", "ANY",
+          function(x, labels, k=20, n.iter=15, return.map = TRUE,
+                   BPPARAM=SerialParam()){
   .check_is_matrix(x)
-  .calculate_nomap(x, ...)
+  .calculate_nomap(x, labels, k, n.iter, return.map, BPPARAM)
 })
 
