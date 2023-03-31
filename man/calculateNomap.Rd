@@ -38,7 +38,7 @@ The raw nomap coefficient corresponding to the original label assignments.
 
 \item{\code{mean_random_nomap}}{
 The average of \code{n.iter} nomap coefficients. Nomap coefficients are computed
-after after permuting the labels and reassigning them to new observations.
+after permuting the labels and reassigning them to new observations.
 }
 \item{\code{corrected_nomap}}{
 Simply the raw nomap coefficient divided by the average of the permuted
@@ -59,6 +59,29 @@ Compute the raw and corrected nomap coefficient using a
 neighborhood graph and observation labels.
 }
 \examples{
-# example code
+# Simplest case where input is a nxn matrix
+# Neighbors can be oriented along the rows or columns
+ncells <- 10
+k <- 3
+labels <- sample(paste0("l",1:3), ncells, replace=TRUE)
 
+mtx <- sapply(1:ncells, function(x) {
+  out <- rep(0,ncells)
+  out[-x] <- sample(c(rep(1,k), rep(0, ncells-k-1)))
+  out
+})
+
+res <- calculateNomap(mtx, labels, k=k)
+
+res
+
+# Also works if input matrix is nxk or kxn
+mtx <- sapply(1:ncells, function(x) {
+  out <- sample((1:ncells)[-x], k)
+  out
+})
+
+res <- calculateNomap(mtx, labels, k=k)
+
+res
 }

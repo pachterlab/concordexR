@@ -90,15 +90,17 @@
       if (all((colSums(x)/k)==1)) {return(2)}
     } else {
       axis <- which(dims == k)
+      if (length(axis) == 0L) {return(NULL)}
       if (axis == 1) {return(3)}
       if (axis == 2) {return(4)}
     }
+
     NULL
   }
 
   pattern <- guess_orientation(x,k=k,dims=dims)
 
-  if (is.null(pattern)) {
+  if (is.null(pattern)) { # probably an issue with `k`
     cli::cli_abort("Cannot determine whether neighbors are oriented on the rows or columns",..., call = call)
   }
 

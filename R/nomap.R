@@ -38,6 +38,7 @@
 
   res <- .nomap_trace(x, labels, return.map = TRUE)
   trace <- res$trace
+
   # Permute and correct trace
   trace_random <- bplapply(seq(n.iter), \(ind){
     .nomap_trace(x, sample(labels), return.map = FALSE)
@@ -54,6 +55,7 @@
     simulated = sim
   )
   if (return.map) out <- c(out, map = list(res$map))
+
   out
 }
 
@@ -88,7 +90,7 @@
 #'
 #'   \item{`mean_random_nomap`}{
 #'   The average of `n.iter` nomap coefficients. Nomap coefficients are computed
-#'   after after permuting the labels and reassigning them to new observations.
+#'   after permuting the labels and reassigning them to new observations.
 #'   }
 #'   \item{`corrected_nomap`}{
 #'   Simply the raw nomap coefficient divided by the average of the permuted
@@ -107,9 +109,31 @@
 #' @export
 #' @rdname calculateNomap
 #' @examples
-#' # example code
+#' # Simplest case where input is a nxn matrix
+#' # Neighbors can be oriented along the rows or columns
+#' ncells <- 10
+#' k <- 3
+#' labels <- sample(paste0("l",1:3), ncells, replace=TRUE)
 #'
-
+#' mtx <- sapply(1:ncells, function(x) {
+#'   out <- rep(0,ncells)
+#'   out[-x] <- sample(c(rep(1,k), rep(0, ncells-k-1)))
+#'   out
+#' })
+#'
+#' res <- calculateNomap(mtx, labels, k=k)
+#'
+#' res
+#'
+#' # Also works if input matrix is nxk or kxn
+#' mtx <- sapply(1:ncells, function(x) {
+#'   out <- sample((1:ncells)[-x], k)
+#'   out
+#' })
+#'
+#' res <- calculateNomap(mtx, labels, k=k)
+#'
+#' res
 setMethod("calculateNomap", "ANY", function(x, ...){
   .check_is_matrix(x)
   .calculate_nomap(x, ...)

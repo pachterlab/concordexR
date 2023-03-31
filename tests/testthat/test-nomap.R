@@ -1,6 +1,5 @@
 library(Matrix)
 
-# set.seed(526)
 ncells <- 100
 nlabels <- 20
 knn <- 20
@@ -9,8 +8,6 @@ nn <- rep(c(1,0), c(knn,ncells-knn))
 
 labels <- paste0("label",1:nlabels)
 labels <- sample(labels, ncells, replace = TRUE)
-
-# names(labels) <- paste0("cell_", 1:ncells)
 
 mtx <- lapply(1:ncells, function(x){
   nns <- sample(nn)
