@@ -67,7 +67,7 @@ labels <- sample(paste0("l",1:3), ncells, replace=TRUE)
 
 mtx <- sapply(1:ncells, function(x) {
   out <- rep(0,ncells)
-  out <- sample(c(rep(1,k), rep(0, ncells-k-1)))
+  out[-x] <- sample(c(rep(1,k), rep(0, ncells-k-1)))
   out
 })
 
