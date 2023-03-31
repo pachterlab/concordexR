@@ -1,0 +1,61 @@
+---
+title: "Overview of nomapR"
+author: "Lambda Moses, Kayla Jackson"
+date: "`r format(Sys.Date(), '%b %d, %Y')`"
+output:
+    BiocStyle::html_document:
+        toc: true
+        number_sections: true
+        toc_depth: 3
+        toc_float:
+            collapsed: true
+vignette: >
+  %\VignetteIndexEntry{overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>", fig.align = "center"
+)
+```
+
+The goal of nomapR is to replace UMAP as a clustering diagnostic.
+
+## Installation
+
+You can install the development version of nomapR from [GitHub](https://github.com/) with:
+
+```{r}
+# install.packages("devtools")
+# devtools::install_github("kayla-jackson/nomapR")
+```
+
+## Example of main functionality
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(nomapR)
+library(BiocNeighbors)
+```
+
+```{r}
+g <- findKNN(iris[, seq_len(4)], k = 10)
+res <- calculateNomap(g$index, labels = iris$Species, k = 10, return.map = TRUE)
+```
+
+```{r}
+plotNomapSim(res)
+```
+
+```{r}
+heatNomap(res)
+```
+
+## SessionInfo
+```{r}
+sessionInfo()
+```

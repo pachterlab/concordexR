@@ -3,60 +3,59 @@
 ############################
 #' @importFrom Matrix rowSums t
 #' @importFrom DelayedArray rowsum
-.nomap_map <- function(graph){
+.nomap_map <- function(graph) {
+    groups <- as.factor(rownames(graph))
 
-  groups <- as.factor(rownames(graph))
+    out <- rowsum(graph, groups)
+    out <- rowsum(t(out), groups)
 
-  out <- rowsum(graph, groups)
-  out <- rowsum(t(out), groups)
-
-  # transpose so that rowSums() = K
-  t(out)/rowSums(out)
+    # transpose so that rowSums() = K
+    t(out) / rowSums(out)
 }
 
-.nomap_trace <- function(graph, labels, return.map = FALSE){
-
-  graph <- .set_label_assignments(graph, labels)
-  mapped <- .nomap_map(graph)
-  tr <- mean(diag(mapped))
-  if (return.map) {
-    list(map = mapped, trace = tr)
-  } else tr
+.nomap_trace <- function(graph, labels, return.map = FALSE) {
+    graph <- .set_label_assignments(graph, labels)
+    mapped <- .nomap_map(graph)
+    tr <- mean(diag(mapped))
+    if (return.map) {
+        list(map = mapped, trace = tr)
+    } else {
+        tr
+    }
 }
 
 #' @importFrom BiocParallel SerialParam bplapply
 #' @importFrom rlang check_required
-.calculate_nomap <- function(
-    x, labels, k=20, n.iter=15, return.map = TRUE, BPPARAM=SerialParam()){
+.calculate_nomap <- function( x, labels, k=20, n.iter=15, return.map = TRUE,
+                              BPPARAM=SerialParam()){
 
-  check_required(x)
-  check_required(labels)
+    check_required(x)
+    check_required(labels)
+
+    .check_labels(labels)
+    x <- .check_graph(x, k = k)
+
+    res <- .nomap_trace(x, labels, return.map = TRUE)
+    trace <- res$trace
+
+    # Permute and correct trace
+    trace_random <- bplapply(seq(n.iter), \(ind){
+        .nomap_trace(x, sample(labels), return.map = FALSE)
+    }, BPPARAM = BPPARAM)
+
+    sim <- unlist(trace_random)
+    trace_random <- mean(sim)
 
 
-  .check_labels(labels)
-  x <- .check_graph(x, k=k)
+    out <- list(
+        nomap = trace,
+        mean_random_nomap = trace_random,
+        corrected_trace = trace / trace_random,
+        simulated = sim
+    )
+    if (return.map) out <- c(out, map = list(res$map))
 
-  res <- .nomap_trace(x, labels, return.map = TRUE)
-  trace <- res$trace
-
-  # Permute and correct trace
-  trace_random <- bplapply(seq(n.iter), \(ind){
-    .nomap_trace(x, sample(labels), return.map = FALSE)
-  }, BPPARAM=BPPARAM)
-
-  sim <- unlist(trace_random)
-  trace_random <- mean(sim)
-
-
-  out <- list(
-    nomap = trace,
-    mean_random_nomap = trace_random,
-    corrected_trace = trace/trace_random,
-    simulated = sim
-  )
-  if (return.map) out <- c(out, map = list(res$map))
-
-  out
+    out
 }
 
 ############################
@@ -114,27 +113,27 @@
 #' @examples
 #' # Simplest case where input is a nxn matrix
 #' # Neighbors can be oriented along the rows or columns
-#' ncells <- 10
+#' nCells <- 10
 #' k <- 3
-#' labels <- sample(paste0("l", seq_len(3)), ncells, replace=TRUE)
+#' labels <- sample(paste0("l", seq_len(3)), nCells, replace=TRUE)
 #'
-#' mtx <- sapply(seq_len(ncells), function(x) {
-#'   out <- rep(0,ncells)
-#'   out[-x] <- sample(c(rep(1,k), rep(0, ncells-k-1)))
-#'   out
+#' mtx <- sapply(seq_len(nCells), function(x) {
+#'     out <- rep(0, nCells)
+#'     out[-x] <- sample(c(rep(1, k), rep(0, nCells - k - 1)))
+#'     out
 #' })
 #'
-#' res <- calculateNomap(mtx, labels, k=k)
+#' res <- calculateNomap(mtx, labels, k = k)
 #'
 #' res
 #'
 #' # Also works if input matrix is nxk or kxn
-#' mtx <- sapply(seq_len(ncells), function(x) {
-#'   out <- sample((seq_len(ncells))[-x], k)
+#' mtx <- sapply(seq_len(nCells), function(x) {
+#'   out <- sample((seq_len(nCells))[-x], k)
 #'   out
 #' })
 #'
-#' res <- calculateNomap(mtx, labels, k=k)
+#' res <- calculateNomap(mtx, labels, k = k)
 #'
 #' res
 setMethod("calculateNomap", "ANY",
@@ -143,4 +142,3 @@ setMethod("calculateNomap", "ANY",
   .check_is_matrix(x)
   .calculate_nomap(x, labels, k, n.iter, return.map, BPPARAM)
 })
-

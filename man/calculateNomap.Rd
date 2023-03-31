@@ -72,27 +72,27 @@ neighborhood graph and observation labels.
 \examples{
 # Simplest case where input is a nxn matrix
 # Neighbors can be oriented along the rows or columns
-ncells <- 10
+nCells <- 10
 k <- 3
-labels <- sample(paste0("l", seq_len(3)), ncells, replace=TRUE)
+labels <- sample(paste0("l", seq_len(3)), nCells, replace=TRUE)
 
-mtx <- sapply(seq_len(ncells), function(x) {
-  out <- rep(0,ncells)
-  out[-x] <- sample(c(rep(1,k), rep(0, ncells-k-1)))
-  out
+mtx <- sapply(seq_len(nCells), function(x) {
+    out <- rep(0, nCells)
+    out[-x] <- sample(c(rep(1, k), rep(0, nCells - k - 1)))
+    out
 })
 
-res <- calculateNomap(mtx, labels, k=k)
+res <- calculateNomap(mtx, labels, k = k)
 
 res
 
 # Also works if input matrix is nxk or kxn
-mtx <- sapply(seq_len(ncells), function(x) {
-  out <- sample((seq_len(ncells))[-x], k)
+mtx <- sapply(seq_len(nCells), function(x) {
+  out <- sample((seq_len(nCells))[-x], k)
   out
 })
 
-res <- calculateNomap(mtx, labels, k=k)
+res <- calculateNomap(mtx, labels, k = k)
 
 res
 }
