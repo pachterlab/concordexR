@@ -17,7 +17,8 @@ Description: Many analysis workflows include approximation of a nearest
     clustering results. The package 'concordexR' is an R implementation of the
     original concordex Python-based command line tool.
 License: Artistic-2.0
-URL: https://github.com/kayla-jackson/concordexR
+URL: https://github.com/kayla-jackson/concordexR,
+    https://pachterlab.github.io/concordexR/
 BugReports: https://github.com/kayla-jackson/concordexR/issues
 Imports: 
     BiocParallel,
