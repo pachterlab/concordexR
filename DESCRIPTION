@@ -25,12 +25,15 @@ Imports:
     DelayedArray,
     ggplot2,
     Matrix,
-    rlang
+    pheatmap,
+    rlang,
+    scales
 Suggests: 
-    bluster,
+    BiocNeighbors,
     scater,
     scRNAseq,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    vdiffr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3

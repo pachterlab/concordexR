@@ -105,7 +105,7 @@
   switch(pattern, "none", "transpose", "expand_row", "expand_col")
 }
 
-#' @importFrom Matrix spMatrix t
+#' @importFrom Matrix spMatrix t sparseMatrix
 .reorient_matrix <- function(x, k, how){
   dims <- .check_matrix_dims(x, return_dims=TRUE)
   r <- dims[1]
