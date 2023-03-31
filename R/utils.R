@@ -90,9 +90,11 @@
       if (all((colSums(x)/k)==1)) {return(2)}
     } else {
       axis <- which(dims == k)
+      if (length(axis) == 0L) {return(NULL)}
       if (axis == 1) {return(3)}
       if (axis == 2) {return(4)}
     }
+
     NULL
   }
 
