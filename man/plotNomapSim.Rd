@@ -23,7 +23,7 @@ actual value.
 }
 \examples{
 library(BiocNeighbors)
-g <- findKNN(iris[,seq_len(4)], k = 10)
+g <- findKNN(iris[, seq_len(4)], k = 10)
 res <- calculateNomap(g$index, labels = iris$Species, k = 10)
 plotNomapSim(res)
 
