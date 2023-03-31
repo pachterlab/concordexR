@@ -16,7 +16,7 @@ Description: Many analysis workflows include approximation of a nearest
     nomap coefficient estimates the similarity between the graph and
     clustering results.  The package 'nomapR' is an R implementation of the
     original nomap Python package.
-License: CC0
+License: BSD_2_clause + file LICENSE
 URL: https://github.com/kayla-jackson/nomapR
 BugReports: https://github.com/kayla-jackson/nomapR/issues
 Imports: 
