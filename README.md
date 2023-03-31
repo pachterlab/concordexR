@@ -31,7 +31,7 @@ library(BiocNeighbors)
 ```
 
 ``` r
-g <- findKNN(iris[,seq_len(4)], k = 10)
+g <- findKNN(iris[, seq_len(4)], k = 10)
 #> Warning in (function (to_check, X, clust_centers, clust_info, dtype, nn, :
 #> detected tied distances to neighbors, see ?'BiocNeighbors-ties'
 res <- calculateNomap(g$index, labels = iris$Species, k = 10, return.map = TRUE)
