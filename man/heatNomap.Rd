@@ -23,9 +23,11 @@ can be used as a clustering diagnostic.
 }
 \examples{
 library(BiocNeighbors)
-g <- findKNN(iris[,seq_len(4)], k = 10)
-res <- calculateNomap(g$index, labels = iris$Species, k = 10,
-                      return.map = TRUE)
+g <- findKNN(iris[, seq_len(4)], k = 10)
+res <- calculateNomap(g$index,
+    labels = iris$Species, k = 10,
+    return.map = TRUE
+)
 heatNomap(res)
 
 }
