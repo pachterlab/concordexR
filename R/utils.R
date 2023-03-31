@@ -98,7 +98,7 @@
 
   pattern <- guess_orientation(x,k=k,dims=dims)
 
-  if (is.null(pattern)) {
+  if (is.null(pattern)) { # probably an issue with `k`
     cli::cli_abort("Cannot determine whether neighbors are oriented on the rows or columns",..., call = call)
   }
 
