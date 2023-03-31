@@ -7,7 +7,7 @@
 
     cli::cli_abort(
       c("Must have at least 2 distinct labels",
-        "i" = "There {?is/are} {no(n_uniq)} class label{?s}"),
+        "i" = "There {?is/are} {n_uniq} class label{?s}"),
       call = rlang::caller_env()
     )
   }

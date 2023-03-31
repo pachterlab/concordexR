@@ -14,19 +14,20 @@
   t(out)/rowSums(out)
 }
 
-.nomap_trace <- function(graph, labels, return.map=FALSE){
+.nomap_trace <- function(graph, labels, return.map = FALSE){
 
   graph <- .set_label_assignments(graph, labels)
   mapped <- .nomap_map(graph)
-
-  mean(diag(mapped))
-
+  tr <- mean(diag(mapped))
+  if (return.map) {
+    list(map = mapped, trace = tr)
+  } else tr
 }
 
 #' @importFrom BiocParallel SerialParam bplapply
 #' @importFrom rlang check_required
 .calculate_nomap <- function(
-    x, labels, k=20, n.iter=15, return.map=FALSE, BPPARAM=SerialParam(), ...){
+    x, labels, k=20, n.iter=15, return.map = FALSE, BPPARAM=SerialParam(), ...){
 
   check_required(x)
   check_required(labels)
@@ -35,30 +36,24 @@
   .check_labels(labels)
   x <- .check_graph(x, k=k)
 
-  trace <- .nomap_trace(x, labels)
-
+  res <- .nomap_trace(x, labels, return.map = TRUE)
+  trace <- res$trace
   # Permute and correct trace
   trace_random <- bplapply(seq(n.iter), \(ind){
-    .nomap_trace(x, sample(labels))
+    .nomap_trace(x, sample(labels), return.map = FALSE)
   }, BPPARAM=BPPARAM)
 
-  trace_random <- mean(unlist(trace_random))
+  sim <- unlist(trace_random)
+  trace_random <- mean(sim)
 
-  if (return.map) {
-    # Not yet implemented
-    return(
-      list(
-        nomap = trace,
-        mean_random_nomap = trace_random,
-        corrected_nomap = trace/trace_random
-      ))
-    }
-
-  list(
+  out <- list(
     nomap = trace,
     mean_random_nomap = trace_random,
-    corrected_trace = trace/trace_random
+    corrected_trace = trace/trace_random,
+    simulated = sim
   )
+  if (return.map) out <- c(out, map = list(res$map))
+  out
 }
 
 ############################
@@ -67,19 +62,22 @@
 
 #' Compute the Nomap coefficient
 #'
-#' @description
-#' Compute the raw and corrected nomap coefficient using a neighborhood graph
-#' and observation labels.
+#' @description Compute the raw and corrected nomap coefficient using a
+#'   neighborhood graph and observation labels.
 #'
-#' @param x A numeric matrix specifying the neighborhood structure of observations.
-#' Typically an adjacency matrix produced by a k-Nearest Neighbor algorithm.
+#' @param x A numeric matrix specifying the neighborhood structure of
+#'   observations. Typically an adjacency matrix produced by a k-Nearest
+#'   Neighbor algorithm.
 #' @param labels A numeric or character vector containing the label or class
-#' corresponding to each observation. For example, a cell type or cluster ID.
+#'   corresponding to each observation. For example, a cell type or cluster ID.
 #' @param k Number of neighbors to expect for each observation. Defaults to 20.
 #' @param n.iter A number specifying the number of permutations for correcting
-#' the coefficient.
+#'   the coefficient.
+#' @param return.map Logical, whether to return the matrix of the number of
+#'   cells of each label in the neighborhood of cells of each label.
 #' @param BPPARAM A \code{\link{BiocParallelParam}} object specifying whether
-#'   and how computing the metric for numerous observations shall be parallelized.
+#'   and how computing the metric for numerous observations shall be
+#'   parallelized.
 #'
 #' @returns A named list with the following components:
 #' \describe{
@@ -95,10 +93,21 @@
 #'   Simply the raw nomap coefficient divided by the average of the permuted
 #'   coefficients.
 #'   }
+#'   \item{`simulated`}{
+#'   Numeric vector of the nomap coefficients from permuted labels, showing the
+#'   null distribution.
+#'   }
+#'   \item{`map`}{
+#'   Numeric matrix of the number of cells of each label in the neighborhood of
+#'   cells of each label. Only returned when \code{return.map = TRUE}.
+#'   }
 #' }
 #'
 #' @export
 #' @rdname calculateNomap
+#' @examples
+#' # example code
+#'
 
 setMethod("calculateNomap", "ANY", function(x, ...){
   .check_is_matrix(x)
