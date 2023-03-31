@@ -46,6 +46,7 @@
   sim <- unlist(trace_random)
   trace_random <- mean(sim)
 
+
   out <- list(
     nomap = trace,
     mean_random_nomap = trace_random,

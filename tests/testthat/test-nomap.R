@@ -83,6 +83,10 @@ test_that("Error and messages for wrong number of labels", {
                "Too many labels supplied")
 })
 
+test_that("Number of neighbors (k) is verified",{
+  expect_error(calculateNomap(mtx, labels, k=2), 'orient')
+})
+
 test_that("Matrix (re)-orientation is working properly", {
   res1 <- calculateNomap(sp_mtx, labels, k = knn)
   res2 <- calculateNomap(t(sp_mtx), labels, k = knn)
