@@ -43,4 +43,8 @@ RoxygenNote: 7.2.3
 Depends: 
     R (>= 4.2)
 Config/testthat/edition: 3
+biocViews:
+    SingleCell,
+    Clustering,
+    GraphAndNetwork
 VignetteBuilder: knitr
