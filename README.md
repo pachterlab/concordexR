@@ -5,8 +5,7 @@
 
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/kayla-jackson/concordexR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/kayla-jackson/concordexR?branch=master)
+[![codecov](https://codecov.io/gh/pachterlab/concordexR/branch/main/graph/badge.svg?token=FSASJPR4T5)](https://codecov.io/gh/pachterlab/concordexR)
 <!-- badges: end -->
 
 The goal of concordexR is to replace UMAP as a clustering diagnostic.
@@ -18,7 +17,7 @@ You can install the development version of concordexR from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("pachterlab/concordexR")
+devtools::install_github("kayla-jackson/concordexR")
 ```
 
 ## Example
