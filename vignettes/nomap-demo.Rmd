@@ -28,7 +28,7 @@ UMAP is commonly used in scRNA-seq data analysis as a visualization tool project
 
 In a nutshell, `nomap` finds the proportion of cells among the k nearest neighbors of each cell with the same cluster or label as the cell itself. This is computed across all labels and the average of all labels is returned as a metric that indicates the quality of clustering. To see if this is significant, the labels are permuted to estimate a null distribution and the actual observed value is compared to the simulated values. If the clustering separates cells well, then the observed value should be much higher than the simulated values, i.e. the neighborhood of each cell is more dominated by cells of the same label as the cell of interest than by chance.
 
-```{r setup}
+```{r setup, message=FALSE}
 library(nomapR)
 library(TENxPBMCData)
 library(BiocNeighbors)
@@ -157,3 +157,5 @@ This heatmap also indicates good clustering, as almost all neighbors of cells fr
 ```{r}
 sessionInfo()
 ```
+
+# References
