@@ -75,7 +75,8 @@ neighborhood graph and observation labels.
 # Neighbors can be oriented along the rows or columns
 nCells <- 10
 k <- 3
-set.seed(40); labels <- sample(paste0("l", seq_len(3)), nCells, replace=TRUE)
+set.seed(40)
+labels <- sample(paste0("l", seq_len(3)), nCells, replace=TRUE)
 
 mtx <- sapply(seq_len(nCells), function(x) {
     out <- rep(0, nCells)

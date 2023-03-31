@@ -9,8 +9,6 @@
     out <- rowsum(graph, groups)
     out <- rowsum(t(out), groups)
 
-    print(out)
-
     # denominator is the number of observations for each label
     t(out) / colSums(out)
 }
