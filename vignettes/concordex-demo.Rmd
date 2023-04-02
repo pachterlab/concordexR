@@ -148,7 +148,7 @@ A number greater than 1 means that cells are more likely to have neighbors with 
 While the value is an average over all clusters, the matrix with the values for each cluster is also returned by default, and can be visualized in a heatmap, as a clustering diagnostic:
 
 ```{r, fig.width=4.5, fig.height=4}
-heatConcordex(res, angle_col = 0)
+heatConcordex(res, angle_col = 0, cluster_rows = FALSE, cluster_cols = FALSE)
 ```
 
 This heatmap also indicates good clustering, as almost all neighbors of cells from each of the cluster labels have the same label, on the diagonal. Off diagonal entries should be interpreted as such: (i,j) means the proportion of cells with label i in the neighborhood of cells with label j. Off diagonal entries means ambiguity between labels as similar cells get different labels. As overplotting easily happens on the UMAP plot, this heatmap shows clustering quality more unambiguously than UMAP.
