@@ -76,7 +76,7 @@
                         <h4 data-toc-skip class="author">Lambda
 Moses</h4>
             
-            <h4 data-toc-skip class="date">Mar 31, 2023</h4>
+            <h4 data-toc-skip class="date">Apr 03, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/pachterlab/concordexR/blob/HEAD/vignettes/concordex-demo.Rmd" class="external-link"><code>vignettes/concordex-demo.Rmd</code></a></small>
       <div class="d-none name"><code>concordex-demo.Rmd</code></div>
@@ -179,7 +179,8 @@ definitely levels off after PC10, so we use the top 10 PCs for
 clustering here. The graph based Leiden clustering uses a k nearest
 neighbor graph. For demonstration here, we use <code>k = 10</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sce</span><span class="op">$</span><span class="va">cluster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/bluster/man/clusterRows.html" class="external-link">clusterRows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">reducedDim</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">"PCA"</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">]</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">29</span><span class="op">)</span></span>
+<span><span class="va">sce</span><span class="op">$</span><span class="va">cluster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/bluster/man/clusterRows.html" class="external-link">clusterRows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">reducedDim</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">"PCA"</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>                           <span class="fu"><a href="https://rdrr.io/pkg/bluster/man/NNGraphParam-class.html" class="external-link">NNGraphParam</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">10</span>, cluster.fun <span class="op">=</span> <span class="st">"leiden"</span>,</span>
 <span>                                        cluster.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>                                          objective_function <span class="op">=</span> <span class="st">"modularity"</span></span>
@@ -245,7 +246,7 @@ labels.</p>
 simulated value is also returned:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span><span class="op">$</span><span class="va">corrected_trace</span></span>
-<span><span class="co">#&gt; [1] 8.418956</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 7.64354</span></span></code></pre></div>
 <p>A number greater than 1 means that cells are more likely to have
 neighbors with the same label than expected by chance when the labels
 are completely randomly assigned, and the value of 7.7 here means that
@@ -254,7 +255,7 @@ the clusters are really good.</p>
 values for each cluster is also returned by default, and can be
 visualized in a heatmap, as a clustering diagnostic:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/heatConcordex.html">heatConcordex</a></span><span class="op">(</span><span class="va">res</span>, angle_col <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/heatConcordex.html">heatConcordex</a></span><span class="op">(</span><span class="va">res</span>, angle_col <span class="op">=</span> <span class="fl">0</span>, cluster_rows <span class="op">=</span> <span class="cn">FALSE</span>, cluster_cols <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="concordex-demo_files/figure-html/unnamed-chunk-18-1.png" width="432"></p>
 <p>This heatmap also indicates good clustering, as almost all neighbors
 of cells from each of the cluster labels have the same label, on the
