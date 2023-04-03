@@ -13,7 +13,7 @@ Authors@R: c(
   )
 Description: Many analysis workflows include approximation of a nearest
     neighbors graph followed by clustering of the graph structure. The
-    concordex coefficient estimates the similarity between the graph and
+    concordex coefficient estimates the concordance between the graph and
     clustering results. The package 'concordexR' is an R implementation of the
     original concordex Python-based command line tool.
 License: Artistic-2.0
