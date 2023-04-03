@@ -93,6 +93,7 @@ plot(attr(reducedDim(sce, "PCA"), "percentVar"), ylab = "Percentage of variance 
 Percentage of variance explained drops sharply from PC1 to PC5, and definitely levels off after PC10, so we use the top 10 PCs for clustering here. The graph based Leiden clustering uses a k nearest neighbor graph. For demonstration here, we use `k = 10`.
 
 ```{r}
+set.seed(29)
 sce$cluster <- clusterRows(reducedDim(sce, "PCA")[,seq_len(10)],
                            NNGraphParam(k = 10, cluster.fun = "leiden",
                                         cluster.args = list(
