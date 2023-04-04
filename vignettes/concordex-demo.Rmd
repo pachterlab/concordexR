@@ -141,7 +141,7 @@ Here the actual value is much higher than the simulated values, indicating that 
 
 To aid interpretation, the ratio of the observed value to the average simulated value is also returned:
 ```{r}
-res$corrected_trace
+res$concordex_ratio
 ```
 
 A number greater than 1 means that cells are more likely to have neighbors with the same label than expected by chance when the labels are completely randomly assigned, and the value of 7.7 here means that the clusters are really good.
