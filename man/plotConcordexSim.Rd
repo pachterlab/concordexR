@@ -17,8 +17,8 @@ coefficient from permuted labels, while the vertical line shows the actual
 concordex coefficient.
 }
 \description{
-The concordex traces from permuted labels represent the null distribution of the
-trace. This can be plotted as a density plot and visually compared to the
+The concordex values from permuted labels represent the null distribution of the
+statistic. This can be plotted as a density plot and visually compared to the
 actual value.
 }
 \examples{

@@ -13,20 +13,22 @@
     t(out) / colSums(out)
 }
 
-.concordex_trace <- function(graph, labels, return.map = FALSE) {
+.concordex_stat <- function(graph, labels, return.map = FALSE) {
     graph <- .set_label_assignments(graph, labels)
     mapped <- .concordex_map(graph)
-    tr <- mean(diag(mapped))
+
+    stat <- mean(diag(mapped))
+
     if (return.map) {
-        list(map = mapped, trace = tr)
+        list(map = mapped, concordex = stat)
     } else {
-        tr
+        stat
     }
 }
 
 #' @importFrom BiocParallel SerialParam bplapply
 #' @importFrom rlang check_required
-.calculate_concordex <- function( x, labels, k=20, n.iter=15, return.map = TRUE,
+.calculate_concordex <- function(x, labels, k=20, n.iter=15, return.map = TRUE,
                               BPPARAM=SerialParam()){
 
     check_required(x)
@@ -35,22 +37,22 @@
     .check_labels(labels)
     x <- .check_graph(x, k = k)
 
-    res <- .concordex_trace(x, labels, return.map = TRUE)
-    trace <- res$trace
+    res <- .concordex_stat(x, labels, return.map = TRUE)
+    concordex <- res$concordex
 
-    # Permute and correct trace
-    trace_random <- bplapply(seq(n.iter), \(ind){
-        .concordex_trace(x, sample(labels), return.map = FALSE)
+    # Permute and correct concordex statistic
+    concordex_random <- bplapply(seq(n.iter), \(ind){
+        .concordex_stat(x, sample(labels), return.map = FALSE)
     }, BPPARAM = BPPARAM)
 
-    sim <- unlist(trace_random)
-    trace_random <- mean(sim)
+    sim <- unlist(concordex_random)
+    concordex_random <- mean(sim)
 
 
     out <- list(
-        concordex = trace,
-        mean_random_concordex = trace_random,
-        corrected_trace = trace / trace_random,
+        concordex = concordex,
+        mean_random_concordex = concordex_random,
+        concordex_ratio = concordex / concordex_random,
         simulated = sim
     )
     if (return.map) out <- c(out, map = list(res$map))
