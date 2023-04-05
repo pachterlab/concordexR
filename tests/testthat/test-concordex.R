@@ -22,7 +22,7 @@ mtx <- lapply(seq_len(ncells), function(x){
 
 mtx <- do.call(rbind, mtx)
 sp_mtx <- as(mtx, "dgCMatrix")
-nms <- c("concordex", "mean_random_concordex", "corrected_trace", "simulated")
+nms <- c("concordex", "mean_random_concordex", "concordex_ratio", "simulated")
 
 test_that("calculateConcordex (matrix/array) returns correct output", {
     res <- calculateConcordex(mtx, labels, return.map = FALSE)
