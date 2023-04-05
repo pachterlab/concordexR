@@ -26,11 +26,10 @@ The goal of concordexR is to replace UMAP as a clustering diagnostic.
 
 ## Installation
 
-You can install the development version of concordexR from [GitHub](https://github.com/) with:
+This package can be installed from Bioconductor since version 3.17 with 
 
-```{r}
-# install.packages("devtools")
-# devtools::install_github("pachterlab/concordexR")
+```{r, eval=FALSE}
+BiocManager::install("concordexR")
 ```
 
 ## Example of main functionality
