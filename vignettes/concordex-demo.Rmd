@@ -195,7 +195,7 @@ same label, averaged over all labels.
 To aid interpretation, the ratio of the observed value to the average simulated
 value is also returned:
 
-``` {r}
+```{r}
 res$concordex_ratio
 ```
 
