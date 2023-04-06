@@ -196,7 +196,7 @@ To aid interpretation, the ratio of the observed value to the average simulated
 value is also returned:
 
 ``` {r}
-res$corrected_trace
+res$concordex_ratio
 ```
 
 A number greater than 1 means that cells are more likely to have neighbors with
