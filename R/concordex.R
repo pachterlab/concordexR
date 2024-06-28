@@ -37,9 +37,11 @@
     .check_labels(labels)
     x <- .check_graph(x, k = k)
 
+    # Compute the concordex statistics
     res <- .concordex_stat(x, labels, return.map = TRUE)
     concordex <- res$concordex
 
+    # Perform the normalizations....
     # Permute and correct concordex statistic
     concordex_random <- bplapply(seq(n.iter), \(ind){
         .concordex_stat(x, sample(labels), return.map = FALSE)
@@ -143,6 +145,42 @@
 setMethod("calculateConcordex", "ANY",
           function(x, labels, k=20, n.iter=15, return.map = TRUE,
                    BPPARAM=SerialParam()){
+              # Need to check if BNINDEX is missing or not
   .check_is_matrix(x)
+
   .calculate_concordex(x, labels, k, n.iter, return.map, BPPARAM)
 })
+
+setMethod("calculateConcordex", "SummarizedExperiment",
+          function(x, labels, ..., assay.type="logcounts") {
+
+              #2. Get labels
+              #3. ... are extra arguments to default method
+              calculateConcordex(assay(x, i=assay.type), labels, ...)
+
+          })
+
+setMethod("calculateConcordex", "SingleCellExperiment",
+          function(x, labels, ..., use.dimred=NULL) {
+
+              #2. Get labels
+              #3. ... are extra arguments to default method
+              if (!is.null(use.dimred)) {
+                  calculateConcordex(reducedDim(x, use.dimred), labels, ...)
+              } else {
+                  callNextMethod(x=x, labels=labels, ...)
+              }
+
+          })
+#' @importFrom SpatialExperiment spatialCoords
+setMethod("calculateConcordex", "SpatialExperiment",
+          function(x, labels, ..., use.spatial=TRUE){
+
+              if (use.spatial) {
+                  calculateConcordex(spatialCoords(x), labels=labels, ...)
+
+              } else {
+                  callNextMethod(x=x, labels=labels, ...)
+              }
+
+          })
