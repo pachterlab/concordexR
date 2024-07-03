@@ -1,5 +1,3 @@
-labels_set_names <- set_names_handler(allow_missing_nm=FALSE, allow_null_nm=FALSE)
-
 labels_pull <- function(x, labels, ...) {
 
     if(is.null(x) & !missing(labels)) {
@@ -53,10 +51,10 @@ labels_walk <- function(x, labels, ..., allow.dimred=TRUE) {
 }
 
 #' Collapse multiple discrete vectors and one-hot-encode
-labels_make_friendly <- function(labels, ..., sep="_", nm=NULL) {
+labels_make_friendly <- function(labels, nm=NULL, sep="_", ...) {
 
     .type = labels_guess_type(labels)
-    attr(labels, "labelclass") <- attr(.type, "labelclass")
+    # attr(labels, "labelclass") <- attr(.type, "labelclass") # doesn't work for non-vectors
 
     if (.type == "type_mixed_compatible_multi" || .type == "type_discrete_multi") {
         labels <- do.call(paste, args=c(labels))
@@ -69,13 +67,18 @@ labels_make_friendly <- function(labels, ..., sep="_", nm=NULL) {
         dimnames(labels)[[2]] <- gsub("labels_", "", dimnames(labels)[[2]])
     }
 
-    label_set_names(labels, nm=nm)
+    labels_set_names(labels, nm=nm)
 }
 
 #' Friendly types for continuous/discrete label combinations
 labels_guess_type <- function(labels) {
 
     types <- unique(sapply(labels, typeof))
+
+    if (is_Matrix(labels)) {
+        if (all(labels@x == floor(labels@x)))
+            types <- "integer"
+    }
 
     out_type <- NULL
     suffix <- if (is.vector(labels)) "vector" else "multi"
@@ -105,7 +108,7 @@ labels_guess_type <- function(labels) {
     out_type <- paste(out_type, suffix, sep="_")
 
     attr(out_type, "labelclass") <-
-        if (grepl("discrete", .type)) "discrete" else "continuous"
+        if (grepl("discrete", out_type)) "discrete" else "continuous"
 
     out_type
 }
@@ -145,7 +148,7 @@ check_labels <- function(labels, expected=NULL) {
 }
 
 is_discrete_labels <- function(labels) {
-    lc <- attr(labels, "labelclass")
+    lc <- attr(labels_guess_type(labels), "labelclass")
 
     if (lc == "discrete") {
         return(TRUE)
