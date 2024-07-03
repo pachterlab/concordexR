@@ -4,7 +4,7 @@
 \alias{labels_make_friendly}
 \title{Collapse multiple discrete vectors and one-hot-encode}
 \usage{
-labels_make_friendly(labels, ..., sep = "_", nm = NULL)
+labels_make_friendly(labels, nm = NULL, sep = "_", ...)
 }
 \description{
 Collapse multiple discrete vectors and one-hot-encode

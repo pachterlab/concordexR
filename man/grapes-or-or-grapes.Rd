@@ -2,10 +2,10 @@
 % Please edit documentation in R/utils.R
 \name{\%||\%}
 \alias{\%||\%}
-\title{return default value if 'x' is null}
+\title{Return default value if 'x' is null}
 \usage{
 x \%||\% y
 }
 \description{
-return default value if 'x' is null
+Return default value if 'x' is null
 }
