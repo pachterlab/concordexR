@@ -1,143 +1,127 @@
-#' @importFrom cli cli_abort
-.check_labels <- function(labels, expected = NULL) {
-    uniq <- unique(labels)
-    n_uniq <- length(uniq)
-
-    if (n_uniq < 2L) {
-        cli::cli_abort(
-            c("Must have at least 2 distinct labels",
-                "i" = "There {?is/are} {n_uniq} class label{?s}"
-            ),
-            call = rlang::caller_env()
-        )
-    }
-
-    # How many labels should there be?
-    if (!is.null(expected)) {
-        n_labels <- length(labels)
-
-        if (n_labels != expected) {
-            message <- switch(sign(n_labels - expected) + 2,
-                "Too few labels supplied",
-                "You have supplied the appropriate number of labels",
-                "Too many labels supplied"
-            )
-            cli::cli_abort(
-                c(message,
-                    "i" = "{expected} label{?s} are required",
-                    "x" = "You supplied {n_labels} label{?s}"
-                ),
-                call = rlang::caller_env()
-            )
-        }
-    }
-
-    invisible(TRUE)
+#' Return default value if 'x' is null
+'%||%' <- function(x, y) {
+    if (is.null(x)) x <- y
+    x
 }
 
-.set_label_assignments <- function(graph, labels) {
-    dims <- dim(graph)
-    .check_labels(labels, expected = dims[1])
+#' alias for `attributes`
+attrs <- attributes
 
-    dimnames(graph) <- list(labels, labels)
-
-    graph
-}
-
-#' @importFrom cli cli_abort cli_warn
-#' @importFrom rlang is_missing is_empty caller_env
-#' @importFrom Matrix diag
-.check_graph <- function(graph, k, ..., call = rlang::caller_env()) {
-    orientation <- .check_matrix_dims(graph, k = k, return_dims = FALSE)
-    graph <- .reorient_matrix(graph, k = k, how = orientation)
-
-    # Check to see if graph is self-referential, warn for now
-
-    diag_s <- sum(diag(graph))
-    if (diag_s != 0L) {
-        cli::cli_warn(
-            c("Some nodes in the graph are self-referential",
-                "!" = "There should not be an edge between a node and itself"
-            ),
-            call = call
-        )
-    }
-
-    graph
-}
-
-#' @importFrom cli cli_abort
-.check_is_matrix <- function(x, ..., call = rlang::caller_env()) {
+check_is_matrix <- function(x, ..., call = rlang::caller_env()) {
     if (!inherits(x, c("matrix", "Matrix"))) {
-        cli::cli_abort("{.arg x} must be a matrix, not a {.cls {class(x)}}.", ..., call = call)
+        stop_no_call("{.arg x} must be a matrix, not a {.cls {class(x)}}.",
+                     .envir=rlang::current_env())
     }
 }
+
 
 #' @importFrom cli cli_abort
-#' @importFrom Matrix rowSums colSums
-.check_matrix_dims <- function(x, k, return_dims = FALSE, ..., call = rlang::caller_env()) {
-    .check_is_matrix(x, .internal = TRUE)
+stop_handler <- function(call=NULL, internal=FALSE) {
+    function(message,
+             info=NULL,
+             success=NULL,
+             failure=NULL,
+             error_bullets=NULL,
+             ...) {
 
-    dims <- dim(x)
-
-    if (return_dims) {
-        return(dims)
-    }
-
-    guess_orientation <- function(x, k, dims) {
-        if (diff(dims) == 0L) {
-            if (all((rowSums(x) / k) == 1)) {
-                return(1)
-            }
-            if (all((colSums(x) / k) == 1)) {
-                return(2)
-            }
-        } else {
-            axis <- which(dims == k)
-            if (length(axis) == 0L) {
-                return(NULL)
-            }
-            if (axis == 1) {
-                return(3)
-            }
-            if (axis == 2) {
-                return(4)
-            }
-        }
-
-        NULL
-    }
-
-    pattern <- guess_orientation(x, k = k, dims = dims)
-
-    if (is.null(pattern)) { # probably an issue with `k`
-        cli::cli_abort("Cannot determine whether neighbors are oriented on the rows or columns", ..., call = call)
-    }
-
-    switch(pattern,
-        "none",
-        "transpose",
-        "expand_row",
-        "expand_col"
-    )
-}
-
-#' @importFrom Matrix spMatrix t sparseMatrix
-.reorient_matrix <- function(x, k, how) {
-    dims <- .check_matrix_dims(x, return_dims = TRUE)
-    r <- dims[1]
-    c <- dims[2]
-
-    switch(how,
-        "none" = x,
-        "transpose" = t(x),
-        "expand_row" = sparseMatrix(
-            i = sort(rep(seq_len(c), k)), j = as.vector(x),
-            x = rep(1, c * k), dims = c(c, c)
-        ),
-        "expand_col" = sparseMatrix(
-            i = rep(seq_len(r), k), j = as.vector(x),
-            x = rep(1, r * k), dims = c(r, r)
+        message <- c(
+            message,
+            "i"=info,
+            "v"=success,
+            "x"=failure,
+            "!"=error_bullets
         )
-    )
+
+        cli_abort(message, call=call, .internal=internal, ...)
+    }
 }
+
+#' @importFrom cli cli_warn
+warn_handler <- function(call=NULL, internal=FALSE) {
+    function(message,
+             info=NULL, success=NULL,
+             failure=NULL,error_bullets=NULL) {
+
+        message <- c(
+            message,
+            "i"=info,
+            "v"=success,
+            "x"=failure,
+            "!"=error_bullets
+        )
+
+        cli_warn(message, call=call, .internal=internal)
+    }
+}
+
+stop_no_call_internal <- stop_handler(internal=TRUE)
+warn_no_call_internal <- warn_handler(internal=TRUE)
+
+stop_no_call <- stop_handler()
+warning_no_call <- warn_handler()
+
+nullify_if <- function(predicate_fun, ...) {
+    dots <- list(...)
+
+    function(x, y) {
+        cnd <- do.call(predicate_fun, c(list(x=x), dots))
+        if (cnd) {
+            return(NULL)
+        }
+        y
+    }
+}
+
+#' Is the object some flavor of a data frame?
+is_frame_object <- function(x) {
+    options <- c("data.frame", "DFrame", "DataFrame")
+
+    inherits(x, what=options)
+}
+
+#' If object `x` is a vector, return `y`
+nullify_if_vector <- nullify_if(is.vector)
+nullify_if_data_frame <- nullify_if(is_frame_object)
+
+#' Ensure object is named
+named <- function(x, nm, margin=1L) {
+
+    if (is.vector(x)) {
+        return(rlang::set_names(x, nm))
+    } else {
+        dimnames(x)[[margin]] <- nm
+        return(x)
+    }
+}
+
+#' Set names to margin of a matrix or update names of a vector
+set_names_handler <- function(allow_missing_nm=TRUE, allow_null_nm=TRUE, margin=1L) {
+
+       function(x, nm, ...) {
+
+           dims <- dim(x) %||% length(x)
+
+           if (margin > length(dims))
+               stop_no_call("{.arg margin} does not match dimensions of {.arg x}")
+
+           if ((allow_missing_nm & missing(nm)) || (allow_null_nm & is.null(nm))) {
+               # keep existing margin names
+               nm_existing <- dimnames(x)[[margin]] %||% nullify_if_data_frame(x, names(x))
+               nm <- nm_existing %||% paste0("...", seq_len(dims[margin]))
+           } else {
+               stop_no_call("{.arg nm} Must be supplied and cannot be {.val NULL}")
+           }
+
+           if (dims[margin] != length(nm)) {
+               stop_no_call(
+                   "{length(nm)} label{?s} were supplied, but {dims[margin]} are required.",
+                   .envir=rlang::current_env()
+                )
+           }
+
+           named(x, nm, margin)
+       }
+}
+
+row_set_names <- set_names_handler(margin=1)
+col_set_names <- set_names_handler(margin=2)
