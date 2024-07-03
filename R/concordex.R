@@ -1,8 +1,4 @@
-############################
-# S4 method definitions
-############################
-
-#' Identify Spatially Homogenous Regions with concordex
+#' Identify Spatially Homogeneous Regions with concordex
 #'
 #' @description Compute the raw and corrected concordex coefficient using a
 #'   neighborhood graph and observation labels.
@@ -49,35 +45,13 @@
 #'
 #' @export
 #' @rdname calculateConcordex
+#'
+#' @importFrom cli cli_abort cli_warn
 #' @importFrom methods setMethod setGeneric
-#' @examples
-#'
-#' # Simplest case where input is a nxn matrix
-#' # Neighbors can be oriented along the rows or columns
-#' nCells <- 10
-#' k <- 3
-#' set.seed(40)
-#' labels <- sample(paste0("l", seq_len(3)), nCells, replace=TRUE)
-#'
-#' mtx <- sapply(seq_len(nCells), function(x) {
-#'     out <- rep(0, nCells)
-#'     out[-x] <- sample(c(rep(1, k), rep(0, nCells - k - 1)))
-#'     out
-#' })
-#'
-#' res <- calculateConcordex(mtx, labels, k = k)
-#'
-#' res
-#'
-#' # Also works if input matrix is nxk or kxn
-#' mtx <- sapply(seq_len(nCells), function(x) {
-#'   out <- sample((seq_len(nCells))[-x], k)
-#'   out
-#' })
-#'
-#' res <- calculateConcordex(mtx, labels, k = k)
-#'
-#' res
+#' @importFrom rlang check_dots_empty check_required
+#' @importFrom BiocNeighbors findKNN KmknnParam
+#' @importFrom BiocParallel SerialParam bplapply
+
 setMethod("calculateConcordex", "ANY",
           function(x, labels,
             ...,
@@ -93,6 +67,7 @@ setMethod("calculateConcordex", "ANY",
               check_required(x)
               check_required(labels)
 
+              check_all_numeric(x)
               check_labels(labels, expected=dim(x)[1])
 
               labels <- labels_make_friendly(labels, nm=dimnames(x)[[1]])

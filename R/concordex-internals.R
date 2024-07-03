@@ -1,9 +1,9 @@
 #' @importFrom Matrix rowSums t
 #' @importFrom DelayedArray rowsum
+#' @importFrom BiocGenerics which
 .concordex_map <- function(nbc, labels, n_neighbors) {
-
     # Temporarily collapse labels
-    labels <- which(labels==1,arr.ind=TRUE)[,'col']
+    labels <- which(labels==1, arr.ind=TRUE)[,'col']
 
     nbc <- nbc*n_neighbors
     out <- rowsum(nbc, labels)
@@ -15,6 +15,7 @@
     out
 }
 
+#' @importFrom Matrix colMeans
 .concordex_nbhd_consolidation <- function(
         g, labels,
         ...,
@@ -25,7 +26,7 @@
 
     # Compute for each row(/spot/cell)
     nbc <- bplapply(seq_len(dims[1]), function(row) {
-        nbx <- Matrix::colMeans(labels[g[row,],])
+        nbx <- colMeans(labels[g[row,],])
         as(nbx,"sparseMatrix")}, BPPARAM=BPPARAM)
 
     nbc <- do.call(cbind, nbc)
@@ -43,8 +44,6 @@
     list(similarity=mapped, concordex=cdx)
 }
 
-#' @importFrom BiocParallel SerialParam bplapply
-#' @importFrom rlang check_required check_dots_empty
 .calculate_concordex <- function(
         x,
         labels,
@@ -92,7 +91,7 @@
     }
 
     if (compute_similarity) {
-        # Compute concordex statistics
+        # statistics
         cdx <- .concordex_stat(nbc, labels, n_neighbors=n_neighbors)
         attr(nbc, "similarity") <- cdx$similarity
         attr(nbc, "concordex") <- cdx$concordex
