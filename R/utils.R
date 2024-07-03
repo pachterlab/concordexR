@@ -14,8 +14,18 @@ check_is_matrix <- function(x, ..., call = rlang::caller_env()) {
     }
 }
 
+#' Are all entries in the input numeric?
+check_all_numeric <- function(x) {
+    all_numeric <- sapply(x, is.numeric)
 
-#' @importFrom cli cli_abort
+    if (!all(all_numeric))
+        stop_no_call(
+            "All entries in {.arg x} must be numeric.",
+            info="Here are the indices of the problematic columns/entries: {which(!all_numeric)}",
+            .envir=rlang::current_env())
+}
+
+#' @importFrom cli cli_abort cli_warn
 stop_handler <- function(call=NULL, internal=FALSE) {
     function(message,
              info=NULL,
@@ -36,7 +46,6 @@ stop_handler <- function(call=NULL, internal=FALSE) {
     }
 }
 
-#' @importFrom cli cli_warn
 warn_handler <- function(call=NULL, internal=FALSE) {
     function(message,
              info=NULL, success=NULL,
