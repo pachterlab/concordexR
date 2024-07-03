@@ -94,7 +94,8 @@ setMethod("calculateConcordex", "ANY",
               check_required(labels)
 
               check_labels(labels, expected=dim(x)[1])
-              labels <- labels_make_friendly(labels, nm=dimnames(x)[1])
+
+              labels <- labels_make_friendly(labels, nm=dimnames(x)[[1]])
 
               req_args <- list(
                   x=x,
