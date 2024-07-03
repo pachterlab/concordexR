@@ -3,16 +3,19 @@
 \name{calculateConcordex}
 \alias{calculateConcordex}
 \alias{calculateConcordex,ANY-method}
-\title{Compute the concordex coefficient}
+\title{Identify Spatially Homogenous Regions with concordex}
 \usage{
 calculateConcordex(x, ...)
 
 \S4method{calculateConcordex}{ANY}(
   x,
   labels,
-  k = 20,
-  n.iter = 15,
-  return.map = TRUE,
+  ...,
+  n_neighbors = 30,
+  compute_similarity = FALSE,
+  BLUSPARAM,
+  BNINDEX,
+  BNPARAM = KmknnParam(),
   BPPARAM = SerialParam()
 )
 }
@@ -28,6 +31,10 @@ an adjacency list which can be a matrix due to fixed number of neighbors.}
 \item{labels}{A numeric or character vector containing the label or class
 corresponding to each observation. For example, a cell type or cluster ID.}
 
+\item{BPPARAM}{A \code{\link{BiocParallelParam}} object specifying whether
+and how computing the metric for numerous observations shall be
+parallelized.}
+
 \item{k}{Number of neighbors to expect for each observation. Defaults to 20.}
 
 \item{n.iter}{A number specifying the number of permutations for correcting
@@ -35,10 +42,6 @@ the coefficient.}
 
 \item{return.map}{Logical, whether to return the matrix of the number of
 cells of each label in the neighborhood of cells of each label.}
-
-\item{BPPARAM}{A \code{\link{BiocParallelParam}} object specifying whether
-and how computing the metric for numerous observations shall be
-parallelized.}
 }
 \value{
 A named list with the following components:
