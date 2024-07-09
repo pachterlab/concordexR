@@ -86,7 +86,7 @@
     nbc <- .concordex_nbhd_consolidation(g, labels,BPPARAM=BPPARAM)
 
     if (cluster_neighborhoods & !missing(BLUSPARAM)) {
-        shr <- bluster::clusterRows(nbc, BLUSPARAM=BLUSPARM)
+        shr <- bluster::clusterRows(nbc, BLUSPARAM=BLUSPARAM)
         attr(nbc, "shrs") <- shr
     }
 
