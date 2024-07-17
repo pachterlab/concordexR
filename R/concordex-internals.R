@@ -4,13 +4,15 @@
 .concordex_map <- function(nbc, labels, n_neighbors) {
     # Temporarily collapse labels
     labels <- which(labels==1, arr.ind=TRUE)[,'col']
+    tally_labs <- table(labels)
 
-    nbc <- nbc*n_neighbors
+    nbc <- nbc
     out <- rowsum(nbc, labels)
 
     # denominator is the number of observations for each label
-    out <- out / rowSums(out)
-    dimnames(out)[[1]] <- dimnames(out)[[2]]
+    out <- out / c(tally_labs[dimnames(out)[[1]]])
+
+    dimnames(out)[[2]] <- dimnames(nbc)[[1]]
 
     out
 }
@@ -24,7 +26,12 @@
     rlang::check_dots_empty()
     dims <- dim(g)
 
-    # Compute for each row(/spot/cell)
+    # After a preliminary benchmarking on Mac/Linux, there is little
+    # advantage (compared to a for loop) to implementing parallel
+    # processing using `BiocParallel` here. There are some advantages to using
+    # `furrr` implementations, but I will need to think more about
+    # the UI with 2 different parallel implementations in the same package
+
     nbc <- bplapply(seq_len(dims[1]), function(row) {
         nbx <- colMeans(labels[g[row,],])
         as(nbx,"sparseMatrix")}, BPPARAM=BPPARAM)
