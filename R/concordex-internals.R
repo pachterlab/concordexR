@@ -18,6 +18,7 @@
 }
 
 #' @importFrom Matrix colMeans
+#' @importFrom sparseMatrixStats colMeans2
 .concordex_nbhd_consolidation <- function(
         g, labels,
         ...,
@@ -26,15 +27,15 @@
     rlang::check_dots_empty()
     dims <- dim(g)
 
-    # After a preliminary benchmarking on Mac/Linux, there is little
-    # advantage (compared to a for loop) to implementing parallel
-    # processing using `BiocParallel` here. There are some advantages to using
-    # `furrr` implementations, but I will need to think more about
-    # the UI with 2 different parallel implementations in the same package
 
-    nbc <- bplapply(seq_len(dims[1]), function(row) {
-        nbx <- colMeans(labels[g[row,],])
-        as(nbx,"sparseMatrix")}, BPPARAM=BPPARAM)
+    # The graph is dense, so we can get some improvements on mapping
+    # by converting to a list of rows
+    g <- purrr::map(data.frame(g), c)
+
+    nbc <- bplapply(g, function(rows) {
+        nbx <- colMeans2(labels, rows=rows)
+        as(nbx,"sparseMatrix")},
+    BPPARAM=BPPARAM)
 
     nbc <- do.call(cbind, nbc)
 
