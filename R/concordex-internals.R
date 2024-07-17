@@ -33,7 +33,7 @@
     g <- purrr::map(data.frame(g), c)
 
     nbc <- bplapply(g, function(rows) {
-        nbx <- colMeans2(labels, rows=rows)
+        nbx <- sparseMatrixStats::colMeans2(labels, rows=rows)
         as(nbx,"sparseMatrix")},
     BPPARAM=BPPARAM)
 
