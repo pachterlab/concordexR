@@ -30,7 +30,7 @@
 
     # The graph is dense, so we can get some improvements on mapping
     # by converting to a list of rows
-    g <- purrr::map(data.frame(g), c)
+    g <- purrr::pmap(data.frame(g), c)
 
     nbc <- bplapply(g, function(rows) {
         nbx <- sparseMatrixStats::colMeans2(labels, rows=rows)
