@@ -37,8 +37,10 @@ Imports:
     Matrix,
     methods,
     pheatmap,
+    purrr,
     rlang,
     scales,
+    sparseMatrixStats,
     SpatialExperiment
 Suggests: 
     BiocManager,
@@ -53,7 +55,7 @@ Suggests:
     vdiffr
 VignetteBuilder: 
     knitr
-biocViews:SingleCell, Clustering, GraphAndNetwork
+biocViews: SingleCell, Clustering, GraphAndNetwork
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

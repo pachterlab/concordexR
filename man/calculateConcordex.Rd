@@ -31,16 +31,13 @@ an adjacency list which can be a matrix due to fixed number of neighbors.}
 \item{labels}{A numeric or character vector containing the label or class
 corresponding to each observation. For example, a cell type or cluster ID.}
 
+\item{n_neighbors}{Number of neighbors to expect for each observation. Defaults to 20.}
+
 \item{BPPARAM}{A \code{\link{BiocParallelParam}} object specifying whether
 and how computing the metric for numerous observations shall be
 parallelized.}
 
-\item{k}{Number of neighbors to expect for each observation. Defaults to 20.}
-
-\item{n.iter}{A number specifying the number of permutations for correcting
-the coefficient.}
-
-\item{return.map}{Logical, whether to return the matrix of the number of
+\item{computes_similarity}{Logical, whether to return the matrix of the number of
 cells of each label in the neighborhood of cells of each label.}
 }
 \value{
