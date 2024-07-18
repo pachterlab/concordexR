@@ -41,10 +41,11 @@ labels_walk <- function(x, labels, ..., allow.dimred=TRUE) {
         }
 
     } else {
+
         if (any(labels %in% dimnames(colData(x))[[2]])) {
 
             which_labels <- intersect(labels, dimnames(colData(x))[[2]])
-            return(labels_pull(colData(x), labels=labels[which_labels]))
+            return(labels_pull(colData(x), labels=which_labels))
         }
     }
     stop_no_call("The labels were not found in {.arg x}")
