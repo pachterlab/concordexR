@@ -82,11 +82,10 @@ nullify_if <- function(predicate_fun, ...) {
 }
 
 
-is_integer <- function(x) {
+is_integer <- function(x, tol=.Machine$double.eps^0.5) {
     if (is.numeric(x)) {
-        return(all(x == floor(x)))
+        return(all(abs(x - round(x)) < tol))
     }
-
     FALSE
 }
 
