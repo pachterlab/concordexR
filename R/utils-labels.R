@@ -54,7 +54,6 @@ labels_walk <- function(x, labels, ..., allow.dimred=TRUE) {
 labels_make_friendly <- function(labels, nm=NULL, sep="_", ...) {
 
     .type = labels_guess_type(labels)
-    # attr(labels, "labelclass") <- attr(.type, "labelclass") # doesn't work for non-vectors
 
     if (.type == "type_mixed_compatible_multi" || .type == "type_discrete_multi") {
         labels <- do.call(paste, args=c(labels))
@@ -63,7 +62,9 @@ labels_make_friendly <- function(labels, nm=NULL, sep="_", ...) {
     }
 
     if (.type == "type_discrete_vector") {
+        labels <- as.character(labels)
         labels <- Matrix::sparse.model.matrix(~0+labels,sep=sep)
+
         dimnames(labels)[[2]] <- gsub("labels_", "", dimnames(labels)[[2]])
     }
 
@@ -76,8 +77,14 @@ labels_guess_type <- function(labels) {
     types <- unique(sapply(labels, typeof))
 
     if (is_Matrix(labels)) {
-        if (all(labels@x == floor(labels@x)))
+        if(is_integer(labels@x)) {
             types <- "integer"
+        }
+    }
+
+    # Catch rogue intger vectors
+    if (is_integer(labels)) {
+        types <- "integer"
     }
 
     out_type <- NULL

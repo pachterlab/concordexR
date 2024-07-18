@@ -10,10 +10,8 @@
 #'   an adjacency list which can be a matrix due to fixed number of neighbors.
 #' @param labels A numeric or character vector containing the label or class
 #'   corresponding to each observation. For example, a cell type or cluster ID.
-#' @param k Number of neighbors to expect for each observation. Defaults to 20.
-#' @param n.iter A number specifying the number of permutations for correcting
-#'   the coefficient.
-#' @param return.map Logical, whether to return the matrix of the number of
+#' @param n_neighbors Number of neighbors to expect for each observation. Defaults to 20.
+#' @param computes_similarity Logical, whether to return the matrix of the number of
 #'   cells of each label in the neighborhood of cells of each label.
 #' @param BPPARAM A \code{\link{BiocParallelParam}} object specifying whether
 #'   and how computing the metric for numerous observations shall be

@@ -81,6 +81,15 @@ nullify_if <- function(predicate_fun, ...) {
     }
 }
 
+
+is_integer <- function(x) {
+    if (is.numeric(x)) {
+        return(all(x == floor(x)))
+    }
+
+    FALSE
+}
+
 #' Is the object some flavor of a data frame?
 is_frame_object <- function(x) {
     options <- c("data.frame", "DFrame", "DataFrame")

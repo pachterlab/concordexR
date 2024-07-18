@@ -3,16 +3,18 @@
 #' @importFrom BiocGenerics which
 .concordex_map <- function(nbc, labels, n_neighbors) {
     # Temporarily collapse labels
-    labels <- which(labels==1, arr.ind=TRUE)[,'col']
-    tally_labs <- table(labels)
+    inds <- which(labels==1, arr.ind=TRUE)
+    inds <- inds[order(inds[,1]), 2]
 
-    nbc <- nbc
+    labels <- dimnames(labels)[[2]][inds]
+
+    tally_labs <- table(labels)
+    tally_labs <- c(tally_labs)
+
     out <- rowsum(nbc, labels)
 
     # denominator is the number of observations for each label
-    out <- out / c(tally_labs[dimnames(out)[[1]]])
-
-    dimnames(out)[[2]] <- dimnames(nbc)[[1]]
+    out <- out / tally_labs[dimnames(out)[[1]]]
 
     out
 }
@@ -91,7 +93,7 @@
     g <- g$index
 
     # Compute for each row(/cell/spot) in g
-    nbc <- .concordex_nbhd_consolidation(g, labels,BPPARAM=BPPARAM)
+    nbc <- .concordex_nbhd_consolidation(g, labels, BPPARAM=BPPARAM)
 
     if (cluster_neighborhoods & !missing(BLUSPARAM)) {
         if (class(BLUSPARAM) %in% "MbkmeansParam") {
