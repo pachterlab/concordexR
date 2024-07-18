@@ -1,70 +1,4 @@
-############################
-# Internal functions
-############################
-#' @importFrom Matrix rowSums t
-#' @importFrom DelayedArray rowsum
-.concordex_map <- function(graph) {
-    groups <- as.factor(rownames(graph))
-
-    out <- rowsum(graph, groups)
-    out <- rowsum(t(out), groups)
-
-    # denominator is the number of observations for each label
-    t(out) / colSums(out)
-}
-
-.concordex_stat <- function(graph, labels, return.map = FALSE) {
-    graph <- .set_label_assignments(graph, labels)
-    mapped <- .concordex_map(graph)
-
-    stat <- mean(diag(mapped))
-
-    if (return.map) {
-        list(map = mapped, concordex = stat)
-    } else {
-        stat
-    }
-}
-
-#' @importFrom BiocParallel SerialParam bplapply
-#' @importFrom rlang check_required
-.calculate_concordex <- function(x, labels, k=20, n.iter=15, return.map = TRUE,
-                              BPPARAM=SerialParam()){
-
-    check_required(x)
-    check_required(labels)
-
-    .check_labels(labels)
-    x <- .check_graph(x, k = k)
-
-    res <- .concordex_stat(x, labels, return.map = TRUE)
-    concordex <- res$concordex
-
-    # Permute and correct concordex statistic
-    concordex_random <- bplapply(seq(n.iter), \(ind){
-        .concordex_stat(x, sample(labels), return.map = FALSE)
-    }, BPPARAM = BPPARAM)
-
-    sim <- unlist(concordex_random)
-    concordex_random <- mean(sim)
-
-
-    out <- list(
-        concordex = concordex,
-        mean_random_concordex = concordex_random,
-        concordex_ratio = concordex / concordex_random,
-        simulated = sim
-    )
-    if (return.map) out <- c(out, map = list(res$map))
-
-    out
-}
-
-############################
-# S4 method definitions
-############################
-
-#' Compute the concordex coefficient
+#' Identify Spatially Homogeneous Regions with concordex
 #'
 #' @description Compute the raw and corrected concordex coefficient using a
 #'   neighborhood graph and observation labels.
@@ -76,10 +10,8 @@
 #'   an adjacency list which can be a matrix due to fixed number of neighbors.
 #' @param labels A numeric or character vector containing the label or class
 #'   corresponding to each observation. For example, a cell type or cluster ID.
-#' @param k Number of neighbors to expect for each observation. Defaults to 20.
-#' @param n.iter A number specifying the number of permutations for correcting
-#'   the coefficient.
-#' @param return.map Logical, whether to return the matrix of the number of
+#' @param n_neighbors Number of neighbors to expect for each observation. Defaults to 20.
+#' @param computes_similarity Logical, whether to return the matrix of the number of
 #'   cells of each label in the neighborhood of cells of each label.
 #' @param BPPARAM A \code{\link{BiocParallelParam}} object specifying whether
 #'   and how computing the metric for numerous observations shall be
@@ -111,38 +43,90 @@
 #'
 #' @export
 #' @rdname calculateConcordex
+#'
+#' @importFrom cli cli_abort cli_warn
 #' @importFrom methods setMethod setGeneric
-#' @examples
-#'
-#' # Simplest case where input is a nxn matrix
-#' # Neighbors can be oriented along the rows or columns
-#' nCells <- 10
-#' k <- 3
-#' set.seed(40)
-#' labels <- sample(paste0("l", seq_len(3)), nCells, replace=TRUE)
-#'
-#' mtx <- sapply(seq_len(nCells), function(x) {
-#'     out <- rep(0, nCells)
-#'     out[-x] <- sample(c(rep(1, k), rep(0, nCells - k - 1)))
-#'     out
-#' })
-#'
-#' res <- calculateConcordex(mtx, labels, k = k)
-#'
-#' res
-#'
-#' # Also works if input matrix is nxk or kxn
-#' mtx <- sapply(seq_len(nCells), function(x) {
-#'   out <- sample((seq_len(nCells))[-x], k)
-#'   out
-#' })
-#'
-#' res <- calculateConcordex(mtx, labels, k = k)
-#'
-#' res
+#' @importFrom rlang check_dots_empty check_required
+#' @importFrom BiocNeighbors findKNN KmknnParam
+#' @importFrom BiocParallel SerialParam bplapply
+
 setMethod("calculateConcordex", "ANY",
-          function(x, labels, k=20, n.iter=15, return.map = TRUE,
-                   BPPARAM=SerialParam()){
-  .check_is_matrix(x)
-  .calculate_concordex(x, labels, k, n.iter, return.map, BPPARAM)
-})
+          function(x, labels,
+            ...,
+            n_neighbors=30,
+            compute_similarity=FALSE,
+            BLUSPARAM,
+            BNINDEX,
+            BNPARAM=KmknnParam(),
+            BPPARAM=SerialParam()) {
+
+              check_dots_empty()
+
+              check_required(x)
+              check_required(labels)
+
+              check_all_numeric(x)
+              check_labels(labels, expected=dim(x)[1])
+
+              labels <- labels_make_friendly(labels, nm=dimnames(x)[[1]])
+
+              req_args <- list(
+                  x=x,
+                  labels=labels,
+                  n_neighbors=n_neighbors,
+                  compute_similarity=compute_similarity,
+                  BNPARAM=BNPARAM,
+                  BPPARAM=BPPARAM)
+
+              other_args <- list()
+
+              if (!is_discrete_labels(labels) & compute_similarity) {
+                  req_args['compute_similarity'] <- FALSE
+                  warn_no_call("Discrete labels are required to compute the similarity matrix.")
+              }
+
+              # More argument checking
+              if (!missing(BNINDEX)) {
+                  other_args[["BNINDEX"]] <- BNINDEX
+                  other_args[['precomputed']] <- TRUE
+              }
+              if (!missing(BLUSPARAM)) {
+                  other_args[["BLUSPARAM"]] <- BLUSPARAM
+                  other_args[['cluster_neighborhoods']] <- TRUE
+              }
+
+              all_args <- c(req_args, other_args)
+              do.call(.calculate_concordex, all_args)
+          })
+
+setMethod("calculateConcordex", "SummarizedExperiment",
+          function(x, labels, ..., assay.type="logcounts") {
+
+              labels <- labels_walk(x, labels)
+              calculateConcordex(t(assay(x, i=assay.type)), labels, ...)
+          })
+
+setMethod("calculateConcordex", "SingleCellExperiment",
+          function(x, labels, ..., use.dimred=NULL) {
+
+              if (!is.null(use.dimred)) {
+                  labels <- labels_walk(x, labels, allow.dimred=FALSE)
+                  calculateConcordex(reducedDim(x, use.dimred), labels, ...)
+
+              } else {
+                  callNextMethod(x=x, labels=labels, ...)
+              }
+          })
+
+#' @importFrom SpatialExperiment spatialCoords
+setMethod("calculateConcordex", "SpatialExperiment",
+          function(x, labels, ..., use.spatial=TRUE) {
+
+              labels <- labels_walk(x, labels)
+
+              if (use.spatial) {
+                  calculateConcordex(spatialCoords(x), labels=labels, ...)
+              } else {
+                  callNextMethod(x=x, labels=labels, ...)
+              }
+          })

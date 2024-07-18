@@ -3,16 +3,19 @@
 \name{calculateConcordex}
 \alias{calculateConcordex}
 \alias{calculateConcordex,ANY-method}
-\title{Compute the concordex coefficient}
+\title{Identify Spatially Homogeneous Regions with concordex}
 \usage{
 calculateConcordex(x, ...)
 
 \S4method{calculateConcordex}{ANY}(
   x,
   labels,
-  k = 20,
-  n.iter = 15,
-  return.map = TRUE,
+  ...,
+  n_neighbors = 30,
+  compute_similarity = FALSE,
+  BLUSPARAM,
+  BNINDEX,
+  BNPARAM = KmknnParam(),
   BPPARAM = SerialParam()
 )
 }
@@ -28,17 +31,14 @@ an adjacency list which can be a matrix due to fixed number of neighbors.}
 \item{labels}{A numeric or character vector containing the label or class
 corresponding to each observation. For example, a cell type or cluster ID.}
 
-\item{k}{Number of neighbors to expect for each observation. Defaults to 20.}
-
-\item{n.iter}{A number specifying the number of permutations for correcting
-the coefficient.}
-
-\item{return.map}{Logical, whether to return the matrix of the number of
-cells of each label in the neighborhood of cells of each label.}
+\item{n_neighbors}{Number of neighbors to expect for each observation. Defaults to 20.}
 
 \item{BPPARAM}{A \code{\link{BiocParallelParam}} object specifying whether
 and how computing the metric for numerous observations shall be
 parallelized.}
+
+\item{computes_similarity}{Logical, whether to return the matrix of the number of
+cells of each label in the neighborhood of cells of each label.}
 }
 \value{
 A named list with the following components:
@@ -68,33 +68,4 @@ cells of each label. Only returned when \code{return.map = TRUE}.
 \description{
 Compute the raw and corrected concordex coefficient using a
 neighborhood graph and observation labels.
-}
-\examples{
-
-# Simplest case where input is a nxn matrix
-# Neighbors can be oriented along the rows or columns
-nCells <- 10
-k <- 3
-set.seed(40)
-labels <- sample(paste0("l", seq_len(3)), nCells, replace=TRUE)
-
-mtx <- sapply(seq_len(nCells), function(x) {
-    out <- rep(0, nCells)
-    out[-x] <- sample(c(rep(1, k), rep(0, nCells - k - 1)))
-    out
-})
-
-res <- calculateConcordex(mtx, labels, k = k)
-
-res
-
-# Also works if input matrix is nxk or kxn
-mtx <- sapply(seq_len(nCells), function(x) {
-  out <- sample((seq_len(nCells))[-x], k)
-  out
-})
-
-res <- calculateConcordex(mtx, labels, k = k)
-
-res
 }

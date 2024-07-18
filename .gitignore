@@ -13,3 +13,6 @@
 .DS_Store
 inst/doc
 docs
+figures
+
+manuscript/
