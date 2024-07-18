@@ -1,6 +1,6 @@
 ---
-title: "Using concordex in place of UMAP in scRNA-seq"
-author: "Lambda Moses"
+title: "Using concordex in to assess cluster boundaries in scRNA-seq"
+author: "Lambda Moses, Kayla Jackson"
 date: "`r format(Sys.Date(), '%b %d, %Y')`"
 output:
     BiocStyle::html_document:
@@ -11,7 +11,7 @@ output:
             collapsed: true
 bibliography: ref.bib
 vignette: >
-  %\VignetteIndexEntry{concordex-demo}
+  %\VignetteIndexEntry{concordex-nonspatial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

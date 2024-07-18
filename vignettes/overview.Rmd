@@ -22,14 +22,21 @@ knitr::opts_chunk$set(
 )
 ```
 
-The goal of concordexR is to replace UMAP as a clustering diagnostic.
+The goal of concordexR is to identify spatial homogeneous regions (SHRs) as defined in the recent manuscrpt["Identification of spatial homogenous regions in tissues with concordex"](https://doi.org/10.1101/2023.06.28.546949). Briefly, SHRs are are domains that are homogeneous with respect to cell type composition. concordex relies on the the k-nearest-neighbor (kNN) graph to representing similarities between cells and uses common clustering algorithms to identify SHRs.
 
 ## Installation
 
+This package is under active development will be available in the Bioconductor version 3.20 release. 
+
+Until then, please install the package from Github or from the Bioconductor devel branch. 
 This package can be installed from Bioconductor since version 3.17 with 
 
 ```{r, eval=FALSE}
-BiocManager::install("concordexR")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+
+#BiocManager::install("concordexR", version="devel")
+devtools::install_github("pachterlab/concordexR")
 ```
 
 ## Example of main functionality
@@ -38,7 +45,6 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(concordexR)
-library(BiocNeighbors)
 ```
 
 ```{r}
@@ -46,13 +52,6 @@ g <- findKNN(iris[, seq_len(4)], k = 10)
 res <- calculateConcordex(g$index, labels = iris$Species, k = 10, return.map = TRUE)
 ```
 
-```{r}
-plotConcordexSim(res)
-```
-
-```{r}
-heatConcordex(res)
-```
 
 ## SessionInfo
 ```{r}
