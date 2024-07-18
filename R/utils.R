@@ -1,10 +1,12 @@
 #' Return default value if 'x' is null
+#' @noRd
 '%||%' <- function(x, y) {
     if (is.null(x)) x <- y
     x
 }
 
 #' alias for `attributes`
+#' @noRd
 attrs <- attributes
 
 check_is_matrix <- function(x, ..., call = rlang::caller_env()) {
@@ -15,6 +17,7 @@ check_is_matrix <- function(x, ..., call = rlang::caller_env()) {
 }
 
 #' Are all entries in the input numeric?
+#' @noRd
 check_all_numeric <- function(x) {
     all_numeric <- sapply(x, is.numeric)
 
@@ -26,6 +29,7 @@ check_all_numeric <- function(x) {
 }
 
 #' @importFrom cli cli_abort cli_warn
+#' @noRd
 stop_handler <- function(call=NULL, internal=FALSE) {
     function(message,
              info=NULL,
@@ -81,31 +85,32 @@ nullify_if <- function(predicate_fun, ...) {
     }
 }
 
+#' If object `x` is a vector, return `y`
+#' @noRd
+nullify_if_vector <- nullify_if(is.vector)
+nullify_if_data_frame <- nullify_if(is_frame_object)
+
+
+inherits_from <- function(options) {
+    function(x) inherits(x, options)
+}
+
+is_frame_object <- inherits_from(c("data.frame", "DFrame", "DataFrame"))
+is_Matrix <- inherits_from("Matrix")
+is_numeric <- inherits_from(c("Matrix","numeric"))
+
 
 is_integer <- function(x, tol=.Machine$double.eps^0.5) {
-    if (is.numeric(x)) {
+    if (is_numeric(x)) {
         return(all(abs(x - round(x)) < tol))
     }
     FALSE
 }
 
-#' Is the object some flavor of a data frame?
-is_frame_object <- function(x) {
-    options <- c("data.frame", "DFrame", "DataFrame")
 
-    inherits(x, what=options)
-}
-
-#' Is the object a matrix in the sparse sense
-is_Matrix <- function(x) {
-    inherits(x, "Matrix")
-}
-
-#' If object `x` is a vector, return `y`
-nullify_if_vector <- nullify_if(is.vector)
-nullify_if_data_frame <- nullify_if(is_frame_object)
 
 #' Ensure object is named
+#' @noRd
 named <- function(x, nm, margin=1L) {
 
     if (is.vector(x)) {
@@ -117,6 +122,7 @@ named <- function(x, nm, margin=1L) {
 }
 
 #' Set names to margin of a matrix or update names of a vector
+#' @noRd
 set_names_handler <- function(allow_missing_nm=TRUE, allow_null_nm=TRUE, margin=1L) {
 
        function(x, nm, ...) {
