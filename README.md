@@ -8,7 +8,7 @@
 [![codecov](https://codecov.io/gh/pachterlab/concordexR/branch/main/graph/badge.svg?token=FSASJPR4T5)](https://codecov.io/gh/pachterlab/concordexR)
 <!-- badges: end -->
 
-The goal of concordexR is to replace UMAP as a clustering diagnostic.
+The goal of concordexR is to identify spatial homogeneous regions (SHRs) as defined in the recent manuscrpt["Identification of spatial homogenous regions in tissues with concordex"](https://doi.org/10.1101/2023.06.28.546949). Briefly, SHRs are are domains that are homogeneous with respect to cell type composition. concordex relies on the the k-nearest-neighbor (kNN) graph to representing similarities between cells and uses common clustering algorithms to identify SHRs.
 
 ## Installation
 
@@ -26,13 +26,9 @@ This is a basic example using concordex:
 
 ``` r
 library(concordexR)
-library(BiocNeighbors)
 ```
 
 ``` r
-g <- findKNN(iris[, seq_len(4)], k = 10)
-#> Warning in (function (to_check, X, clust_centers, clust_info, dtype, nn, :
-#> detected tied distances to neighbors, see ?'BiocNeighbors-ties'
 res <- calculateConcordex(g$index, labels = iris$Species, k = 10, return.map = TRUE)
 ```
 
