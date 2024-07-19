@@ -97,6 +97,8 @@ setMethod("calculateConcordex", "ANY",
           })
 
 #' @param ... Other parameters passed to methods
+#' @param assay.type String or integer scalar indicating the assay of \code{x}
+#'   containing the counts.
 #'
 #' @export
 #' @docType methods
@@ -110,6 +112,10 @@ setMethod("calculateConcordex", "SummarizedExperiment",
           })
 
 #' @param ... Other parameters passed to methods
+#' @param use.dimred Integer or string specifying the reduced dimensions to use
+#'   for construction of the k-nearest neighbor graph. Note that if this is not
+#'   \code{NULL}, reduced dimensions can not be used as labels to compute the
+#'   neighborhood consolidation matrix.
 #'
 #' @export
 #' @docType methods
@@ -129,6 +135,8 @@ setMethod("calculateConcordex", "SingleCellExperiment",
 
 
 #' @param ... Other parameters passed to methods
+#' @use.spatial Logical, should the spatial coordinates be used to compute the
+#' k-nearest neighbor graph?
 #'
 #' @export
 #' @docType methods
