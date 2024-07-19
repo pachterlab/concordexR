@@ -88,6 +88,7 @@ p1 <- plotColData(sce, x = "nCounts", y = "nGenes") +
   geom_density2d()
 p2 <- plotColData(sce, x = "nCounts", y = "pct_mito") +
   geom_density2d()
+
 p1 + p2
 ```
 
@@ -176,7 +177,7 @@ the `Seurat` object, can also be used. Here the cluster labels are permuted 100
 times.
 
 ``` {r}
-res <- calculateConcordex(g$index, labels = sce$cluster, k = 10, n.iter = 100)
+res <- calculateConcordex(sce, labels="cluster", n_neighbors=10)
 ```
 
 The results can be visualized in plots, which is implemented in this R package
