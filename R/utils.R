@@ -71,7 +71,7 @@ stop_no_call_internal <- stop_handler(internal=TRUE)
 warn_no_call_internal <- warn_handler(internal=TRUE)
 
 stop_no_call <- stop_handler()
-warning_no_call <- warn_handler()
+warn_no_call <- warn_handler()
 
 nullify_if <- function(predicate_fun, ...) {
     dots <- list(...)
