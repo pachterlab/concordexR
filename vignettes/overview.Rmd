@@ -44,11 +44,13 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(concordexR)
+library(SFEData)
+
+sfe <- McKellarMuscleData("small")
 ```
 
 ```{r}
-library(SFEData)
-res <- calculateConcordex(g$index, labels = iris$Species, k = 10, return.map = TRUE)
+res <- calculateConcordex(sfe, labels=colData(sfe)[["in_tissue"]])
 ```
 
 
