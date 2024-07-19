@@ -1,5 +1,5 @@
 Package: concordexR
-Title: Identify Spatially Homogeneous Regions with concordex
+Title: Identify Spatial Homogeneous Regions with concordex
 Version: 0.99.3
 Authors@R: c(
     person("Kayla", "Jackson", , "kaylajac@caltech.edu", role = c("aut", "cre"),
@@ -10,16 +10,22 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-7420-8697")),
     person("Lambda", "Moses", , "dlu2@caltech.edu", role = "aut",
            comment = c(ORCID = "0000-0002-7092-9427")),
+    person("Alexandra", "Kim", , "alexandrasuriya@gmail.com", role = "ctb"),
     person("Laura", "Luebbert", , "lauraluebbert@caltech.edu", role = "ctb",
            comment = c(ORCID = "0000-0003-1379-2927")),
     person("Lior", "Pachter", , "lpachter@caltech.edu", role = c("aut", "rev", "ths"),
            comment = c(ORCID = "0000-0002-9164-6231"))
   )
-Description: Many analysis workflows include approximation of a nearest
-    neighbors graph followed by clustering of the graph structure. The
-    concordex coefficient estimates the concordance between the graph and
-    clustering results. The package 'concordexR' is an R implementation of
-    the original concordex Python-based command line tool.
+Description: Spatial homogeneous regions (SHRs) in tissues are domains
+    that are homogenous with respect to cell type composition. We present
+    a method for identifying SHRs using spatial transcriptomics data, and
+    demonstrate that it is efficient and effective at finding SHRs for a
+    wide variety of tissue types.  concordex relies on analysis of
+    k-nearest-neighbor (kNN) graphs. The tool is also useful for analysis
+    of non-spatial transcriptomics data, and can elucidate the extent of
+    concordance between partitions of cells derived from clustering
+    algorithms, and transcriptomic similarity as represented in kNN
+    graphs.
 License: Artistic-2.0
 URL: https://github.com/pachterlab/concordexR,
     https://pachterlab.github.io/concordexR/
@@ -33,26 +39,26 @@ Imports:
     bluster,
     cli,
     DelayedArray,
-    ggplot2,
     Matrix,
     methods,
-    pheatmap,
     purrr,
     rlang,
-    scales,
+    SingleCellExperiment,
     sparseMatrixStats,
-    SpatialExperiment
+    SpatialExperiment,
+    SummarizedExperiment
 Suggests: 
     BiocManager,
     BiocStyle,
+    ggplot2,
     glue,
     knitr,
     patchwork,
     rmarkdown,
     scater,
+    SFEData,
     TENxPBMCData,
-    testthat (>= 3.0.0),
-    vdiffr
+    testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
 biocViews: SingleCell, Clustering, GraphAndNetwork
