@@ -58,7 +58,7 @@ labels_make_friendly <- function(labels, nm=NULL, sep="_", ...) {
     .type = labels_guess_type(labels)
 
     if (.type == "type_mixed_compatible_multi" || .type == "type_discrete_multi") {
-        labels <- do.call(paste, args=c(labels))
+        labels <- do.call(paste, args=list(labels))
         labels <- gsub(" ", sep, labels)
         .type <- "type_discrete_vector"
     }
