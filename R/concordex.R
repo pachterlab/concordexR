@@ -3,43 +3,40 @@
 #' @description Compute the raw and corrected concordex coefficient using a
 #'   neighborhood graph and observation labels.
 #'
-#' @param x A numeric matrix specifying the neighborhood structure of
-#'   observations. Typically an adjacency matrix produced by a k-Nearest
-#'   Neighbor algorithm. It can also be a matrix whose rows correspond to each
-#'   observation and columns correspond to neighbor indices, i.e. matrix form of
-#'   an adjacency list which can be a matrix due to fixed number of neighbors.
-#' @param labels A numeric or character vector containing the label or class
-#'   corresponding to each observation. For example, a cell type or cluster ID.
-#' @param n_neighbors Number of neighbors to expect for each observation. Defaults to 20.
-#' @param computes_similarity Logical, whether to return the matrix of the number of
-#'   cells of each label in the neighborhood of cells of each label.
+#' @param x A \code{\link{SpatialExperiment}},
+#'   \code{\link{SpatialFeatureExperiment}},
+#'    \code{\link{SingleCellExperiment}}, or \code{\link{SummarizedExperiment}}
+#'    object containing a count matrix.
+#'
+#'    Otherwise, a numeric matrix-like object containing counts for cells
+#'    (or spots) in the columns and features in the rows.
+#' @param labels Cell/spot labels used to compute the neighborhood consolidation
+#'   matrix. Continuous or discrete labels are allowed, and typically, integer
+#'   labels are assumed to be discrete.
+#'
+#'   Labels can be specified as follows:
+#'
+#'   * A vector or matrix-like object with one entry per cell. If a matrix, the
+#'   cells should be on the rows and the label identifiers on the columns.
+#'
+#'   * If \code{x} inherits from \code{\link{SummarizedExperiment-class}}, a
+#'   string or character vector specifying the names of columns in \code{colData(x)}
+#'   or the name of a dimensionality reduction result (see \link{reducedDimNames})
+#'
+#' @param n_neighbors Number of neighbors to expect for each observation.
+#'   Defaults to 30.
+#' @param compute_similarity Logical. Whether to return the label similarity matrix.
+#'   Only useful if discrete labels are provided.
+#' @param BLUSPARAM A \code{\link{BlusterParam}} object specifying the clustering
+#'   algorithm to use to identify spatial homogeneous regions. If this parameter
+#'   is not specified, then regions are not returned. By default, this parameter
+#'   is missing.
+#' @param BNINDEX A \code{\link{BiocNeighborIndex}} object containing the precomputed
+#'   index information.
 #' @param BPPARAM A \code{\link{BiocParallelParam}} object specifying whether
 #'   and how computing the metric for numerous observations shall be
-#'   parallelized.
-#' @param ... Arguments passed to methods.
-#' @returns A named list with the following components:
-#' \describe{
-#'   \item{`concordex`}{
-#'   The raw concordex coefficient corresponding to the original label assignments.
-#'   }
-#'
-#'   \item{`mean_random_concordex`}{
-#'   The average of `n.iter` concordex coefficients. concordex coefficients are computed
-#'   after permuting the labels and reassigning them to new observations.
-#'   }
-#'   \item{`corrected_concordex`}{
-#'   Simply the raw concordex coefficient divided by the average of the permuted
-#'   coefficients.
-#'   }
-#'   \item{`simulated`}{
-#'   Numeric vector of the concordex coefficients from permuted labels, showing the
-#'   null distribution.
-#'   }
-#'   \item{`map`}{
-#'   Numeric matrix of the number of cells of each label in the neighborhood of
-#'   cells of each label. Only returned when \code{return.map = TRUE}.
-#'   }
-#' }
+#'   parallelized (see \code{\link{bpparam}}).
+#' @returns A sparse matrix
 #'
 #' @export
 #' @rdname calculateConcordex
@@ -99,16 +96,28 @@ setMethod("calculateConcordex", "ANY",
               do.call(.calculate_concordex, all_args)
           })
 
+#' @param ... Other parameters passed to methods
+#'
+#' @export
+#' @docType methods
+#' @rdname calculateConcordex
+#'
+#' @importFrom SummarizedExperiment assay
 setMethod("calculateConcordex", "SummarizedExperiment",
           function(x, labels, ..., assay.type="logcounts") {
-
               labels <- labels_walk(x, labels)
               calculateConcordex(t(assay(x, i=assay.type)), labels, ...)
           })
 
+#' @param ... Other parameters passed to methods
+#'
+#' @export
+#' @docType methods
+#' @rdname calculateConcordex
+#'
+#' @importFrom SingleCellExperiment reducedDim
 setMethod("calculateConcordex", "SingleCellExperiment",
           function(x, labels, ..., use.dimred=NULL) {
-
               if (!is.null(use.dimred)) {
                   labels <- labels_walk(x, labels, allow.dimred=FALSE)
                   calculateConcordex(reducedDim(x, use.dimred), labels, ...)
@@ -118,6 +127,13 @@ setMethod("calculateConcordex", "SingleCellExperiment",
               }
           })
 
+
+#' @param ... Other parameters passed to methods
+#'
+#' @export
+#' @docType methods
+#' @rdname calculateConcordex
+#'
 #' @importFrom SpatialExperiment spatialCoords
 setMethod("calculateConcordex", "SpatialExperiment",
           function(x, labels, ..., use.spatial=TRUE) {
