@@ -70,11 +70,22 @@ index information.}
 \item{BPPARAM}{A \code{\link{BiocParallelParam}} object specifying whether
 and how computing the metric for numerous observations shall be
 parallelized (see \code{\link{bpparam}}).}
+
+\item{assay.type}{String or integer scalar indicating the assay of \code{x}
+containing the counts.}
+
+\item{use.dimred}{Integer or string specifying the reduced dimensions to use
+for construction of the k-nearest neighbor graph. Note that if this is not
+\code{NULL}, reduced dimensions can not be used as labels to compute the
+neighborhood consolidation matrix.}
+
+\item{use.spatial}{Logical, should the spatial coordinates be used to compute the
+k-nearest neighbor graph?}
 }
 \value{
 A sparse matrix
 }
 \description{
-Compute the raw and corrected concordex coefficient using a
-neighborhood graph and observation labels.
+Compute the neighborhood consolidation matrix and identify spatial
+homogeneous regions.
 }

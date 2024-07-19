@@ -1,7 +1,7 @@
 #' Identify Spatially Homogeneous Regions with concordex
 #'
-#' @description Compute the raw and corrected concordex coefficient using a
-#'   neighborhood graph and observation labels.
+#' @description Compute the neighborhood consolidation matrix and identify spatial
+#' homogeneous regions.
 #'
 #' @param x A \code{\link{SpatialExperiment}},
 #'   \code{\link{SpatialFeatureExperiment}},
@@ -135,7 +135,7 @@ setMethod("calculateConcordex", "SingleCellExperiment",
 
 
 #' @param ... Other parameters passed to methods
-#' @use.spatial Logical, should the spatial coordinates be used to compute the
+#' @param use.spatial Logical, should the spatial coordinates be used to compute the
 #' k-nearest neighbor graph?
 #'
 #' @export
