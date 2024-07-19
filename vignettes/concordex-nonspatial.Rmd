@@ -35,15 +35,11 @@ quantitative alternative to UMAP cluster visualization without the misleading
 problems of UMAP. This package is the R implementation of the original Python
 command line tool.
 
-In a nutshell, `concordex` finds the proportion of cells among the k nearest
+In a nutshell, `concordex` finds the proportion of cells among the k-nearest
 neighbors of each cell with the same cluster or label as the cell itself. This
 is computed across all labels and the average of all labels is returned as a
-metric that indicates the quality of clustering. To see if this is significant,
-the labels are permuted to estimate a null distribution and the actual observed
-value is compared to the simulated values. If the clustering separates cells
-well, then the observed value should be much higher than the simulated values,
-i.e. the neighborhood of each cell is more dominated by cells of the same label
-as the cell of interest than by chance.
+metric that indicates the quality of clustering. If the clustering separates cells
+well, then the observed similarity matrix should be diagonal dominant. 
 
 ``` {r setup, message=FALSE}
 library(concordexR)
@@ -177,48 +173,24 @@ the `Seurat` object, can also be used. Here the cluster labels are permuted 100
 times.
 
 ``` {r}
-res <- calculateConcordex(sce, labels="cluster", n_neighbors=10)
+res <- calculateConcordex(
+    sce, 
+    labels="cluster", 
+    use.dimred="PCA",
+    compute_similarity=TRUE
+)
 ```
 
-The results can be visualized in plots, which is implemented in this R package
-but not in the Python package. The actual `concordex` value can be compared to
-the simulated values where the latter is visualized in a density plot:
-
-``` {r}
-plotConcordexSim(res)
-```
-
-Here the actual value is much higher than the simulated values, indicating that
-the cluster labels do reflect actual clusters well. The value itself is the
-proportion of cells with each label in the neighborhood of other cells with the
-same label, averaged over all labels.
-
-To aid interpretation, the ratio of the observed value to the average simulated
-value is also returned:
+Here the argument `compute_similarity` indicates that we concordex will return 
+the cluster-cluster similarity matrix. The entries in this matrix  itself represent
+the proportion of cells with each label in the neighborhood of other cells with the
+same label.
 
 ```{r}
-res$concordex_ratio
+sim <- attr(res, "similarity")
+
+round(sim, 2)
 ```
-
-A number greater than 1 means that cells are more likely to have neighbors with
-the same label than expected by chance when the labels are completely randomly
-assigned, and the value of 7.7 here means that the clusters are really good.
-
-While the value is an average over all clusters, the matrix with the values for
-each cluster is also returned by default, and can be visualized in a heatmap, as
-a clustering diagnostic:
-
-``` {r, fig.width=4.5, fig.height=4}
-heatConcordex(res, angle_col = 0, cluster_rows = FALSE, cluster_cols = FALSE)
-```
-
-This heatmap also indicates good clustering, as almost all neighbors of cells
-from each of the cluster labels have the same label, on the diagonal. Off
-diagonal entries should be interpreted as such: (i,j) means the proportion of
-cells with label i in the neighborhood of cells with label j. Off diagonal
-entries means ambiguity between labels as similar cells get different labels. As
-overplotting easily happens on the UMAP plot, this heatmap shows clustering
-quality more unambiguously than UMAP.
 
 # Session info
 
