@@ -20,7 +20,7 @@ labels_walk <- function(x, labels, ..., allow.dimred=TRUE) {
 
     rlang::check_dots_empty()
 
-    n <- length(labels)
+    n <- nrow(labels) %||% length(labels)
 
     if (n == 0L) stop("No labels to search for. Must provide labels.")
 
@@ -52,6 +52,7 @@ labels_walk <- function(x, labels, ..., allow.dimred=TRUE) {
 }
 
 #' Collapse multiple discrete vectors and one-hot-encode
+#' @noRd
 labels_make_friendly <- function(labels, nm=NULL, sep="_", ...) {
 
     .type = labels_guess_type(labels)
@@ -73,6 +74,7 @@ labels_make_friendly <- function(labels, nm=NULL, sep="_", ...) {
 }
 
 #' Friendly types for continuous/discrete label combinations
+#' @noRd
 labels_guess_type <- function(labels) {
 
     types <- unique(sapply(labels, typeof))
@@ -83,7 +85,7 @@ labels_guess_type <- function(labels) {
         }
     }
 
-    # Catch rogue intger vectors
+    # Catch rogue integer vectors
     if (is_integer(labels)) {
         types <- "integer"
     }
@@ -93,7 +95,7 @@ labels_guess_type <- function(labels) {
 
     if (length(types) > 1L) {
 
-        if (all(types %in% c("character","integer"))) {
+        if (all(types %in% c("character","integer","logical"))) {
             out_type <- "type_mixed_compatible"
 
         } else {
@@ -116,7 +118,7 @@ labels_guess_type <- function(labels) {
     out_type <- paste(out_type, suffix, sep="_")
 
     attr(out_type, "labelclass") <-
-        if (grepl("discrete", out_type)) "discrete" else "continuous"
+        if (grepl("discrete|mixed_compatible", out_type)) "discrete" else "continuous"
 
     out_type
 }
@@ -142,7 +144,6 @@ check_labels_type_compatible <- function(labels) {
 }
 
 check_labels <- function(labels, expected=NULL) {
-    dims <- dim(labels) %||% length(labels)
 
     unique_labels <- unique(labels)
     n_uniq <- dim(unique_labels)[1] %||% length(unique_labels)
