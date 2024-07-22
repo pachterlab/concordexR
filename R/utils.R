@@ -130,29 +130,23 @@ set_names_handler <- function(allow_missing_nm=TRUE, allow_null_nm=TRUE, margin=
            dims <- dim(x) %||% length(x)
 
            if (margin > length(dims))
-               stop_no_call("{.arg margin} does not match dimensions of {.arg x}")
+               stop_no_call_internal("{.arg margin} does not match dimensions of {.arg x}")
 
            if (!allow_null_nm & allow_missing_nm) allow_missing_name <- FALSE
 
            if ((allow_missing_nm & missing(nm)) || (allow_null_nm & is.null(nm))) {
+
                # keep existing margin names
                nm_existing <- dimnames(x)[[margin]] %||% nullify_if_data_frame(x, names(x))
                nm <- nm_existing %||% paste0("...", seq_len(dims[margin]))
 
            } else if (!allow_missing_nm & missing(nm)) {
                if (allow_null_nm) {
-                   stop_no_call("{.arg nm} Must be supplied. ")
+                   stop_no_call_internal("{.arg nm} Must be supplied. ")
                }
                stop_no_call("{.arg nm} Must be supplied or {.var NULL}. ")
            } else if (!allow_null_nm & is.null(nm)) {
-               stop_no_call("{.arg nm} Must be supplied and cannot be {.var NULL}. ")
-           }
-
-           if (dims[margin] != length(nm)) {
-               stop_no_call(
-                   "{length(nm)} label{?s} supplied, but {dims[margin]} are required.",
-                   .envir=rlang::current_env()
-                )
+               stop_no_call_internal("{.arg nm} Must be supplied and cannot be {.var NULL}. ")
            }
 
            named(x, nm, margin)
