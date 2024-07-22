@@ -71,8 +71,8 @@ test_that("NA labels are not allowed", {
     expect_error(check_labels(c("Label1",NA_character_)), '"NA" or "NULL"')
 })
 
-test_that("`NA` labels are not allowed", {
-    expect_error(check_labels(labels_compatible_na), '"NA" or "NULL"')
+test_that("Labels are required to be the expected dimension", {
+    expect_error(check_labels(labels_compatible, 20), "not equal to the number of observations")
 })
 
 test_that("Label types are identified correctly", {
