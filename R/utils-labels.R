@@ -77,7 +77,7 @@ labels_make_friendly <- function(labels, nm=NULL, sep="_", ...) {
 #' @noRd
 labels_guess_type <- function(labels) {
 
-    types <- unique(sapply(labels, typeof))
+    types <- unique(vapply(labels, typeof, character(1)))
 
     if (is_Matrix(labels)) {
         if(is_integer(labels@x)) {
@@ -137,7 +137,7 @@ check_labels_type_compatible <- function(labels) {
 
     if (!type_compatible(.type)) {
         stop_no_call(
-          message = "Label types are not compatible",
+          message = "Label classes are not compatible",
           info = "Labels should be discrete {.emph or} continous, not both."
         )
     }
@@ -152,8 +152,23 @@ check_labels <- function(labels, expected=NULL) {
         stop_no_call("There are fewer than two unique labels")
     }
 
-    check_labels_type_compatible(labels)
+    if (!is.null(expected)) {
+        nlabs <- nrow(labels) %||% length(labels)
+        stop_no_call(
+            "The number of labels provided is not equal to the number of observations
+            in {.arg x}",
+            info="{nlabs} label{?s} were supplied, but {expected} were expected",
+            .envir=rlang::current_env())
+    }
 
+    print(any(is.na(labels) | is.null(labels)))
+    if (any(is.na(labels) | is.null(labels))) {
+        print("here???!")
+        stop_no_call("{.val NA} or {.val NULL} values detected in labels")
+    }
+
+    # Mixed continuous/discrete labels are not allowed
+    check_labels_type_compatible(labels)
 }
 
 is_discrete_labels <- function(labels) {
