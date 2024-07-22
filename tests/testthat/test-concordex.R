@@ -31,7 +31,7 @@ test_that("concordex uses 'logcounts' by default for SCE objects", {
     )
 })
 
-test_that("concordex ignores similarity matrix with continuous labels",{
+test_that("Similarity matrix is not computed with continuous labels",{
     expect_warning(
         calculateConcordex(sce, "pca", compute_similarity=TRUE),
         "Discrete labels are required")
