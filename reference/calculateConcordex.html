@@ -81,8 +81,8 @@ homogeneous regions.</p>
 <code>SpatialFeatureExperiment</code>,
 <code>SingleCellExperiment</code>, or <code>SummarizedExperiment</code>
 object containing a count matrix.</p>
-<p>Otherwise, a numeric matrix-like object containing counts for cells
-(or spots) in the columns and features in the rows.</p></dd>
+<p>Otherwise, a numeric matrix-like object containing counts for observations
+(e.g. cells/spots) on the rows and features on the columns.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -90,11 +90,11 @@ object containing a count matrix.</p>
 
 
 <dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
-<dd><p>Cell/spot labels used to compute the neighborhood consolidation
+<dd><p>Observation labels used to compute the neighborhood consolidation
 matrix. Continuous or discrete labels are allowed, and typically, integer
 labels are assumed to be discrete.</p>
-<p>Labels can be specified as follows:</p><ul><li><p>A vector or matrix-like object with one entry per cell. If a matrix, the
-cells should be on the rows and the label identifiers on the columns.</p></li>
+<p>Labels can be specified as follows:</p><ul><li><p>A vector or matrix-like object with one entry per observation If a matrix, the
+observations should be on the rows and the label identifiers on the columns.</p></li>
 <li><p>If <code>x</code> inherits from <code>SummarizedExperiment-class</code>, a
 string or character vector specifying the names of columns in <code>colData(x)</code>
 or the name of a dimensionality reduction result (see reducedDimNames)</p></li>
