@@ -4,10 +4,7 @@ library(TENxPBMCData)
 library(scater)
 
 sce <- TENxPBMCData("pbmc3k")
-
-# Make smaller
 sce <- sce[,seq(200)]
-sce <- logNormCounts(sce)
 
 sfe <- McKellarMuscleData("small")
 
@@ -30,6 +27,8 @@ test_that("concordex uses 'logcounts' by default for SCE objects", {
         "'logcounts' not in names"
     )
 })
+
+sce <- logNormCounts(sce)
 
 test_that("Similarity matrix is not computed with continuous labels",{
     expect_warning(
