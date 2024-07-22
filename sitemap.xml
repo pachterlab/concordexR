@@ -1,39 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/404.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/articles/concordex-demo.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/articles/overview.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/reference/calculateConcordex.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/reference/heatConcordex.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pachterlab.github.io/concordexR/reference/plotConcordexSim.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://pachterlab.github.io/concordexR/404.html</loc></url>
+<url><loc>https://pachterlab.github.io/concordexR/LICENSE.html</loc></url>
+<url><loc>https://pachterlab.github.io/concordexR/articles/concordex-nonspatial.html</loc></url>
+<url><loc>https://pachterlab.github.io/concordexR/articles/index.html</loc></url>
+<url><loc>https://pachterlab.github.io/concordexR/articles/overview.html</loc></url>
+<url><loc>https://pachterlab.github.io/concordexR/authors.html</loc></url>
+<url><loc>https://pachterlab.github.io/concordexR/index.html</loc></url>
+<url><loc>https://pachterlab.github.io/concordexR/news/index.html</loc></url>
+<url><loc>https://pachterlab.github.io/concordexR/reference/calculateConcordex.html</loc></url>
+<url><loc>https://pachterlab.github.io/concordexR/reference/index.html</loc></url>
 </urlset>
+
