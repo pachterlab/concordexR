@@ -30,7 +30,9 @@ check_all_numeric <- function(x) {
 
 #' @importFrom cli cli_abort cli_warn
 #' @noRd
-stop_handler <- function(call=NULL, internal=FALSE) {
+message_handler <- function(suffix, call=NULL, internal=FALSE) {
+
+    cli_fun <- paste0("cli_", suffix)
     function(message,
              info=NULL,
              success=NULL,
@@ -46,32 +48,24 @@ stop_handler <- function(call=NULL, internal=FALSE) {
             "!"=error_bullets
         )
 
-        cli_abort(message, call=call, .internal=internal, ...)
-    }
-}
+        dots <- list(...)
 
-warn_handler <- function(call=NULL, internal=FALSE) {
-    function(message,
-             info=NULL, success=NULL,
-             failure=NULL,error_bullets=NULL) {
-
-        message <- c(
-            message,
-            "i"=info,
-            "v"=success,
-            "x"=failure,
-            "!"=error_bullets
+        cli_args <- list(
+            message=message,
+            call=call,
+           .internal=internal
         )
 
-        cli_warn(message, call=call, .internal=internal)
+        do.call(cli_fun, args = c(cli_args, dots))
     }
 }
 
-stop_no_call_internal <- stop_handler(internal=TRUE)
-warn_no_call_internal <- warn_handler(internal=TRUE)
 
-stop_no_call <- stop_handler()
-warn_no_call <- warn_handler()
+stop_no_call_internal <- message_handler("abort", internal=TRUE)
+warn_no_call_internal <- message_handler("warn", internal=TRUE)
+
+stop_no_call <- message_handler("abort")
+warn_no_call <- message_handler("warn")
 
 nullify_if <- function(predicate_fun, ...) {
     dots <- list(...)
