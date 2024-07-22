@@ -9,7 +9,7 @@
 #'    object containing a count matrix.
 #'
 #'    Otherwise, a numeric matrix-like object containing counts for cells
-#'    (or spots) in the columns and features in the rows.
+#'    (or spots) on the rows and features on the columns.
 #' @param labels Cell/spot labels used to compute the neighborhood consolidation
 #'   matrix. Continuous or discrete labels are allowed, and typically, integer
 #'   labels are assumed to be discrete.
