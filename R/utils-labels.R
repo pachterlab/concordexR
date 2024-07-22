@@ -161,9 +161,7 @@ check_labels <- function(labels, expected=NULL) {
             .envir=rlang::current_env())
     }
 
-    print(any(is.na(labels) | is.null(labels)))
     if (any(is.na(labels) | is.null(labels))) {
-        print("here???!")
         stop_no_call("{.val NA} or {.val NULL} values detected in labels")
     }
 
