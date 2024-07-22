@@ -36,20 +36,33 @@ devtools::install_github("pachterlab/concordexR")
 
 This is a basic example using concordex:
 
-```{r example}
+```{r load libraries}
+library(SFEData)
+library(Voyager)
+library(scran)
+library(bluster)
+
 library(concordexR)
-library(BiocNeighbors)
 ```
 
 ```{r}
-g <- findKNN(iris[, seq_len(4)], k = 10)
-res <- calculateConcordex(g$index, labels = iris$Species, k = 10, return.map = TRUE)
+sfe <- McKellarMuscleData("small")
+clusters <- quickCluster(sfe, min.size=2, d=15)
 ```
 
-```{r}
-plotConcordexSim(res)
+```{r example}
+nbc <- calculateConcordex(
+    sfe,
+    clusters,
+    n_neighbors=10,
+    BLUSPARAM=KmeansParam(2)
+)
+
+colData(sfe)[["shr"]] <- attr(nbc, "shrs")
+
 ```
 
-```{r}
-heatConcordex(res)
+```{r plot}
+plotSpatialFeature(sfe,features="shr")
 ```
+
