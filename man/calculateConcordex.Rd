@@ -35,19 +35,19 @@ calculateConcordex(x, ...)
 \code{\link{SingleCellExperiment}}, or \code{\link{SummarizedExperiment}}
 object containing a count matrix.
 
-Otherwise, a numeric matrix-like object containing counts for cells
-(or spots) on the rows and features on the columns.}
+Otherwise, a numeric matrix-like object containing counts for observations
+(e.g. cells/spots) on the rows and features on the columns.}
 
 \item{...}{Other parameters passed to methods}
 
-\item{labels}{Cell/spot labels used to compute the neighborhood consolidation
+\item{labels}{Observation labels used to compute the neighborhood consolidation
 matrix. Continuous or discrete labels are allowed, and typically, integer
 labels are assumed to be discrete.
 
 Labels can be specified as follows:
 \itemize{
-\item A vector or matrix-like object with one entry per cell. If a matrix, the
-cells should be on the rows and the label identifiers on the columns.
+\item A vector or matrix-like object with one entry per observation If a matrix, the
+observations should be on the rows and the label identifiers on the columns.
 \item If \code{x} inherits from \code{\link{SummarizedExperiment-class}}, a
 string or character vector specifying the names of columns in \code{colData(x)}
 or the name of a dimensionality reduction result (see \link{reducedDimNames})
