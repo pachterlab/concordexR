@@ -154,11 +154,13 @@ check_labels <- function(labels, expected=NULL) {
 
     if (!is.null(expected)) {
         nlabs <- nrow(labels) %||% length(labels)
-        stop_no_call(
-            "The number of labels provided is not equal to the number of observations
+        if (nlabs != expected) {
+            stop_no_call(
+                "The number of labels provided is not equal to the number of observations
             in {.arg x}",
-            info="{nlabs} label{?s} were supplied, but {expected} were expected",
-            .envir=rlang::current_env())
+                info="{nlabs} label{?s} were supplied, but {expected} were expected",
+                .envir=rlang::current_env())
+        }
     }
 
     if (any(is.na(labels) | is.null(labels))) {
