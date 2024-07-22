@@ -36,7 +36,7 @@ calculateConcordex(x, ...)
 object containing a count matrix.
 
 Otherwise, a numeric matrix-like object containing counts for cells
-(or spots) in the columns and features in the rows.}
+(or spots) on the rows and features on the columns.}
 
 \item{...}{Other parameters passed to methods}
 
