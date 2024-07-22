@@ -63,7 +63,17 @@ test_that("Labels can be provided as an array-like with nrow(labels)==ncol(x)", 
 
 labels_incompatible <- data.frame(a=letters,b=rnorm(26))
 labels_compatible <- data.frame(a=letters,b=1:26, c=logical(26))
+labels_compatible_na <- data.frame(a=letters,b=1:26, c=NA_integer_)
 labels_compatible2 <- data.frame(a=rnorm(2), b=rnorm(26))
+
+test_that("NA labels are not allowed", {
+    expect_error(check_labels(labels_compatible_na), '"NA" or "NULL"')
+    expect_error(check_labels(c("Label1",NA_character_)), '"NA" or "NULL"')
+})
+
+test_that("`NA` labels are not allowed", {
+    expect_error(check_labels(labels_compatible_na), '"NA" or "NULL"')
+})
 
 test_that("Label types are identified correctly", {
     expect_match(labels_guess_type(c(1,3,4)), "discrete_vector")
