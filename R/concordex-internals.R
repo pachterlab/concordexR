@@ -19,6 +19,7 @@
     out
 }
 
+#' @importFrom purrr pmap
 #' @importFrom Matrix colMeans
 #' @importFrom sparseMatrixStats colMeans2
 .concordex_nbhd_consolidation <- function(
@@ -26,16 +27,16 @@
         ...,
         BPPARAM=SerialParam()) {
 
-    rlang::check_dots_empty()
+    check_dots_empty()
     dims <- dim(g)
 
 
     # The graph is dense, so we can get some improvements on mapping
     # by converting to a list of rows
-    g <- purrr::pmap(data.frame(g), c)
+    g <- pmap(data.frame(g), c)
 
     nbc <- bplapply(g, function(rows) {
-        nbx <- sparseMatrixStats::colMeans2(labels, rows=rows)
+        nbx <- colMeans2(labels, rows=rows)
         as(nbx,"sparseMatrix")},
     BPPARAM=BPPARAM)
 
@@ -54,6 +55,7 @@
     list(similarity=mapped, concordex=cdx)
 }
 
+#' @importFrom bluster clusterRows
 .calculate_concordex <- function(
         x,
         labels,
@@ -97,9 +99,9 @@
 
     if (cluster_neighborhoods & !missing(BLUSPARAM)) {
         if (class(BLUSPARAM) %in% "MbkmeansParam") {
-            shr <- bluster::clusterRows(as.matrix(nbc), BLUSPARAM=BLUSPARAM)
+            shr <- clusterRows(as.matrix(nbc), BLUSPARAM=BLUSPARAM)
         } else {
-           shr <- bluster::clusterRows(nbc, BLUSPARAM=BLUSPARAM)
+           shr <- clusterRows(nbc, BLUSPARAM=BLUSPARAM)
         }
 
         attr(nbc, "shrs") <- shr
