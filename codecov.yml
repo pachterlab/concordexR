@@ -1,5 +1,7 @@
 comment: false
-
+codecov:
+  branch: main
+  disable_default_path_fixes: false
 coverage:
   status:
     project:
