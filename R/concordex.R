@@ -3,7 +3,6 @@
 #' @description Compute the neighborhood consolidation matrix and identify spatial
 #' homogeneous regions.
 #'
-#'
 #' @param x A \code{\link{SpatialExperiment}},
 #'   \code{\link{SpatialFeatureExperiment-class}},
 #'    \code{\link{SingleCellExperiment}}, or \code{\link{SummarizedExperiment}}
@@ -72,7 +71,6 @@
 #' )
 #'
 #'
-
 #' @export
 #' @rdname calculateConcordex
 #'
