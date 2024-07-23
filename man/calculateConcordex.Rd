@@ -31,14 +31,14 @@ calculateConcordex(x, ...)
 }
 \arguments{
 \item{x}{A \code{\link{SpatialExperiment}},
-\code{\link{SpatialFeatureExperiment}},
+\code{\link{SpatialFeatureExperiment-class}},
 \code{\link{SingleCellExperiment}}, or \code{\link{SummarizedExperiment}}
 object containing a count matrix.
 
 Otherwise, a numeric matrix-like object containing counts for observations
 (e.g. cells/spots) on the rows and features on the columns.}
 
-\item{...}{Other parameters passed to methods}
+\item{...}{Other parameters passed to default method}
 
 \item{labels}{Observation labels used to compute the neighborhood consolidation
 matrix. Continuous or discrete labels are allowed, and typically, integer
@@ -59,13 +59,16 @@ Defaults to 30.}
 \item{compute_similarity}{Logical. Whether to return the label similarity matrix.
 Only useful if discrete labels are provided.}
 
-\item{BLUSPARAM}{A \code{\link{BlusterParam}} object specifying the clustering
+\item{BLUSPARAM}{A \code{\link{BlusterParam-class}} object specifying the clustering
 algorithm to use to identify spatial homogeneous regions. If this parameter
 is not specified, then regions are not returned. By default, this parameter
 is missing.}
 
 \item{BNINDEX}{A \code{\link{BiocNeighborIndex}} object containing the precomputed
-index information.}
+index information, see \link{findKNN}.}
+
+\item{BNPARAM}{A \code{\link{BiocNeighborParam}} object specifying the algorithm to use.
+This can be missing if \code{BNINDEX} is supplied, see \link{findKNN}.}
 
 \item{BPPARAM}{A \code{\link{BiocParallelParam}} object specifying whether
 and how computing the metric for numerous observations shall be
@@ -88,4 +91,30 @@ A sparse matrix
 \description{
 Compute the neighborhood consolidation matrix and identify spatial
 homogeneous regions.
+}
+\examples{
+example(read10xVisium, "SpatialExperiment")
+library(bluster)
+
+## Setting BLUSPARAM clusters the consolidation
+## matrix into SHRs
+cdx <- calculateConcordex(
+  spe, "in_tissue",
+  n_neighbors=10,
+  BLUSPARAM=KmeansParam(3)
+)
+
+## SHRs are an attribute of the result
+shr <- attr(cdx, "shr")
+
+## The label similarity matrix can be computed
+## with `compute_similarity=TRUE`
+cdx <- calculateConcordex(
+  spe, "in_tissue",
+  n_neighbors=10,
+  compute_similarity=TRUE,
+  BLUSPARAM=KmeansParam(3)
+)
+
+
 }
