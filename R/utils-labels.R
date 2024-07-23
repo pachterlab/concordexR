@@ -152,19 +152,20 @@ check_labels <- function(labels, expected=NULL) {
         stop_no_call("There are fewer than two unique labels")
     }
 
+    if (any(is.na(labels) | is.null(labels))) {
+        stop_no_call("{.val NA} or {.val NULL} values detected in labels")
+    }
+
     if (!is.null(expected)) {
         nlabs <- nrow(labels) %||% length(labels)
+
         if (nlabs != expected) {
             stop_no_call(
-                "The number of labels provided is not equal to the number of observations
-            in {.arg x}",
+                "The number of labels provided is not equal to the number of
+                observations in {.arg x}",
                 info="{nlabs} label{?s} were supplied, but {expected} were expected",
                 .envir=rlang::current_env())
         }
-    }
-
-    if (any(is.na(labels) | is.null(labels))) {
-        stop_no_call("{.val NA} or {.val NULL} values detected in labels")
     }
 
     # Mixed continuous/discrete labels are not allowed
@@ -180,5 +181,6 @@ is_discrete_labels <- function(labels) {
     if (is.null(ls)) {
         stop_no_call_internal("Label class has not been determined")
     }
+
     FALSE
 }
