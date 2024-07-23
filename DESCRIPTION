@@ -1,6 +1,6 @@
 Package: concordexR
 Title: Identify Spatial Homogeneous Regions with concordex
-Version: 1.5.4
+Version: 1.5.5
 Authors@R: c(
     person("Kayla", "Jackson", , "kaylajac@caltech.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6483-0108")),
@@ -53,6 +53,7 @@ Suggests:
     ggplot2,
     glue,
     knitr,
+    mbkmeans,
     patchwork,
     rmarkdown,
     scater,
