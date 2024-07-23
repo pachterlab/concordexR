@@ -4,12 +4,13 @@
 #' homogeneous regions.
 #'
 #' @param x A \code{\link{SpatialExperiment}},
-#'   \code{\link{SpatialFeatureExperiment}},
+#'   \code{\link{SpatialFeatureExperiment-class}},
 #'    \code{\link{SingleCellExperiment}}, or \code{\link{SummarizedExperiment}}
 #'    object containing a count matrix.
 #'
 #'    Otherwise, a numeric matrix-like object containing counts for observations
 #'    (e.g. cells/spots) on the rows and features on the columns.
+#'
 #' @param labels Observation labels used to compute the neighborhood consolidation
 #'   matrix. Continuous or discrete labels are allowed, and typically, integer
 #'   labels are assumed to be discrete.
@@ -25,19 +26,52 @@
 #'
 #' @param n_neighbors Number of neighbors to expect for each observation.
 #'   Defaults to 30.
+#'
 #' @param compute_similarity Logical. Whether to return the label similarity matrix.
 #'   Only useful if discrete labels are provided.
-#' @param BLUSPARAM A \code{\link{BlusterParam}} object specifying the clustering
+#'
+#' @param BLUSPARAM A \code{\link{BlusterParam-class}} object specifying the clustering
 #'   algorithm to use to identify spatial homogeneous regions. If this parameter
 #'   is not specified, then regions are not returned. By default, this parameter
 #'   is missing.
+#'
+#'@param BNPARAM A \code{\link{BiocNeighborParam}} object specifying the algorithm to use.
+#' This can be missing if \code{BNINDEX} is supplied, see \link{findKNN}.
+#'
 #' @param BNINDEX A \code{\link{BiocNeighborIndex}} object containing the precomputed
-#'   index information.
+#'   index information, see \link{findKNN}.
+#'
 #' @param BPPARAM A \code{\link{BiocParallelParam}} object specifying whether
 #'   and how computing the metric for numerous observations shall be
 #'   parallelized (see \code{\link{bpparam}}).
-#' @returns A sparse matrix
 #'
+#' @returns A sparse matrix
+#' @examples
+#' example(read10xVisium, "SpatialExperiment")
+#' library(bluster)
+#'
+#' ## Setting BLUSPARAM clusters the consolidation
+#' ## matrix into SHRs
+#'cdx <- calculateConcordex(
+#'   spe, "in_tissue",
+#'   n_neighbors=10,
+#'   BLUSPARAM=KmeansParam(3)
+#' )
+#'
+#' ## SHRs are an attribute of the result
+#'shr <- attr(cdx, "shr")
+#'
+#' ## The label similarity matrix can be computed
+#' ## with `compute_similarity=TRUE`
+#'cdx <- calculateConcordex(
+#'   spe, "in_tissue",
+#'   n_neighbors=10,
+#'   compute_similarity=TRUE,
+#'   BLUSPARAM=KmeansParam(3)
+#' )
+#'
+#'
+
 #' @export
 #' @rdname calculateConcordex
 #'
@@ -96,7 +130,7 @@ setMethod("calculateConcordex", "ANY",
               do.call(.calculate_concordex, all_args)
           })
 
-#' @param ... Other parameters passed to methods
+#' @param ... Other parameters passed to default method
 #' @param assay.type String or integer scalar indicating the assay of \code{x}
 #'   containing the counts.
 #'
@@ -111,7 +145,7 @@ setMethod("calculateConcordex", "SummarizedExperiment",
               calculateConcordex(t(assay(x, i=assay.type)), labels, ...)
           })
 
-#' @param ... Other parameters passed to methods
+#' @param ... Other parameters passed to default method
 #' @param use.dimred Integer or string specifying the reduced dimensions to use
 #'   for construction of the k-nearest neighbor graph. Note that if this is not
 #'   \code{NULL}, reduced dimensions can not be used as labels to compute the
@@ -133,15 +167,13 @@ setMethod("calculateConcordex", "SingleCellExperiment",
               }
           })
 
-
-#' @param ... Other parameters passed to methods
+#' @param ... Other parameters passed to default method
 #' @param use.spatial Logical, should the spatial coordinates be used to compute the
 #' k-nearest neighbor graph?
 #'
 #' @export
 #' @docType methods
 #' @rdname calculateConcordex
-#'
 #' @importFrom SpatialExperiment spatialCoords
 setMethod("calculateConcordex", "SpatialExperiment",
           function(x, labels, ..., use.spatial=TRUE) {
