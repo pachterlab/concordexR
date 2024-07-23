@@ -20,16 +20,34 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 
-
-The goal of concordexR is to replace UMAP as a clustering diagnostic.
+The goal of concordexR is to identify spatial homogeneous regions (SHRs) as 
+defined in the recent manuscript, ["Identification of spatial homogenous regions in tissues with concordex"](https://doi.org/10.1101/2023.06.28.546949). Briefly, SHRs are are 
+domains that are homogeneous with respect to cell type composition. `concordex` 
+relies on the the k-nearest-neighbor (kNN) graph to representing similarities 
+between cells and uses common clustering algorithms to identify SHRs.
 
 ## Installation
 
-You can install the development version of concordexR from [GitHub](https://github.com/) with:
+(Recommended) You can install the development version of `concordexR` from
+[GitHub](https://github.com/) with:
 
-``` r
+```{r}
 # install.packages("devtools")
 devtools::install_github("pachterlab/concordexR")
+```
+
+Versions of the `concordexR` package that do not enable clustering spatial data
+into spatial homogeneous regions (SHRs) are available for Bioconductor versions
+3.17-19. The most recent version of the package is slated to be released on 
+Bioconductor version 3.20. You can install the Bioconductor development version 
+with: 
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+    
+BiocManager::install(version="devel")
+BiocManager::install("concordexR")
 ```
 
 ## Example
@@ -59,10 +77,29 @@ nbc <- calculateConcordex(
 )
 
 colData(sfe)[["shr"]] <- attr(nbc, "shrs")
-
 ```
 
-```{r plot}
-plotSpatialFeature(sfe,features="shr")
+```{r plot-shr}
+plotSpatialFeature(sfe, features="shr")
 ```
 
+## Citation
+
+If you'd like to use the `concordexR` package in your research, please cite our
+recent bioRxiv preprint
+
+>  Jackson, K.; Booeshaghi, A. S.; Gálvez-Merchán, Á.; Moses, L.; Chari, T.; Pachter, L. Quantitative assessment of single-cell RNA-seq clustering with CONCORDEX. bioRxiv (Cold Spring Harbor Laboratory) 2023. https://doi.org/10.1101/2023.06.28.546949.
+
+   @article {Jackson2023.06.28.546949,
+	author = {Jackson, Kayla C. and Booeshaghi, A. Sina and G{\'a}lvez-Merch{\'a}n, {\'A}ngel and Moses, Lambda and Chari, Tara and Kim, Alexandra and Pachter, Lior},
+	title = {Identification of spatial homogeneous regions in tissues with concordex},
+	year = {2024},
+	doi = {10.1101/2023.06.28.546949},
+	publisher = {Cold Spring Harbor Laboratory},
+	URL = {https://www.biorxiv.org/content/early/2024/07/18/2023.06.28.546949},
+	journal = {bioRxiv}
+}
+    
+## Maintainer
+
+[Kayla Jackson](https://github.com/kayla-jackson)
