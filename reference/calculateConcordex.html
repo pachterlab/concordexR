@@ -9,7 +9,7 @@ homogeneous regions."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">concordexR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@ homogeneous regions.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A <code>SpatialExperiment</code>,
-<code>SpatialFeatureExperiment</code>,
+<code>SpatialFeatureExperiment-class</code>,
 <code>SingleCellExperiment</code>, or <code>SummarizedExperiment</code>
 object containing a count matrix.</p>
 <p>Otherwise, a numeric matrix-like object containing counts for observations
@@ -86,7 +86,7 @@ object containing a count matrix.</p>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other parameters passed to methods</p></dd>
+<dd><p>Other parameters passed to default method</p></dd>
 
 
 <dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
@@ -112,7 +112,7 @@ Only useful if discrete labels are provided.</p></dd>
 
 
 <dt id="arg-blusparam">BLUSPARAM<a class="anchor" aria-label="anchor" href="#arg-blusparam"></a></dt>
-<dd><p>A <code>BlusterParam</code> object specifying the clustering
+<dd><p>A <code><a href="https://rdrr.io/pkg/bluster/man/BlusterParam-class.html" class="external-link">BlusterParam-class</a></code> object specifying the clustering
 algorithm to use to identify spatial homogeneous regions. If this parameter
 is not specified, then regions are not returned. By default, this parameter
 is missing.</p></dd>
@@ -120,7 +120,12 @@ is missing.</p></dd>
 
 <dt id="arg-bnindex">BNINDEX<a class="anchor" aria-label="anchor" href="#arg-bnindex"></a></dt>
 <dd><p>A <code>BiocNeighborIndex</code> object containing the precomputed
-index information.</p></dd>
+index information, see findKNN.</p></dd>
+
+
+<dt id="arg-bnparam">BNPARAM<a class="anchor" aria-label="anchor" href="#arg-bnparam"></a></dt>
+<dd><p>A <code>BiocNeighborParam</code> object specifying the algorithm to use.
+This can be missing if <code>BNINDEX</code> is supplied, see findKNN.</p></dd>
 
 
 <dt id="arg-bpparam">BPPARAM<a class="anchor" aria-label="anchor" href="#arg-bpparam"></a></dt>
@@ -151,6 +156,176 @@ k-nearest neighbor graph?</p></dd>
     <p>A sparse matrix</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">read10xVisium</span>, <span class="st">"SpatialExperiment"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: SingleCellExperiment</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: SummarizedExperiment</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MatrixGenerics</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: matrixStats</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘MatrixGenerics’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:matrixStats’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colWeightedMeans, colWeightedMedians, colWeightedSds,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowWeightedSds, rowWeightedVars</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: GenomicRanges</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: stats4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: BiocGenerics</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘BiocGenerics’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     IQR, mad, sd, var, xtabs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     Filter, Find, Map, Position, Reduce, anyDuplicated, aperm, append,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     as.data.frame, basename, cbind, colnames, dirname, do.call,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     duplicated, eval, evalq, get, grep, grepl, intersect, is.unsorted,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     pmin.int, rank, rbind, rownames, sapply, setdiff, table, tapply,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     union, unique, unsplit, which.max, which.min</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: S4Vectors</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘S4Vectors’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:utils’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     findMatches</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     I, expand.grid, unname</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: IRanges</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: GenomeInfoDb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Biobase</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Welcome to Bioconductor</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     Vignettes contain introductory material; view with</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     'browseVignettes()'. To cite Bioconductor, see</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     'citation("Biobase")', and for packages 'citation("pkgname")'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘Biobase’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:MatrixGenerics’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rowMedians</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:matrixStats’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     anyMissing, rowMedians</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; dir &lt;- system.file(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV+   file.path("extdata", "10xVisium"), </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV+   package = "SpatialExperiment")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; sample_ids &lt;- c("section1", "section2")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; samples &lt;- file.path(dir, sample_ids, "outs")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; list.files(samples[1])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "raw_feature_bc_matrix" "spatial"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; list.files(file.path(samples[1], "spatial"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "scalefactors_json.json"    "tissue_lowres_image.png"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "tissue_positions_list.csv"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; file.path(samples[1], "raw_feature_bc_matrix")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/runner/work/_temp/Library/SpatialExperiment/extdata/10xVisium/section1/outs/raw_feature_bc_matrix"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; (spe &lt;- read10xVisium(samples, sample_ids, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV+   type = "sparse", data = "raw", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV+   images = "lowres", load = FALSE))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class: SpatialExperiment </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dim: 50 99 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> assays(1): counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rownames(50): ENSMUSG00000051951 ENSMUSG00000089699 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSMUSG00000005886 ENSMUSG00000101476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rowData names(1): symbol</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colnames(99): AAACAACGAATAGTTC-1 AAACAAGTATCTCCCA-1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   AAAGTCGACCCTCAGT-1 AAAGTGCCATCAATTA-1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colData names(4): in_tissue array_row array_col sample_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> reducedDimNames(0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mainExpName: NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> altExpNames(0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> spatialCoords names(2) : pxl_col_in_fullres pxl_row_in_fullres</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> imgData names(4): sample_id image_id data scaleFactor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; # base directory 'outs/' from Space Ranger can also be omitted</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; samples2 &lt;- file.path(dir, sample_ids)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; (spe2 &lt;- read10xVisium(samples2, sample_ids, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV+   type = "sparse", data = "raw", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV+   images = "lowres", load = FALSE))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class: SpatialExperiment </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dim: 50 99 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> assays(1): counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rownames(50): ENSMUSG00000051951 ENSMUSG00000089699 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSMUSG00000005886 ENSMUSG00000101476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rowData names(1): symbol</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colnames(99): AAACAACGAATAGTTC-1 AAACAAGTATCTCCCA-1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   AAAGTCGACCCTCAGT-1 AAAGTGCCATCAATTA-1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colData names(4): in_tissue array_row array_col sample_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> reducedDimNames(0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mainExpName: NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> altExpNames(0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> spatialCoords names(2) : pxl_col_in_fullres pxl_row_in_fullres</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> imgData names(4): sample_id image_id data scaleFactor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; # tabulate number of spots mapped to tissue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; cd &lt;- colData(spe)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; table(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV+   in_tissue = cd$in_tissue, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV+   sample_id = cd$sample_id)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          sample_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> in_tissue section1 section2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     FALSE       28       27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     TRUE        22       22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; # view available images</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rd10xV&gt; imgData(spe)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 2 rows and 4 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sample_id    image_id   data scaleFactor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;character&gt; &lt;character&gt; &lt;list&gt;   &lt;numeric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    section1      lowres   ####   0.0510334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    section2      lowres   ####   0.0510334</span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">bluster</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Setting BLUSPARAM clusters the consolidation</span></span></span>
+<span class="r-in"><span><span class="co">## matrix into SHRs</span></span></span>
+<span class="r-in"><span><span class="va">cdx</span> <span class="op">&lt;-</span> <span class="fu">calculateConcordex</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">spe</span>, <span class="st">"in_tissue"</span>,</span></span>
+<span class="r-in"><span>  n_neighbors<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  BLUSPARAM<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/bluster/man/KmeansParam-class.html" class="external-link">KmeansParam</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## SHRs are an attribute of the result</span></span></span>
+<span class="r-in"><span><span class="va">shr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">cdx</span>, <span class="st">"shr"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## The label similarity matrix can be computed</span></span></span>
+<span class="r-in"><span><span class="co">## with `compute_similarity=TRUE`</span></span></span>
+<span class="r-in"><span><span class="va">cdx</span> <span class="op">&lt;-</span> <span class="fu">calculateConcordex</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">spe</span>, <span class="st">"in_tissue"</span>,</span></span>
+<span class="r-in"><span>  n_neighbors<span class="op">=</span><span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  compute_similarity<span class="op">=</span><span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  BLUSPARAM<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/bluster/man/KmeansParam-class.html" class="external-link">KmeansParam</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
