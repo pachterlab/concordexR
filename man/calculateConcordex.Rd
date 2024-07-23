@@ -31,7 +31,7 @@ calculateConcordex(x, ...)
 }
 \arguments{
 \item{x}{A \code{\link{SpatialExperiment}},
-\code{\link{SpatialFeatureExperiment-class}},
+\code{SpatialFeatureExperiment},
 \code{\link{SingleCellExperiment}}, or \code{\link{SummarizedExperiment}}
 object containing a count matrix.
 

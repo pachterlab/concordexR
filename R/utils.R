@@ -19,7 +19,7 @@ check_is_matrix <- function(x, ..., call = rlang::caller_env()) {
 #' Are all entries in the input numeric?
 #' @noRd
 check_all_numeric <- function(x) {
-    all_numeric <- sapply(x, is.numeric)
+    all_numeric <- vapply(x, is.numeric,logical(1))
 
     if (!all(all_numeric))
         stop_no_call(

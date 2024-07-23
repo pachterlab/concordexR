@@ -4,7 +4,7 @@
 #' homogeneous regions.
 #'
 #' @param x A \code{\link{SpatialExperiment}},
-#'   \code{\link{SpatialFeatureExperiment-class}},
+#'   \code{SpatialFeatureExperiment},
 #'    \code{\link{SingleCellExperiment}}, or \code{\link{SummarizedExperiment}}
 #'    object containing a count matrix.
 #'
@@ -75,7 +75,7 @@
 #' @rdname calculateConcordex
 #'
 #' @importFrom cli cli_abort cli_warn
-#' @importFrom methods setMethod setGeneric
+#' @importFrom methods setMethod setGeneric callNextMethod as is
 #' @importFrom rlang check_dots_empty check_required
 #' @importFrom BiocNeighbors findKNN KmknnParam
 #' @importFrom BiocParallel SerialParam bplapply
@@ -137,7 +137,7 @@ setMethod("calculateConcordex", "ANY",
 #' @docType methods
 #' @rdname calculateConcordex
 #'
-#' @importFrom SummarizedExperiment assay
+#' @importFrom SummarizedExperiment assay colData
 setMethod("calculateConcordex", "SummarizedExperiment",
           function(x, labels, ..., assay.type="logcounts") {
               labels <- labels_walk(x, labels)
@@ -154,7 +154,7 @@ setMethod("calculateConcordex", "SummarizedExperiment",
 #' @docType methods
 #' @rdname calculateConcordex
 #'
-#' @importFrom SingleCellExperiment reducedDim
+#' @importFrom SingleCellExperiment reducedDim reducedDimNames
 setMethod("calculateConcordex", "SingleCellExperiment",
           function(x, labels, ..., use.dimred=NULL) {
               if (!is.null(use.dimred)) {
