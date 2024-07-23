@@ -1,6 +1,6 @@
 Package: concordexR
 Title: Identify Spatial Homogeneous Regions with concordex
-Version: 1.5.0
+Version: 1.5.1
 Authors@R: c(
     person("Kayla", "Jackson", , "kaylajac@caltech.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6483-0108")),
@@ -62,7 +62,7 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
-biocViews: SingleCell, Clustering, GraphAndNetwork
+biocViews: SingleCell, Clustering, Spatial, Transcriptomics
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
