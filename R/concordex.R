@@ -101,7 +101,7 @@ setMethod("calculateConcordex", "ANY",
               labels <- labels_make_friendly(labels, nm=dimnames(x)[[1]])
 
               req_args <- list(
-                  x=x,
+                  x=as.matrix(x),
                   labels=labels,
                   n_neighbors=n_neighbors,
                   compute_similarity=compute_similarity,
