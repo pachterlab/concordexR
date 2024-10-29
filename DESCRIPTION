@@ -1,6 +1,6 @@
 Package: concordexR
 Title: Identify Spatial Homogeneous Regions with concordex
-Version: 1.6.0
+Version: 1.7.0
 Authors@R: c(
     person("Kayla", "Jackson", , "kaylajac@caltech.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6483-0108")),
