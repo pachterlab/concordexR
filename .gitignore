@@ -12,7 +12,9 @@
 .httr-oauth
 .DS_Store
 inst/doc
-docs
-figures
 
-manuscript/
+
+# Testing and development
+analysis/
+docs/
+figures/
