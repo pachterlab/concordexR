@@ -3,13 +3,18 @@
 \docType{methods}
 \name{calculateConcordex}
 \alias{calculateConcordex}
+\alias{runConcordex}
 \alias{calculateConcordex,ANY-method}
 \alias{calculateConcordex,SummarizedExperiment-method}
 \alias{calculateConcordex,SingleCellExperiment-method}
 \alias{calculateConcordex,SpatialExperiment-method}
+\alias{runConcordex,SpatialExperiment-method}
+\alias{runConcordex,SingleCellExperiment-method}
 \title{Identify Spatially Homogeneous Regions with concordex}
 \usage{
 calculateConcordex(x, ...)
+
+runConcordex(x, ...)
 
 \S4method{calculateConcordex}{ANY}(
   x,
@@ -28,6 +33,10 @@ calculateConcordex(x, ...)
 \S4method{calculateConcordex}{SingleCellExperiment}(x, labels, ..., use.dimred = NULL)
 
 \S4method{calculateConcordex}{SpatialExperiment}(x, labels, ..., use.spatial = TRUE)
+
+\S4method{runConcordex}{SpatialExperiment}(x, labels, ..., name = "NBC")
+
+\S4method{runConcordex}{SingleCellExperiment}(x, labels, ..., name = "NBC")
 }
 \arguments{
 \item{x}{A \code{\link{SpatialExperiment}},
@@ -84,6 +93,9 @@ neighborhood consolidation matrix.}
 
 \item{use.spatial}{Logical, should the spatial coordinates be used to compute the
 k-nearest neighbor graph?}
+
+\item{name}{String specifying the name to be used to store the result in the
+\code{\link{reducedDims}} of the output.}
 }
 \value{
 A sparse matrix

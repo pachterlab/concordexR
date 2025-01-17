@@ -6,5 +6,6 @@
 ^pkgdown$
 ^codecov\.yml$
 ^README\.Rmd$
+^\.git$
 ^\.github$
 ^dev$

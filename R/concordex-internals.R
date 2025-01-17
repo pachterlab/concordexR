@@ -72,7 +72,6 @@
     check_dots_empty()
 
     if (precomputed & !missing(BNINDEX)) {
-
         g <- findKNN(
             k=n_neighbors,
             warn.ties=FALSE,

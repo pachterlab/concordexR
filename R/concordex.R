@@ -45,13 +45,20 @@
 #'   and how computing the metric for numerous observations shall be
 #'   parallelized (see \code{\link{bpparam}}).
 #'
-#' @returns A sparse matrix
+#' @return
+#' For \code{calculateConcordex}, a sparse, numeric matrix representing the
+#' neighborhood consolidation for each cell (row)
+#'
+#' For \code{runConcordex}, a SingleCellExperiment (or SpatialExperiment) object
+#' is returned containing this matrix in \code{\link{reducedDims}(..., name)}.
+#'
 #' @examples
 #' example(read10xVisium, "SpatialExperiment")
 #' library(bluster)
 #'
 #' ## Setting BLUSPARAM clusters the consolidation
 #' ## matrix into SHRs
+#'
 #'cdx <- calculateConcordex(
 #'   spe, "in_tissue",
 #'   n_neighbors=10,
@@ -137,7 +144,7 @@ setMethod("calculateConcordex", "ANY",
 #' @docType methods
 #' @rdname calculateConcordex
 #'
-#' @importFrom SummarizedExperiment assay colData
+#' @importFrom SummarizedExperiment assay colData colData<-
 setMethod("calculateConcordex", "SummarizedExperiment",
           function(x, labels, ..., assay.type="logcounts") {
               labels <- labels_walk(x, labels)
@@ -185,3 +192,32 @@ setMethod("calculateConcordex", "SpatialExperiment",
                   callNextMethod(x=x, labels=labels, ...)
               }
           })
+
+#' @param name String specifying the name to be used to store the result in the
+#' \code{\link{reducedDims}} of the output.
+#'
+#' @export
+#' @docType methods
+#' @rdname calculateConcordex
+#' @importFrom SingleCellExperiment reducedDim<-
+setMethod("runConcordex", "SpatialExperiment", function(x, labels, ..., name="NBC")
+    {
+    nbc <- calculateConcordex(x, labels, ...)
+
+    if ("shrs" %in% names(attrs(nbc))) {
+        colData["shr"] <- attrs(nbc)$shrs
+    }
+    reducedDim(x, name) <- nbc
+
+    x
+    })
+
+#' @export
+#' @docType methods
+#' @rdname calculateConcordex
+setMethod("runConcordex", "SingleCellExperiment", function(x, labels, ..., name="NBC")
+{
+    reducedDim(x, name) <- calculateConcordex(x, labels, ...)
+
+    x
+})
