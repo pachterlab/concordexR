@@ -21,56 +21,10 @@ clustering algorithms to identify SHRs.
 
 ## Installation
 
-(Recommended) You can install the development version of `concordexR`
-from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("pachterlab/concordexR")
-#> Using GitHub PAT from the git credential store.
-#> Downloading GitHub repo pachterlab/concordexR@HEAD
-#> matrixStats (1.4.1    -> 1.5.0   ) [CRAN]
-#> bit         (4.5.0    -> 4.5.0.1 ) [CRAN]
-#> cpp11       (0.5.0    -> 0.5.1   ) [CRAN]
-#> bit64       (4.5.2    -> 4.6.0-1 ) [CRAN]
-#> pillar      (1.9.0    -> 1.10.1  ) [CRAN]
-#> RSQLite     (2.3.7    -> 2.3.9   ) [CRAN]
-#> Rcpp        (1.0.13-1 -> 1.0.14  ) [CRAN]
-#> BH          (1.84.0-0 -> 1.87.0-1) [CRAN]
-#> igraph      (2.1.1    -> 2.1.3   ) [CRAN]
-#> Skipping 21 packages ahead of CRAN: zlibbioc, XVector, SparseArray, S4Arrays, IRanges, S4Vectors, MatrixGenerics, BiocGenerics, GenomeInfoDbData, GenomeInfoDb, DelayedArray, Biobase, GenomicRanges, SummarizedExperiment, BiocParallel, BiocFileCache, SingleCellExperiment, BiocNeighbors, SpatialExperiment, sparseMatrixStats, bluster
-#> Installing 9 packages: matrixStats, bit, cpp11, bit64, pillar, RSQLite, Rcpp, BH, igraph
-#> Installing packages into '/private/var/folders/xt/1wqk38p91gj1rj16t201p9nw0000gn/T/RtmpaxG0sT/temp_libpath5bb940deed66'
-#> (as 'lib' is unspecified)
-#> Warning: unable to access index for repository https://bioconductor.org/packages/3.18/bioc/bin/macosx/big-sur-x86_64/contrib/4.4:
-#>   cannot open URL 'https://bioconductor.org/packages/3.18/bioc/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'
-#> Warning: unable to access index for repository https://bioconductor.org/packages/3.18/data/annotation/bin/macosx/big-sur-x86_64/contrib/4.4:
-#>   cannot open URL 'https://bioconductor.org/packages/3.18/data/annotation/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'
-#> Warning: unable to access index for repository https://bioconductor.org/packages/3.18/data/experiment/bin/macosx/big-sur-x86_64/contrib/4.4:
-#>   cannot open URL 'https://bioconductor.org/packages/3.18/data/experiment/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'
-#> Warning: unable to access index for repository https://bioconductor.org/packages/3.18/workflows/bin/macosx/big-sur-x86_64/contrib/4.4:
-#>   cannot open URL 'https://bioconductor.org/packages/3.18/workflows/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'
-#> Warning: unable to access index for repository https://bioconductor.org/packages/3.18/books/bin/macosx/big-sur-x86_64/contrib/4.4:
-#>   cannot open URL 'https://bioconductor.org/packages/3.18/books/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'
-#> 
-#> The downloaded binary packages are in
-#>  /var/folders/xt/1wqk38p91gj1rj16t201p9nw0000gn/T//RtmpzKfXwP/downloaded_packages
-#> ── R CMD build ─────────────────────────────────────────────────────────────────
-#> * checking for file ‘/private/var/folders/xt/1wqk38p91gj1rj16t201p9nw0000gn/T/RtmpzKfXwP/remotes5ce53aa7effb/pachterlab-concordexR-1d49855/DESCRIPTION’ ... OK
-#> * preparing ‘concordexR’:
-#> * checking DESCRIPTION meta-information ... OK
-#> * checking for LF line-endings in source and make files and shell scripts
-#> * checking for empty or unneeded directories
-#> * building ‘concordexR_1.7.1.tar.gz’
-#> Installing package into '/private/var/folders/xt/1wqk38p91gj1rj16t201p9nw0000gn/T/RtmpaxG0sT/temp_libpath5bb940deed66'
-#> (as 'lib' is unspecified)
-```
-
 Versions of the `concordexR` package that do not enable clustering
 spatial data into spatial homogeneous regions (SHRs) are available for
 Bioconductor versions 3.17-19. The most recent version of the package is
-slated to be released on Bioconductor version 3.20. You can install the
-Bioconductor development version with:
+slated to be released on Bioconductor version 3.20.
 
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -82,20 +36,20 @@ BiocManager::install(version="3.20")
 #> Replacement repositories:
 #>     CRAN: https://cran.rstudio.com/
 #> Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
-#> Old packages: 'bit64', 'igraph', 'anytime', 'arrow', 'assorthead', 'BH',
-#>   'BiocCheck', 'BiocNeighbors', 'Biostrings', 'bit', 'bookdown', 'class',
+#> Old packages: 'anytime', 'arrow', 'assorthead', 'BH', 'BiocCheck',
+#>   'BiocNeighbors', 'Biostrings', 'bit', 'bit64', 'bookdown', 'class',
 #>   'classInt', 'clue', 'cluster', 'cpp11', 'data.table', 'DelayedMatrixStats',
 #>   'edgeR', 'evaluate', 'fitdistrplus', 'fontawesome', 'foreign',
-#>   'GenomeInfoDb', 'geometry', 'ggmapinset', 'graph', 'graphlayouts', 'IRanges',
-#>   'KernSmooth', 'knitr', 'later', 'limma', 'lme4', 'lpSolve', 'lubridate',
-#>   'maps', 'MASS', 'MatrixGenerics', 'matrixStats', 'nnet', 'parallelly',
-#>   'pillar', 'pkgbuild', 'processx', 'progressr', 'promises', 'quantreg',
-#>   'Rcpp', 'RcppArmadillo', 'Rdpack', 'reticulate', 'Rfast', 'rhdf5', 'rpart',
-#>   'RSQLite', 'Seurat', 'SFEData', 'shiny', 'SingleCellExperiment', 'spatial',
-#>   'SpatialFeatureExperiment', 'spatialLIBD', 'spatstat.data',
-#>   'spatstat.explore', 'spatstat.geom', 'spatstat.utils', 'spData', 'spdep',
-#>   'stringdist', 'survival', 'systemfonts', 'terra', 'testthat', 'textshaping',
-#>   'tidyterra', 'waldo', 'xfun', 'XML'
+#>   'GenomeInfoDb', 'geometry', 'ggmapinset', 'graph', 'graphlayouts', 'igraph',
+#>   'IRanges', 'KernSmooth', 'knitr', 'later', 'limma', 'lme4', 'lpSolve',
+#>   'lubridate', 'maps', 'MASS', 'MatrixGenerics', 'matrixStats', 'nnet',
+#>   'parallelly', 'pillar', 'pkgbuild', 'processx', 'progressr', 'promises',
+#>   'quantreg', 'Rcpp', 'RcppArmadillo', 'Rdpack', 'reticulate', 'Rfast',
+#>   'rhdf5', 'rpart', 'RSQLite', 'Seurat', 'SFEData', 'shiny',
+#>   'SingleCellExperiment', 'spatial', 'SpatialFeatureExperiment', 'spatialLIBD',
+#>   'spatstat.data', 'spatstat.explore', 'spatstat.geom', 'spatstat.utils',
+#>   'spData', 'spdep', 'stringdist', 'survival', 'systemfonts', 'terra',
+#>   'testthat', 'textshaping', 'tidyterra', 'waldo', 'xfun', 'XML'
 BiocManager::install("concordexR")
 #> 'getOption("repos")' replaces Bioconductor standard repositories, see
 #> 'help("repositories", package = "BiocManager")' for details.
@@ -104,20 +58,20 @@ BiocManager::install("concordexR")
 #> Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)
 #> Warning: package(s) not installed when version(s) same as or greater than current; use
 #>   `force = TRUE` to re-install: 'concordexR'
-#> Old packages: 'bit64', 'igraph', 'anytime', 'arrow', 'assorthead', 'BH',
-#>   'BiocCheck', 'BiocNeighbors', 'Biostrings', 'bit', 'bookdown', 'class',
+#> Old packages: 'anytime', 'arrow', 'assorthead', 'BH', 'BiocCheck',
+#>   'BiocNeighbors', 'Biostrings', 'bit', 'bit64', 'bookdown', 'class',
 #>   'classInt', 'clue', 'cluster', 'cpp11', 'data.table', 'DelayedMatrixStats',
 #>   'edgeR', 'evaluate', 'fitdistrplus', 'fontawesome', 'foreign',
-#>   'GenomeInfoDb', 'geometry', 'ggmapinset', 'graph', 'graphlayouts', 'IRanges',
-#>   'KernSmooth', 'knitr', 'later', 'limma', 'lme4', 'lpSolve', 'lubridate',
-#>   'maps', 'MASS', 'MatrixGenerics', 'matrixStats', 'nnet', 'parallelly',
-#>   'pillar', 'pkgbuild', 'processx', 'progressr', 'promises', 'quantreg',
-#>   'Rcpp', 'RcppArmadillo', 'Rdpack', 'reticulate', 'Rfast', 'rhdf5', 'rpart',
-#>   'RSQLite', 'Seurat', 'SFEData', 'shiny', 'SingleCellExperiment', 'spatial',
-#>   'SpatialFeatureExperiment', 'spatialLIBD', 'spatstat.data',
-#>   'spatstat.explore', 'spatstat.geom', 'spatstat.utils', 'spData', 'spdep',
-#>   'stringdist', 'survival', 'systemfonts', 'terra', 'testthat', 'textshaping',
-#>   'tidyterra', 'waldo', 'xfun', 'XML'
+#>   'GenomeInfoDb', 'geometry', 'ggmapinset', 'graph', 'graphlayouts', 'igraph',
+#>   'IRanges', 'KernSmooth', 'knitr', 'later', 'limma', 'lme4', 'lpSolve',
+#>   'lubridate', 'maps', 'MASS', 'MatrixGenerics', 'matrixStats', 'nnet',
+#>   'parallelly', 'pillar', 'pkgbuild', 'processx', 'progressr', 'promises',
+#>   'quantreg', 'Rcpp', 'RcppArmadillo', 'Rdpack', 'reticulate', 'Rfast',
+#>   'rhdf5', 'rpart', 'RSQLite', 'Seurat', 'SFEData', 'shiny',
+#>   'SingleCellExperiment', 'spatial', 'SpatialFeatureExperiment', 'spatialLIBD',
+#>   'spatstat.data', 'spatstat.explore', 'spatstat.geom', 'spatstat.utils',
+#>   'spData', 'spdep', 'stringdist', 'survival', 'systemfonts', 'terra',
+#>   'testthat', 'textshaping', 'tidyterra', 'waldo', 'xfun', 'XML'
 ```
 
 ## Example

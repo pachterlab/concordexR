@@ -29,19 +29,10 @@ between cells and uses common clustering algorithms to identify SHRs.
 
 ## Installation
 
-(Recommended) You can install the development version of `concordexR` from
-[GitHub](https://github.com/) with:
-
-```{r}
-# install.packages("devtools")
-devtools::install_github("pachterlab/concordexR")
-```
-
 Versions of the `concordexR` package that do not enable clustering spatial data
 into spatial homogeneous regions (SHRs) are available for Bioconductor versions
 3.17-19. The most recent version of the package is slated to be released on 
-Bioconductor version 3.20. You can install the Bioconductor development version 
-with: 
+Bioconductor version 3.20. 
 
 ```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE))
