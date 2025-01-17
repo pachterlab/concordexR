@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   concordex-nonspatial: concordex-nonspatial.html
   overview: overview.html
-last_built: 2025-01-17T01:28Z
+last_built: 2025-01-17T01:32Z
 urls:
   reference: https://pachterlab.github.io/concordexR/reference
   article: https://pachterlab.github.io/concordexR/articles
