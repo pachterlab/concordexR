@@ -62,49 +62,8 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>(Recommended) You can install the development version of <code>concordexR</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>Versions of the <code>concordexR</code> package that do not enable clustering spatial data into spatial homogeneous regions (SHRs) are available for Bioconductor versions 3.17-19. The most recent version of the package is slated to be released on Bioconductor version 3.20.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"pachterlab/concordexR"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using GitHub PAT from the git credential store.</span></span>
-<span><span class="co">#&gt; Downloading GitHub repo pachterlab/concordexR@HEAD</span></span>
-<span><span class="co">#&gt; matrixStats (1.4.1    -&gt; 1.5.0   ) [CRAN]</span></span>
-<span><span class="co">#&gt; bit         (4.5.0    -&gt; 4.5.0.1 ) [CRAN]</span></span>
-<span><span class="co">#&gt; cpp11       (0.5.0    -&gt; 0.5.1   ) [CRAN]</span></span>
-<span><span class="co">#&gt; bit64       (4.5.2    -&gt; 4.6.0-1 ) [CRAN]</span></span>
-<span><span class="co">#&gt; pillar      (1.9.0    -&gt; 1.10.1  ) [CRAN]</span></span>
-<span><span class="co">#&gt; RSQLite     (2.3.7    -&gt; 2.3.9   ) [CRAN]</span></span>
-<span><span class="co">#&gt; Rcpp        (1.0.13-1 -&gt; 1.0.14  ) [CRAN]</span></span>
-<span><span class="co">#&gt; BH          (1.84.0-0 -&gt; 1.87.0-1) [CRAN]</span></span>
-<span><span class="co">#&gt; igraph      (2.1.1    -&gt; 2.1.3   ) [CRAN]</span></span>
-<span><span class="co">#&gt; Skipping 21 packages ahead of CRAN: zlibbioc, XVector, SparseArray, S4Arrays, IRanges, S4Vectors, MatrixGenerics, BiocGenerics, GenomeInfoDbData, GenomeInfoDb, DelayedArray, Biobase, GenomicRanges, SummarizedExperiment, BiocParallel, BiocFileCache, SingleCellExperiment, BiocNeighbors, SpatialExperiment, sparseMatrixStats, bluster</span></span>
-<span><span class="co">#&gt; Installing 9 packages: matrixStats, bit, cpp11, bit64, pillar, RSQLite, Rcpp, BH, igraph</span></span>
-<span><span class="co">#&gt; Installing packages into '/private/var/folders/xt/1wqk38p91gj1rj16t201p9nw0000gn/T/RtmpaxG0sT/temp_libpath5bb940deed66'</span></span>
-<span><span class="co">#&gt; (as 'lib' is unspecified)</span></span>
-<span><span class="co">#&gt; Warning: unable to access index for repository https://bioconductor.org/packages/3.18/bioc/bin/macosx/big-sur-x86_64/contrib/4.4:</span></span>
-<span><span class="co">#&gt;   cannot open URL 'https://bioconductor.org/packages/3.18/bioc/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'</span></span>
-<span><span class="co">#&gt; Warning: unable to access index for repository https://bioconductor.org/packages/3.18/data/annotation/bin/macosx/big-sur-x86_64/contrib/4.4:</span></span>
-<span><span class="co">#&gt;   cannot open URL 'https://bioconductor.org/packages/3.18/data/annotation/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'</span></span>
-<span><span class="co">#&gt; Warning: unable to access index for repository https://bioconductor.org/packages/3.18/data/experiment/bin/macosx/big-sur-x86_64/contrib/4.4:</span></span>
-<span><span class="co">#&gt;   cannot open URL 'https://bioconductor.org/packages/3.18/data/experiment/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'</span></span>
-<span><span class="co">#&gt; Warning: unable to access index for repository https://bioconductor.org/packages/3.18/workflows/bin/macosx/big-sur-x86_64/contrib/4.4:</span></span>
-<span><span class="co">#&gt;   cannot open URL 'https://bioconductor.org/packages/3.18/workflows/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'</span></span>
-<span><span class="co">#&gt; Warning: unable to access index for repository https://bioconductor.org/packages/3.18/books/bin/macosx/big-sur-x86_64/contrib/4.4:</span></span>
-<span><span class="co">#&gt;   cannot open URL 'https://bioconductor.org/packages/3.18/books/bin/macosx/big-sur-x86_64/contrib/4.4/PACKAGES'</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The downloaded binary packages are in</span></span>
-<span><span class="co">#&gt;  /var/folders/xt/1wqk38p91gj1rj16t201p9nw0000gn/T//RtmpzKfXwP/downloaded_packages</span></span>
-<span><span class="co">#&gt; ── R CMD build ─────────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; * checking for file ‘/private/var/folders/xt/1wqk38p91gj1rj16t201p9nw0000gn/T/RtmpzKfXwP/remotes5ce53aa7effb/pachterlab-concordexR-1d49855/DESCRIPTION’ ... OK</span></span>
-<span><span class="co">#&gt; * preparing ‘concordexR’:</span></span>
-<span><span class="co">#&gt; * checking DESCRIPTION meta-information ... OK</span></span>
-<span><span class="co">#&gt; * checking for LF line-endings in source and make files and shell scripts</span></span>
-<span><span class="co">#&gt; * checking for empty or unneeded directories</span></span>
-<span><span class="co">#&gt; * building ‘concordexR_1.7.1.tar.gz’</span></span>
-<span><span class="co">#&gt; Installing package into '/private/var/folders/xt/1wqk38p91gj1rj16t201p9nw0000gn/T/RtmpaxG0sT/temp_libpath5bb940deed66'</span></span>
-<span><span class="co">#&gt; (as 'lib' is unspecified)</span></span></code></pre></div>
-<p>Versions of the <code>concordexR</code> package that do not enable clustering spatial data into spatial homogeneous regions (SHRs) are available for Bioconductor versions 3.17-19. The most recent version of the package is slated to be released on Bioconductor version 3.20. You can install the Bioconductor development version with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span>    </span>
@@ -114,20 +73,20 @@
 <span><span class="co">#&gt; Replacement repositories:</span></span>
 <span><span class="co">#&gt;     CRAN: https://cran.rstudio.com/</span></span>
 <span><span class="co">#&gt; Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)</span></span>
-<span><span class="co">#&gt; Old packages: 'bit64', 'igraph', 'anytime', 'arrow', 'assorthead', 'BH',</span></span>
-<span><span class="co">#&gt;   'BiocCheck', 'BiocNeighbors', 'Biostrings', 'bit', 'bookdown', 'class',</span></span>
+<span><span class="co">#&gt; Old packages: 'anytime', 'arrow', 'assorthead', 'BH', 'BiocCheck',</span></span>
+<span><span class="co">#&gt;   'BiocNeighbors', 'Biostrings', 'bit', 'bit64', 'bookdown', 'class',</span></span>
 <span><span class="co">#&gt;   'classInt', 'clue', 'cluster', 'cpp11', 'data.table', 'DelayedMatrixStats',</span></span>
 <span><span class="co">#&gt;   'edgeR', 'evaluate', 'fitdistrplus', 'fontawesome', 'foreign',</span></span>
-<span><span class="co">#&gt;   'GenomeInfoDb', 'geometry', 'ggmapinset', 'graph', 'graphlayouts', 'IRanges',</span></span>
-<span><span class="co">#&gt;   'KernSmooth', 'knitr', 'later', 'limma', 'lme4', 'lpSolve', 'lubridate',</span></span>
-<span><span class="co">#&gt;   'maps', 'MASS', 'MatrixGenerics', 'matrixStats', 'nnet', 'parallelly',</span></span>
-<span><span class="co">#&gt;   'pillar', 'pkgbuild', 'processx', 'progressr', 'promises', 'quantreg',</span></span>
-<span><span class="co">#&gt;   'Rcpp', 'RcppArmadillo', 'Rdpack', 'reticulate', 'Rfast', 'rhdf5', 'rpart',</span></span>
-<span><span class="co">#&gt;   'RSQLite', 'Seurat', 'SFEData', 'shiny', 'SingleCellExperiment', 'spatial',</span></span>
-<span><span class="co">#&gt;   'SpatialFeatureExperiment', 'spatialLIBD', 'spatstat.data',</span></span>
-<span><span class="co">#&gt;   'spatstat.explore', 'spatstat.geom', 'spatstat.utils', 'spData', 'spdep',</span></span>
-<span><span class="co">#&gt;   'stringdist', 'survival', 'systemfonts', 'terra', 'testthat', 'textshaping',</span></span>
-<span><span class="co">#&gt;   'tidyterra', 'waldo', 'xfun', 'XML'</span></span>
+<span><span class="co">#&gt;   'GenomeInfoDb', 'geometry', 'ggmapinset', 'graph', 'graphlayouts', 'igraph',</span></span>
+<span><span class="co">#&gt;   'IRanges', 'KernSmooth', 'knitr', 'later', 'limma', 'lme4', 'lpSolve',</span></span>
+<span><span class="co">#&gt;   'lubridate', 'maps', 'MASS', 'MatrixGenerics', 'matrixStats', 'nnet',</span></span>
+<span><span class="co">#&gt;   'parallelly', 'pillar', 'pkgbuild', 'processx', 'progressr', 'promises',</span></span>
+<span><span class="co">#&gt;   'quantreg', 'Rcpp', 'RcppArmadillo', 'Rdpack', 'reticulate', 'Rfast',</span></span>
+<span><span class="co">#&gt;   'rhdf5', 'rpart', 'RSQLite', 'Seurat', 'SFEData', 'shiny',</span></span>
+<span><span class="co">#&gt;   'SingleCellExperiment', 'spatial', 'SpatialFeatureExperiment', 'spatialLIBD',</span></span>
+<span><span class="co">#&gt;   'spatstat.data', 'spatstat.explore', 'spatstat.geom', 'spatstat.utils',</span></span>
+<span><span class="co">#&gt;   'spData', 'spdep', 'stringdist', 'survival', 'systemfonts', 'terra',</span></span>
+<span><span class="co">#&gt;   'testthat', 'textshaping', 'tidyterra', 'waldo', 'xfun', 'XML'</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"concordexR"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'getOption("repos")' replaces Bioconductor standard repositories, see</span></span>
 <span><span class="co">#&gt; 'help("repositories", package = "BiocManager")' for details.</span></span>
@@ -136,26 +95,26 @@
 <span><span class="co">#&gt; Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.2 (2024-10-31)</span></span>
 <span><span class="co">#&gt; Warning: package(s) not installed when version(s) same as or greater than current; use</span></span>
 <span><span class="co">#&gt;   `force = TRUE` to re-install: 'concordexR'</span></span>
-<span><span class="co">#&gt; Old packages: 'bit64', 'igraph', 'anytime', 'arrow', 'assorthead', 'BH',</span></span>
-<span><span class="co">#&gt;   'BiocCheck', 'BiocNeighbors', 'Biostrings', 'bit', 'bookdown', 'class',</span></span>
+<span><span class="co">#&gt; Old packages: 'anytime', 'arrow', 'assorthead', 'BH', 'BiocCheck',</span></span>
+<span><span class="co">#&gt;   'BiocNeighbors', 'Biostrings', 'bit', 'bit64', 'bookdown', 'class',</span></span>
 <span><span class="co">#&gt;   'classInt', 'clue', 'cluster', 'cpp11', 'data.table', 'DelayedMatrixStats',</span></span>
 <span><span class="co">#&gt;   'edgeR', 'evaluate', 'fitdistrplus', 'fontawesome', 'foreign',</span></span>
-<span><span class="co">#&gt;   'GenomeInfoDb', 'geometry', 'ggmapinset', 'graph', 'graphlayouts', 'IRanges',</span></span>
-<span><span class="co">#&gt;   'KernSmooth', 'knitr', 'later', 'limma', 'lme4', 'lpSolve', 'lubridate',</span></span>
-<span><span class="co">#&gt;   'maps', 'MASS', 'MatrixGenerics', 'matrixStats', 'nnet', 'parallelly',</span></span>
-<span><span class="co">#&gt;   'pillar', 'pkgbuild', 'processx', 'progressr', 'promises', 'quantreg',</span></span>
-<span><span class="co">#&gt;   'Rcpp', 'RcppArmadillo', 'Rdpack', 'reticulate', 'Rfast', 'rhdf5', 'rpart',</span></span>
-<span><span class="co">#&gt;   'RSQLite', 'Seurat', 'SFEData', 'shiny', 'SingleCellExperiment', 'spatial',</span></span>
-<span><span class="co">#&gt;   'SpatialFeatureExperiment', 'spatialLIBD', 'spatstat.data',</span></span>
-<span><span class="co">#&gt;   'spatstat.explore', 'spatstat.geom', 'spatstat.utils', 'spData', 'spdep',</span></span>
-<span><span class="co">#&gt;   'stringdist', 'survival', 'systemfonts', 'terra', 'testthat', 'textshaping',</span></span>
-<span><span class="co">#&gt;   'tidyterra', 'waldo', 'xfun', 'XML'</span></span></code></pre></div>
+<span><span class="co">#&gt;   'GenomeInfoDb', 'geometry', 'ggmapinset', 'graph', 'graphlayouts', 'igraph',</span></span>
+<span><span class="co">#&gt;   'IRanges', 'KernSmooth', 'knitr', 'later', 'limma', 'lme4', 'lpSolve',</span></span>
+<span><span class="co">#&gt;   'lubridate', 'maps', 'MASS', 'MatrixGenerics', 'matrixStats', 'nnet',</span></span>
+<span><span class="co">#&gt;   'parallelly', 'pillar', 'pkgbuild', 'processx', 'progressr', 'promises',</span></span>
+<span><span class="co">#&gt;   'quantreg', 'Rcpp', 'RcppArmadillo', 'Rdpack', 'reticulate', 'Rfast',</span></span>
+<span><span class="co">#&gt;   'rhdf5', 'rpart', 'RSQLite', 'Seurat', 'SFEData', 'shiny',</span></span>
+<span><span class="co">#&gt;   'SingleCellExperiment', 'spatial', 'SpatialFeatureExperiment', 'spatialLIBD',</span></span>
+<span><span class="co">#&gt;   'spatstat.data', 'spatstat.explore', 'spatstat.geom', 'spatstat.utils',</span></span>
+<span><span class="co">#&gt;   'spData', 'spdep', 'stringdist', 'survival', 'systemfonts', 'terra',</span></span>
+<span><span class="co">#&gt;   'testthat', 'textshaping', 'tidyterra', 'waldo', 'xfun', 'XML'</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>This is a basic example using concordex:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pachterlab/SFEData" class="external-link">SFEData</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">Voyager</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: SpatialFeatureExperiment</span></span>
@@ -236,12 +195,12 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">bluster</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pachterlab/concordexR" class="external-link">concordexR</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sfe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SFEData/man/McKellarMuscleData.html" class="external-link">McKellarMuscleData</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; see ?SFEData and browseVignettes('SFEData') for documentation</span></span>
 <span><span class="co">#&gt; loading from cache</span></span>
 <span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu">quickCluster</span><span class="op">(</span><span class="va">sfe</span>, min.size<span class="op">=</span><span class="fl">2</span>, d<span class="op">=</span><span class="fl">15</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nbc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/calculateConcordex.html">calculateConcordex</a></span><span class="op">(</span></span>
 <span>    <span class="va">sfe</span>,</span>
 <span>    <span class="va">clusters</span>,</span>
@@ -250,7 +209,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">colData</span><span class="op">(</span><span class="va">sfe</span><span class="op">)</span><span class="op">[[</span><span class="st">"shr"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">nbc</span>, <span class="st">"shrs"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">plotSpatialFeature</span><span class="op">(</span><span class="va">sfe</span>, features<span class="op">=</span><span class="st">"shr"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot-shr-1.png" width="70%"></p>
 </div>
