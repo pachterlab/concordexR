@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![codecov](https://codecov.io/gh/pachterlab/concordexR/branch/main/graph/badge.svg?token=FSASJPR4T5)](https://codecov.io/gh/pachterlab/concordexR)
+[![Bioc devel status](http://www.bioconductor.org/shields/build/devel/bioc/concordexR.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/concordexR)
 <!-- badges: end -->
 
 
@@ -46,7 +47,7 @@ with:
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
     
-BiocManager::install(version="devel")
+BiocManager::install(version="3.20")
 BiocManager::install("concordexR")
 ```
 
