@@ -1,10 +1,10 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   concordex-nonspatial: concordex-nonspatial.html
   overview: overview.html
-last_built: 2025-01-17T02:16Z
+last_built: 2025-06-10T17:09Z
 urls:
   reference: https://pachterlab.github.io/concordexR/reference
   article: https://pachterlab.github.io/concordexR/articles
