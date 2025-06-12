@@ -204,10 +204,10 @@ setMethod("runConcordex", "SpatialExperiment", function(x, labels, ..., name="NB
     {
     nbc <- calculateConcordex(x, labels, ...)
 
-    if ("shrs" %in% names(attrs(nbc))) {
-        colData["shr"] <- attrs(nbc)$shrs
+    if ("SHR" %in% names(nbc)) {
+        colData["shr"] <- nbc[["SHR"]]
     }
-    reducedDim(x, name) <- nbc
+    reducedDim(x, name) <- nbc[["NBC"]]
 
     x
     })
@@ -217,7 +217,7 @@ setMethod("runConcordex", "SpatialExperiment", function(x, labels, ..., name="NB
 #' @rdname calculateConcordex
 setMethod("runConcordex", "SingleCellExperiment", function(x, labels, ..., name="NBC")
 {
-    reducedDim(x, name) <- calculateConcordex(x, labels, ...)
-
+    nbc <- calculateConcordex(x, labels, ...)
+    reducedDim(x, name) <- nbc[["NBC"]]
     x
 })
