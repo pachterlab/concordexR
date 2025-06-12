@@ -46,8 +46,8 @@
 #'   parallelized (see \code{\link{bpparam}}).
 #'
 #' @return
-#' For \code{calculateConcordex}, a sparse, numeric matrix representing the
-#' neighborhood consolidation for each cell (row)
+#' For \code{calculateConcordex}, A list containing a sparse, numeric matrix representing the
+#' neighborhood consolidation for each cell (row) and SHR identities.
 #'
 #' For \code{runConcordex}, a SingleCellExperiment (or SpatialExperiment) object
 #' is returned containing this matrix in \code{\link{reducedDims}(..., name)}.
@@ -92,8 +92,8 @@ setMethod("calculateConcordex", "ANY",
             ...,
             n_neighbors=30,
             compute_similarity=FALSE,
-            BLUSPARAM,
             BNINDEX,
+            BLUSPARAM=NNGraphParam(cluster.fun="louvain"),
             BNPARAM=KmknnParam(),
             BPPARAM=SerialParam()) {
 
@@ -154,7 +154,7 @@ setMethod("calculateConcordex", "SummarizedExperiment",
 #' @param ... Other parameters passed to default method
 #' @param use.dimred Integer or string specifying the reduced dimensions to use
 #'   for construction of the k-nearest neighbor graph. Note that if this is not
-#'   \code{NULL}, reduced dimensions can not be used as labels to compute the
+#'   \code{NULL}, reduced dimensions cannot be used as labels to compute the
 #'   neighborhood consolidation matrix.
 #'
 #' @export
@@ -204,10 +204,10 @@ setMethod("runConcordex", "SpatialExperiment", function(x, labels, ..., name="NB
     {
     nbc <- calculateConcordex(x, labels, ...)
 
-    if ("shrs" %in% names(attrs(nbc))) {
-        colData["shr"] <- attrs(nbc)$shrs
+    if ("SHR" %in% names(nbc)) {
+        colData["shr"] <- nbc[["SHR"]]
     }
-    reducedDim(x, name) <- nbc
+    reducedDim(x, name) <- nbc[["NBC"]]
 
     x
     })
@@ -217,7 +217,7 @@ setMethod("runConcordex", "SpatialExperiment", function(x, labels, ..., name="NB
 #' @rdname calculateConcordex
 setMethod("runConcordex", "SingleCellExperiment", function(x, labels, ..., name="NBC")
 {
-    reducedDim(x, name) <- calculateConcordex(x, labels, ...)
-
+    nbc <- calculateConcordex(x, labels, ...)
+    reducedDim(x, name) <- nbc[["NBC"]]
     x
 })

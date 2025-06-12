@@ -25,7 +25,7 @@ runConcordex(x, ...)
   BLUSPARAM,
   BNINDEX,
   BNPARAM = KmknnParam(),
-  BPPARAM = SerialParam()
+  BPPARAM = NNGraphParam(cluster.fun = "louvain")
 )
 
 \S4method{calculateConcordex}{SummarizedExperiment}(x, labels, ..., assay.type = "logcounts")
@@ -88,7 +88,7 @@ containing the counts.}
 
 \item{use.dimred}{Integer or string specifying the reduced dimensions to use
 for construction of the k-nearest neighbor graph. Note that if this is not
-\code{NULL}, reduced dimensions can not be used as labels to compute the
+\code{NULL}, reduced dimensions cannot be used as labels to compute the
 neighborhood consolidation matrix.}
 
 \item{use.spatial}{Logical, should the spatial coordinates be used to compute the
@@ -98,7 +98,11 @@ k-nearest neighbor graph?}
 \code{\link{reducedDims}} of the output.}
 }
 \value{
-A sparse matrix
+For \code{calculateConcordex}, A list containing a sparse, numeric matrix representing the
+neighborhood consolidation for each cell (row) and SHR identities.
+
+For \code{runConcordex}, a SingleCellExperiment (or SpatialExperiment) object
+is returned containing this matrix in \code{\link{reducedDims}(..., name)}.
 }
 \description{
 Compute the neighborhood consolidation matrix and identify spatial
@@ -110,6 +114,7 @@ library(bluster)
 
 ## Setting BLUSPARAM clusters the consolidation
 ## matrix into SHRs
+
 cdx <- calculateConcordex(
   spe, "in_tissue",
   n_neighbors=10,

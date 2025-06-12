@@ -30,21 +30,29 @@
     check_dots_empty()
     dims <- dim(g)
 
-
-    # The graph is dense, so we can get some improvements on mapping
+    # The index is dense, so we can get some improvements
     # by converting to a list of rows
-    g <- pmap(data.frame(g), c)
+    g <- split(g, seq(dims[1]))
 
-    nbc <- bplapply(g, function(rows) {
-        nbx <- colMeans2(labels, rows=rows)
-        as(nbx,"sparseMatrix")},
-    BPPARAM=BPPARAM)
+    nw <- BPPARAM$workers
 
-    nbc <- do.call(cbind, nbc)
+    .consolidate <- function(rows) {
+        mapply(FUN=function(r){colMeans2(labels, rows=r)}, rows, SIMPLIFY=FALSE)
+    }
 
+    if (nw <= 1L) {
+        # Avoid `bplappy()` for serial
+        nbc <- .consolidate(g)
+        nbc <- do.call(rbind, nbc)
+
+    } else {
+        nbc <- bpvec(g, .consolidate,
+                 AGGREGATE = function(...) do.call(rbind, c(...)),
+                 BPPARAM=BPPARAM)
+    }
     # Transpose so that labels are on columns
-    t(nbc)
-
+    # t(nbc)
+    nbc
 }
 
 .concordex_stat <- function(nbc, labels, n_neighbors) {
@@ -95,23 +103,26 @@
 
     # Compute for each row(/cell/spot) in g
     nbc <- .concordex_nbhd_consolidation(g, labels, BPPARAM=BPPARAM)
+    out <- list("NBC"=nbc)
 
     if (cluster_neighborhoods & !missing(BLUSPARAM)) {
         if (class(BLUSPARAM) %in% "MbkmeansParam") {
             shr <- clusterRows(as.matrix(nbc), BLUSPARAM=BLUSPARAM)
         } else {
-           shr <- clusterRows(nbc, BLUSPARAM=BLUSPARAM)
+           shr <- clusterRows(nbc, BLUSPARAM=BLUSPARAM, full=FALSE)
         }
 
-        attr(nbc, "shrs") <- shr
+        out[['SHR']] <- shr
     }
 
     if (compute_similarity) {
         # statistics
         cdx <- .concordex_stat(nbc, labels, n_neighbors=n_neighbors)
-        attr(nbc, "similarity") <- cdx$similarity
-        attr(nbc, "concordex") <- cdx$concordex
+
+        out[["SIMILARITY"]] <- cdx$similarity
+        out[["CONCORDEX_SCORE"]] <- cdx$concordex
+
     }
 
-    nbc
+    out
 }

@@ -187,7 +187,7 @@ the proportion of cells with each label in the neighborhood of other cells with 
 same label.
 
 ```{r}
-sim <- attr(res, "similarity")
+sim <- res[["SIMILARITY"]]
 
 round(sim, 2)
 ```
