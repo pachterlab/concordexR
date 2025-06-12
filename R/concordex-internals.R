@@ -103,6 +103,7 @@
 
     # Compute for each row(/cell/spot) in g
     nbc <- .concordex_nbhd_consolidation(g, labels, BPPARAM=BPPARAM)
+    out <- list("NBC"=nbc)
 
     if (cluster_neighborhoods & !missing(BLUSPARAM)) {
         if (class(BLUSPARAM) %in% "MbkmeansParam") {
@@ -111,18 +112,20 @@
            shr <- clusterRows(nbc, BLUSPARAM=BLUSPARAM, full=FALSE)
         }
 
-        attr(nbc, "shrs") <- shr
+        out[['SHR']] <- shr
     }
 
     if (compute_similarity) {
         # statistics
         cdx <- .concordex_stat(nbc, labels, n_neighbors=n_neighbors)
 
-        return(list("NBC"=nbc, "SHR"=shr, "SIMILARITY"=cdx$similarity, "CONCORDEX_SCORE"=cdx$concordex))
+        out[["SIMILARITY"]] <- cdx$similarity
+        out[["CONCORDEX_SCORE"]] <- cdx$concordex
+
         # attr(nbc, "similarity") <- cdx$similarity
         # attr(nbc, "concordex") <- cdx$concordex
 
     }
 
-    list("NBC"=nbc, "SHR"=shr)
+    out
 }
