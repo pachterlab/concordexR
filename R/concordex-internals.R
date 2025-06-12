@@ -122,9 +122,6 @@
         out[["SIMILARITY"]] <- cdx$similarity
         out[["CONCORDEX_SCORE"]] <- cdx$concordex
 
-        # attr(nbc, "similarity") <- cdx$similarity
-        # attr(nbc, "concordex") <- cdx$concordex
-
     }
 
     out
