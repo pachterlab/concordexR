@@ -92,10 +92,10 @@ setMethod("calculateConcordex", "ANY",
             ...,
             n_neighbors=30,
             compute_similarity=FALSE,
-            BLUSPARAM,
             BNINDEX,
+            BLUSPARAM=NNGraphParam(cluster.fun="louvain"),
             BNPARAM=KmknnParam(),
-            BPPARAM=NNGraphParam(cluster.fun="louvain")) {
+            BPPARAM=SerialParam()) {
 
               check_dots_empty()
 
