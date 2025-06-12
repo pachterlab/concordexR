@@ -117,9 +117,12 @@
     if (compute_similarity) {
         # statistics
         cdx <- .concordex_stat(nbc, labels, n_neighbors=n_neighbors)
-        attr(nbc, "similarity") <- cdx$similarity
-        attr(nbc, "concordex") <- cdx$concordex
+
+        return(list("NBC"=nbc, "SHR"=shr, "SIMILARITY"=cdx$similarity, "CONCORDEX_SCORE"=cdx$concordex))
+        # attr(nbc, "similarity") <- cdx$similarity
+        # attr(nbc, "concordex") <- cdx$concordex
+
     }
 
-    nbc
+    list("NBC"=nbc, "SHR"=shr)
 }
