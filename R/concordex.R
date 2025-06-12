@@ -95,7 +95,7 @@ setMethod("calculateConcordex", "ANY",
             BLUSPARAM,
             BNINDEX,
             BNPARAM=KmknnParam(),
-            BPPARAM=SerialParam()) {
+            BPPARAM=NNGraphParam(cluster.fun="louvain")) {
 
               check_dots_empty()
 
@@ -154,7 +154,7 @@ setMethod("calculateConcordex", "SummarizedExperiment",
 #' @param ... Other parameters passed to default method
 #' @param use.dimred Integer or string specifying the reduced dimensions to use
 #'   for construction of the k-nearest neighbor graph. Note that if this is not
-#'   \code{NULL}, reduced dimensions can not be used as labels to compute the
+#'   \code{NULL}, reduced dimensions cannot be used as labels to compute the
 #'   neighborhood consolidation matrix.
 #'
 #' @export
