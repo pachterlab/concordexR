@@ -46,8 +46,8 @@
 #'   parallelized (see \code{\link{bpparam}}).
 #'
 #' @return
-#' For \code{calculateConcordex}, a sparse, numeric matrix representing the
-#' neighborhood consolidation for each cell (row)
+#' For \code{calculateConcordex}, A list containing a sparse, numeric matrix representing the
+#' neighborhood consolidation for each cell (row) and SHR identities.
 #'
 #' For \code{runConcordex}, a SingleCellExperiment (or SpatialExperiment) object
 #' is returned containing this matrix in \code{\link{reducedDims}(..., name)}.
